@@ -24,7 +24,8 @@ body.sb-l-m .sidebar-menu > li > a:hover > .sidebar-title { background-color:#67
 body.sb-l-m .sidebar-menu li > ul > li > a {
     padding: 0px 15px 0px 15px;
 }
-table.dataTable thead th {background-color:#2a2f43 !important; color:#fff;}
+/*table.dataTable thead th {background-color:#2a2f43 !important; color:#fff;}*/
+.table.dataTable thead th {background-color:#0b6598 !important; color:#fff;}
 .over-x_table thead th {background-color:#0b6598 !important; color:#fff;}
 
 .allcp-form .select .fa{

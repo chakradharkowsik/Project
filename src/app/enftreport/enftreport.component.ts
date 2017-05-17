@@ -10,6 +10,7 @@ import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, Ng
 })
 export class ENFTReportComponent implements OnInit {
 
+    dataLoaded:boolean;
     selectedYear: string;
     selectedHireMonth: string;
     selectedControlGroup: string;
@@ -22,7 +23,7 @@ export class ENFTReportComponent implements OnInit {
     ControlGroups: Array<string>;
     TypeOfHours: Array<string>;
     NonFullTimeCatgeories: Array<string>;
-
+    errorMessage:string;
     count13Weeks: string;
     count26Weeks: string;
     count47Weeks: string;
@@ -32,35 +33,35 @@ export class ENFTReportComponent implements OnInit {
 
     public rows: Array<any> = [];
     public columns: Array<any> = [
-        { title: 'Work Year', className: 'va-m blueHeader', name: 'WorkYear' },
-        { title: 'Work Month', className: 'va-m', name: 'workMonth' },
+        // { title: 'Work Year', className: 'va-m blueHeader', name: 'WorkYear' },
+        // { title: 'Work Month', className: 'va-m', name: 'workMonth' },
         { title: 'Control Group', className: 'va-m', name: 'controlGroup' },
-        { title: 'Most Recent Production Company', className: 'va-m', name: 'mostRecentProductionCompany' },
-        { title: 'Most Recent Project', className: 'va-m', name: 'mostRecentProject' },
+        { title: 'Latest Production Company', className: 'va-m', name: 'mostRecentProductionCompany' },
+        { title: 'Most Recent Show', className: 'va-m', name: 'mostRecentProject' },
         { title: 'SSN Number', className: 'hidden-xs va-m', name: 'ssnNumber' },
         { title: 'First Name', className: 'hidden-xs va-m', name: 'firstName' },
         { title: 'Last Name', className: 'va-m', name: 'lastName' },
         { title: 'Last Worked Date', className: 'va-m', name: 'lastWorkedDate' },
         { title: 'Hire Date', className: 'va-m', name: 'hireDate' },
+        { title: 'Union Type', className: 'va-m', name: 'unionType' },
         { title: 'Payroll Source', className: 'va-m', name: 'payrollSource' },
         { title: 'Average Hours', className: 'va-m', name: 'avgHours' },
         { title: 'Total Hours', className: 'va-m', name: 'totalHours' },
-        { title: 'All Control Group', className: 'va-m', name: 'allControlGroup' },
-        { title: 'Union Type', className: 'va-m', name: 'unionType' },
-        { title: 'All Union Type', className: 'va-m', name: 'allUnionType' },
-        { title: 'Employee Type', className: 'va-m', name: 'employeeType' },
-        { title: 'Label Summary 13 Weeks', className: 'va-m', name: 'lastSummary13Weeks' },
-        { title: 'Summary 13 Weeks', className: 'va-m', name: 'summary13Weeks' },
-        { title: 'Label Summary 26 Weeks', className: 'va-m', name: 'lastSummary26Weeks' },
-        { title: 'Summary 26 Weeks', className: 'va-m', name: 'summary26Weeks' },
-        { title: 'Label Summary 47 Weeks', className: 'va-m', name: 'lastSummary47Weeks' },
-        { title: 'Summary 47 Weeks', className: 'va-m', name: 'summary47Weeks' },
-        { title: 'Label Summary 52 Weeks', className: 'va-m', name: 'lastSummary52Weeks' },
-        { title: 'Summary 52 Weeks', className: 'va-m', name: 'summary52Weeks' },
-        { title: 'Avg. Weekly Threshold', className: 'va-m', name: 'avgWeeklyThreshold' }
+        // { title: 'All Control Group', className: 'va-m', name: 'allControlGroup' },        
+        // { title: 'All Union Type', className: 'va-m', name: 'allUnionType' },
+        // { title: 'Employee Type', className: 'va-m', name: 'employeeType' },
+        // { title: 'Label Summary 13 Weeks', className: 'va-m', name: 'lastSummary13Weeks' },
+        // { title: 'Summary 13 Weeks', className: 'va-m', name: 'summary13Weeks' },
+        // { title: 'Label Summary 26 Weeks', className: 'va-m', name: 'lastSummary26Weeks' },
+        // { title: 'Summary 26 Weeks', className: 'va-m', name: 'summary26Weeks' },
+        // { title: 'Label Summary 47 Weeks', className: 'va-m', name: 'lastSummary47Weeks' },
+        // { title: 'Summary 47 Weeks', className: 'va-m', name: 'summary47Weeks' },
+        // { title: 'Label Summary 52 Weeks', className: 'va-m', name: 'lastSummary52Weeks' },
+        // { title: 'Summary 52 Weeks', className: 'va-m', name: 'summary52Weeks' },
+        // { title: 'Avg. Weekly Threshold', className: 'va-m', name: 'avgWeeklyThreshold' }
     ];
     public page: number = 1;
-    public itemsPerPage: number = 10;
+    public itemsPerPage: number = 1;
     public maxSize: number = 5;
     public numPages: number = 1;
     public length: number = 0;
@@ -85,12 +86,18 @@ export class ENFTReportComponent implements OnInit {
         this.NonFullTimeCatgeories = this._enftreport.getNonFullTimeCategories();
         this.AvgWeeklyHrsThr = "30";
 
+        this.selectedYear="-1";
+        this.selectedHireMonth="-1";
+        this.selectedControlGroup="-1";
+        this.selectedTypeOfHours="-1";
+
         this.count13Weeks = "0";
         this.count26Weeks = "0";
         this.count47Weeks = "0";
         this.count52Weeks = "0";
 
         this.onChangeTable(this.config);
+        this.dataLoaded=false;
     }
 
     Search(): void {
@@ -98,16 +105,24 @@ export class ENFTReportComponent implements OnInit {
         this.count13Weeks = counts.count13Weeks;
         this.count26Weeks = counts.count26Weeks;
         this.count47Weeks = counts.count47Weeks;
-        this.count52Weeks = counts.count52Weeks;
+        this.count52Weeks = counts.count52Weeks;        
     }
 
-    GetWeekData(weekCount: number): void {
-        this._enftreport.getWeekReportData(weekCount);
+    getWeekData(weekCount: number): void {
+        debugger;
+          this._enftreport.getWeekReportData(weekCount).subscribe(workdetails => {
+                this.workDetails = workdetails;
+                this.onChangeTable(this.config);
+                this.dataLoaded=true;
+            },
+            error => this.errorMessage = <any>error);
+        //this._enftreport.getWeekReportData(weekCount);
 
     }
     public onCellClick(data: any): any {
         console.log(data);
     }
+    
     public changePage(page: any, data: Array<any> = this.workDetails): Array<any> {
         let start = (page.page - 1) * page.itemsPerPage;
         let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;

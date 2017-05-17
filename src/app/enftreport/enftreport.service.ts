@@ -1,33 +1,54 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { IWorkDetails } from './workdetail';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
 
 @Injectable()
-export class ENFTReportService
-{
-     getYears(){return ['2016','2017','2018']}
+export class ENFTReportService {
+    private _enftreportUrl = 'app/api/';
+    constructor(private _http: Http) {
 
-     getMonths(){return ['January','Feburary','March']}
+    }
+    getYears() { return ['2016', '2017', '2018'] }
 
-     getControlGroups(){return ['Revolution','Cast & Crew']}
+    getMonths() { return ['January', 'Feburary', 'March'] }
 
-     getTypeOfHours(){return ['Union','Non Union']}
+    getControlGroups() { return ['Revolution', 'Cast & Crew'] }
 
-     getNonFullTimeCategories(){return ['Parttime','seasonal','uncategory','variable']}
+    getTypeOfHours() { return ['Union', 'Non Union'] }
 
-     getWeeklyCounts():any{return {count13Weeks:"3",count26Weeks:"4",count47Weeks:"5",count52Weeks:"6"};}
+    getNonFullTimeCategories() { return ['Part Time', 'Seasonal', 'Un Category', 'Variable'] }
 
-     getWeekReportData(weekCount:number):any{
-         
-        switch(weekCount){
+    getWeeklyCounts(): any { return { count13Weeks: "3", count26Weeks: "4", count47Weeks: "5", count52Weeks: "6" }; }
+
+    getWeekReportData(weekCount: number): Observable<IWorkDetails[]> {
+        let fileName: string = '';
+        switch (weekCount) {
             case 13:
-            break;
+                fileName = "enftreport13.json";
+                break;
             case 26:
-            break;
+                fileName = "enftreport26.json";
+                break;
             case 47:
-            break;
+                break;
             case 52:
-            break;            
+                break;
         }
-     }
+        return this._http.get(this._enftreportUrl + fileName)
+            .map((response: Response) => <IWorkDetails[]>response.json())
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+    private handleError(error: Response) {
+        // in a real world app, we may send the server to some remote logging infrastructure
+        // instead of just logging it to the console
+        console.error(error);
+        return Observable.throw(error.json().error || 'Server error');
+    }
 
-    
 }
