@@ -6,41 +6,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var core_1 = require("@angular/core");
-var platform_browser_1 = require("@angular/platform-browser");
+var common_1 = require("@angular/common");
 var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
-var router_1 = require("@angular/router");
-var app_component_1 = require("./app.component");
-var index_1 = require("./index");
 var ng2_table_1 = require("ng2-table/ng2-table");
 var ng2_bootstrap_1 = require("ng2-bootstrap");
-var app_routes_1 = require("./app.routes");
-var AppModule = (function () {
-    function AppModule() {
+var OnGoingReportModule = (function () {
+    function OnGoingReportModule() {
     }
-    return AppModule;
+    return OnGoingReportModule;
 }());
-AppModule = __decorate([
+OnGoingReportModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule,
+        imports: [common_1.CommonModule,
             forms_1.FormsModule,
             http_1.HttpModule,
-            router_1.RouterModule.forRoot(app_routes_1.APPROUTES),
             ng2_table_1.Ng2TableModule,
             ng2_bootstrap_1.PaginationModule.forRoot(),
             ng2_bootstrap_1.TabsModule.forRoot()
         ],
-        declarations: [app_component_1.AppComponent,
-            index_1.SideNavComponent,
-            index_1.TopNavComponent,
-            index_1.ENFTReportComponent,
-            index_1.OnGoingReportComponent],
-        providers: [
-            index_1.ENFTReportService,
-            index_1.OnGoingReportService
-        ],
-        bootstrap: [app_component_1.AppComponent]
+        declarations: [],
+        providers: []
     })
-], AppModule);
-exports.AppModule = AppModule;
-//# sourceMappingURL=app.module.js.map
+], OnGoingReportModule);
+exports.OnGoingReportModule = OnGoingReportModule;
+//# sourceMappingURL=ogreport.module.js.map

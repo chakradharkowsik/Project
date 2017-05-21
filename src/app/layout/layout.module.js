@@ -7,7 +7,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
-var platform_browser_1 = require("@angular/platform-browser");
 var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
 var LayoutModule = (function () {
@@ -20,8 +19,7 @@ LayoutModule = __decorate([
         imports: [
             common_1.CommonModule,
             forms_1.FormsModule,
-            http_1.HttpModule,
-            platform_browser_1.BrowserModule
+            http_1.HttpModule
         ],
         declarations: [],
         providers: []

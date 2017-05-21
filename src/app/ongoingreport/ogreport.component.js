@@ -9,15 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-var enftreport_service_1 = require("./enftreport.service");
-var ENFTReportComponent = (function () {
-    function ENFTReportComponent(_enftreport) {
-        this._enftreport = _enftreport;
+var ogreport_service_1 = require("./ogreport.service");
+var OnGoingReportComponent = (function () {
+    function OnGoingReportComponent(_ogreportsrv) {
+        this._ogreportsrv = _ogreportsrv;
         this.workDetails = [];
         this.rows = [];
         this.columns = [
-            // { title: 'Work Year', className: 'va-m blueHeader', name: 'WorkYear' },
-            // { title: 'Work Month', className: 'va-m', name: 'workMonth' },
             { title: 'Control Group', className: 'va-m', name: 'controlGroup' },
             { title: 'Latest Production Company', className: 'va-m', name: 'mostRecentProductionCompany' },
             { title: 'Most Recent Show', className: 'va-m', name: 'mostRecentProject' },
@@ -26,10 +24,10 @@ var ENFTReportComponent = (function () {
             { title: 'Last Name', className: 'va-m', name: 'lastName' },
             { title: 'Last Worked Date', className: 'va-m', name: 'lastWorkedDate' },
             { title: 'Hire Date', className: 'va-m', name: 'hireDate' },
-            { title: 'Union Type', className: 'va-m', name: 'unionType' },
-            { title: 'Payroll Source', className: 'va-m', name: 'payrollSource' },
-            { title: 'Average Hours', className: 'va-m', name: 'avgHours' },
-            { title: 'Total Hours', className: 'va-m', name: 'totalHours' },
+            { title: 'Union/Non-Union', className: 'va-m', name: 'unionType' },
+            { title: 'Weeks Since Last Worked', className: 'va-m', name: 'weeksSinceLastWorked' },
+            { title: 'Average Hours-SMP', className: 'va-m', name: 'avgHours' },
+            { title: 'Total Hours', className: 'va-m', name: 'totalHours' }
         ];
         this.page = 1;
         this.itemsPerPage = 1;
@@ -43,15 +41,13 @@ var ENFTReportComponent = (function () {
             className: ['table', 'table-striped', 'table-bordered', 'table-hover']
         };
     }
-    ENFTReportComponent.prototype.ngOnInit = function () {
+    OnGoingReportComponent.prototype.ngOnInit = function () {
         // throw new Error("Method not implemented.");
-        this.Years = this._enftreport.getYears();
-        this.Months = this._enftreport.getMonths();
-        this.ControlGroups = this._enftreport.getControlGroups();
-        this.TypeOfHours = this._enftreport.getTypeOfHours();
-        this.NonFullTimeCatgeories = this._enftreport.getNonFullTimeCategories();
+        this.Months = this._ogreportsrv.getMonths();
+        this.ControlGroups = this._ogreportsrv.getControlGroups();
+        this.TypeOfHours = this._ogreportsrv.getTypeOfHours();
+        this.NonFullTimeCatgeories = this._ogreportsrv.getNonFullTimeCategories();
         this.AvgWeeklyHrsThr = "30";
-        this.selectedYear = "-1";
         this.selectedHireMonth = "-1";
         this.selectedControlGroup = "-1";
         this.selectedTypeOfHours = "-1";
@@ -62,33 +58,33 @@ var ENFTReportComponent = (function () {
         this.onChangeTable(this.config);
         this.dataLoaded = false;
     };
-    ENFTReportComponent.prototype.Search = function () {
-        var counts = this._enftreport.getWeeklyCounts();
+    OnGoingReportComponent.prototype.Search = function () {
+        var counts = this._ogreportsrv.getWeeklyCounts();
         this.count13Weeks = counts.count13Weeks;
         this.count26Weeks = counts.count26Weeks;
         this.count47Weeks = counts.count47Weeks;
         this.count52Weeks = counts.count52Weeks;
     };
-    ENFTReportComponent.prototype.getWeekData = function (weekCount) {
+    OnGoingReportComponent.prototype.getWeekData = function (weekCount) {
         var _this = this;
-        debugger;
-        this._enftreport.getWeekReportData(weekCount).subscribe(function (workdetails) {
+        // debugger;
+        this._ogreportsrv.getWeekReportData(weekCount).subscribe(function (workdetails) {
             _this.workDetails = workdetails;
             _this.onChangeTable(_this.config);
             _this.dataLoaded = true;
         }, function (error) { return _this.errorMessage = error; });
-        //this._enftreport.getWeekReportData(weekCount);
+        //this._ogreportsrv.getWeekReportData(weekCount);
     };
-    ENFTReportComponent.prototype.onCellClick = function (data) {
+    OnGoingReportComponent.prototype.onCellClick = function (data) {
         console.log(data);
     };
-    ENFTReportComponent.prototype.changePage = function (page, data) {
+    OnGoingReportComponent.prototype.changePage = function (page, data) {
         if (data === void 0) { data = this.workDetails; }
         var start = (page.page - 1) * page.itemsPerPage;
         var end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
         return data.slice(start, end);
     };
-    ENFTReportComponent.prototype.changeFilter = function (data, config) {
+    OnGoingReportComponent.prototype.changeFilter = function (data, config) {
         var _this = this;
         var filteredData = data;
         this.columns.forEach(function (column) {
@@ -121,7 +117,7 @@ var ENFTReportComponent = (function () {
         filteredData = tempArray;
         return filteredData;
     };
-    ENFTReportComponent.prototype.changeSort = function (data, config) {
+    OnGoingReportComponent.prototype.changeSort = function (data, config) {
         if (!config.sorting) {
             return data;
         }
@@ -148,7 +144,7 @@ var ENFTReportComponent = (function () {
             return 0;
         });
     };
-    ENFTReportComponent.prototype.onChangeTable = function (config, page) {
+    OnGoingReportComponent.prototype.onChangeTable = function (config, page) {
         if (page === void 0) { page = { page: this.page, itemsPerPage: this.itemsPerPage }; }
         if (config.filtering) {
             Object.assign(this.config.filtering, config.filtering);
@@ -161,14 +157,14 @@ var ENFTReportComponent = (function () {
         this.rows = page && config.paging ? this.changePage(page, sortedData) : sortedData;
         this.length = sortedData.length;
     };
-    return ENFTReportComponent;
+    return OnGoingReportComponent;
 }());
-ENFTReportComponent = __decorate([
+OnGoingReportComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
-        templateUrl: 'enftreport.html'
+        templateUrl: './ogreport.html'
     }),
-    __metadata("design:paramtypes", [enftreport_service_1.ENFTReportService])
-], ENFTReportComponent);
-exports.ENFTReportComponent = ENFTReportComponent;
-//# sourceMappingURL=enftreport.component.js.map
+    __metadata("design:paramtypes", [ogreport_service_1.OnGoingReportService])
+], OnGoingReportComponent);
+exports.OnGoingReportComponent = OnGoingReportComponent;
+//# sourceMappingURL=ogreport.component.js.map

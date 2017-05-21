@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { ENFTReportService } from './enftreport.service';
+import { OnGoingReportService } from './ogreport.service';
 import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, NgTableSortingDirective } from 'ng2-table/ng2-table';
 
 @Component({
     moduleId: module.id,
-    templateUrl: 'enftreport.html'
+    templateUrl: './ogreport.html'
 
 })
-export class ENFTReportComponent implements OnInit {
+export class OnGoingReportComponent implements OnInit {
 
-    dataLoaded:boolean;
-    selectedYear: string;
+    dataLoaded:boolean;    
     selectedHireMonth: string;
     selectedControlGroup: string;
     selectedTypeOfHours: string;
     selectedNonFullTimeCatgeories: Array<string>;
     AvgWeeklyHrsThr: string;
 
-    Years: Array<string>;
+    
     Months: Array<string>;
     ControlGroups: Array<string>;
     TypeOfHours: Array<string>;
@@ -32,8 +31,6 @@ export class ENFTReportComponent implements OnInit {
 
     public rows: Array<any> = [];
     public columns: Array<any> = [
-        // { title: 'Work Year', className: 'va-m blueHeader', name: 'WorkYear' },
-        // { title: 'Work Month', className: 'va-m', name: 'workMonth' },
         { title: 'Control Group', className: 'va-m', name: 'controlGroup' },
         { title: 'Latest Production Company', className: 'va-m', name: 'mostRecentProductionCompany' },
         { title: 'Most Recent Show', className: 'va-m', name: 'mostRecentProject' },
@@ -42,22 +39,10 @@ export class ENFTReportComponent implements OnInit {
         { title: 'Last Name', className: 'va-m', name: 'lastName' },
         { title: 'Last Worked Date', className: 'va-m', name: 'lastWorkedDate' },
         { title: 'Hire Date', className: 'va-m', name: 'hireDate' },
-        { title: 'Union Type', className: 'va-m', name: 'unionType' },
-        { title: 'Payroll Source', className: 'va-m', name: 'payrollSource' },
-        { title: 'Average Hours', className: 'va-m', name: 'avgHours' },
-        { title: 'Total Hours', className: 'va-m', name: 'totalHours' },
-        // { title: 'All Control Group', className: 'va-m', name: 'allControlGroup' },        
-        // { title: 'All Union Type', className: 'va-m', name: 'allUnionType' },
-        // { title: 'Employee Type', className: 'va-m', name: 'employeeType' },
-        // { title: 'Label Summary 13 Weeks', className: 'va-m', name: 'lastSummary13Weeks' },
-        // { title: 'Summary 13 Weeks', className: 'va-m', name: 'summary13Weeks' },
-        // { title: 'Label Summary 26 Weeks', className: 'va-m', name: 'lastSummary26Weeks' },
-        // { title: 'Summary 26 Weeks', className: 'va-m', name: 'summary26Weeks' },
-        // { title: 'Label Summary 47 Weeks', className: 'va-m', name: 'lastSummary47Weeks' },
-        // { title: 'Summary 47 Weeks', className: 'va-m', name: 'summary47Weeks' },
-        // { title: 'Label Summary 52 Weeks', className: 'va-m', name: 'lastSummary52Weeks' },
-        // { title: 'Summary 52 Weeks', className: 'va-m', name: 'summary52Weeks' },
-        // { title: 'Avg. Weekly Threshold', className: 'va-m', name: 'avgWeeklyThreshold' }
+        { title: 'Union/Non-Union', className: 'va-m', name: 'unionType' },
+        { title: 'Weeks Since Last Worked', className: 'va-m', name: 'weeksSinceLastWorked' },
+        { title: 'Average Hours-SMP', className: 'va-m', name: 'avgHours' },
+        { title: 'Total Hours', className: 'va-m', name: 'totalHours' }
     ];
     public page: number = 1;
     public itemsPerPage: number = 1;
@@ -72,20 +57,20 @@ export class ENFTReportComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _enftreport: ENFTReportService) {
+    constructor(private _ogreportsrv: OnGoingReportService) {
 
     }
 
     ngOnInit(): void {
         // throw new Error("Method not implemented.");
-        this.Years = this._enftreport.getYears();
-        this.Months = this._enftreport.getMonths();
-        this.ControlGroups = this._enftreport.getControlGroups();
-        this.TypeOfHours = this._enftreport.getTypeOfHours();
-        this.NonFullTimeCatgeories = this._enftreport.getNonFullTimeCategories();
+       
+        this.Months = this._ogreportsrv.getMonths();
+        this.ControlGroups = this._ogreportsrv.getControlGroups();
+        this.TypeOfHours = this._ogreportsrv.getTypeOfHours();
+        this.NonFullTimeCatgeories = this._ogreportsrv.getNonFullTimeCategories();
         this.AvgWeeklyHrsThr = "30";
 
-        this.selectedYear="-1";
+       
         this.selectedHireMonth="-1";
         this.selectedControlGroup="-1";
         this.selectedTypeOfHours="-1";
@@ -100,7 +85,7 @@ export class ENFTReportComponent implements OnInit {
     }
 
     Search(): void {
-        let counts = this._enftreport.getWeeklyCounts();
+        let counts = this._ogreportsrv.getWeeklyCounts();
         this.count13Weeks = counts.count13Weeks;
         this.count26Weeks = counts.count26Weeks;
         this.count47Weeks = counts.count47Weeks;
@@ -108,14 +93,14 @@ export class ENFTReportComponent implements OnInit {
     }
 
     getWeekData(weekCount: number): void {
-        debugger;
-          this._enftreport.getWeekReportData(weekCount).subscribe(workdetails => {
+        // debugger;
+          this._ogreportsrv.getWeekReportData(weekCount).subscribe(workdetails => {
                 this.workDetails = workdetails;
                 this.onChangeTable(this.config);
                 this.dataLoaded=true;
             },
             error => this.errorMessage = <any>error);
-        //this._enftreport.getWeekReportData(weekCount);
+        //this._ogreportsrv.getWeekReportData(weekCount);
 
     }
     public onCellClick(data: any): any {
