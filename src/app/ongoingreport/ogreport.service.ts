@@ -19,8 +19,7 @@ export class OnGoingReportService {
     getControlGroups() { return ['Revolution', 'Cast & Crew'] }
 
     getTypeOfHours() { return ['Union', 'Non Union'] }
-
-    getNonFullTimeCategories() { return ['Part Time', 'Seasonal', 'Un Category', 'Variable'] }
+   
 
     getWeeklyCounts(): any { return { count13Weeks: "3", count26Weeks: "4", count47Weeks: "5", count52Weeks: "6" }; }
 

@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
+var forms_1 = require("@angular/forms");
 var ogreport_service_1 = require("./ogreport.service");
 var OnGoingReportComponent = (function () {
     function OnGoingReportComponent(_ogreportsrv) {
@@ -42,15 +43,24 @@ var OnGoingReportComponent = (function () {
         };
     }
     OnGoingReportComponent.prototype.ngOnInit = function () {
+        this.controlGroupControl = new forms_1.FormControl("", forms_1.Validators.required);
+        this.typeOfHoursControl = new forms_1.FormControl("", forms_1.Validators.required);
+        this.measurementEndDateControl = new forms_1.FormControl("", forms_1.Validators.required);
+        this.avgWeeklyThresholdControl = new forms_1.FormControl("30", forms_1.Validators.required);
+        this.ogReportForm = new forms_1.FormGroup({
+            controlGroup: this.controlGroupControl,
+            typeOfHour: this.typeOfHoursControl,
+            avgWeeklyHoursThreshold: this.avgWeeklyThresholdControl,
+            measurementEndDate: this.measurementEndDateControl
+        });
         // throw new Error("Method not implemented.");
         this.measurementEndDates = this._ogreportsrv.getMeasurementEndDates();
-        this.ControlGroups = this._ogreportsrv.getControlGroups();
-        this.TypeOfHours = this._ogreportsrv.getTypeOfHours();
-        this.NonFullTimeCatgeories = this._ogreportsrv.getNonFullTimeCategories();
-        this.AvgWeeklyHrsThr = "30";
-        this.selectedMeasurementEndDates = "-1";
-        this.selectedControlGroup = "-1";
-        this.selectedTypeOfHours = "-1";
+        this.controlGroups = this._ogreportsrv.getControlGroups();
+        this.typeOfHours = this._ogreportsrv.getTypeOfHours();
+        // this.avgWeeklyHrsThr = "30";
+        // this.selectedMeasurementEndDates = "-1";
+        // this.selectedControlGroup = "-1";
+        // this.selectedTypeOfHours = "-1";
         this.count13Weeks = "0";
         this.count26Weeks = "0";
         this.count47Weeks = "0";
@@ -58,7 +68,8 @@ var OnGoingReportComponent = (function () {
         this.onChangeTable(this.config);
         this.dataLoaded = false;
     };
-    OnGoingReportComponent.prototype.Search = function () {
+    OnGoingReportComponent.prototype.Search = function (formValues) {
+        debugger;
         var counts = this._ogreportsrv.getWeeklyCounts();
         this.count13Weeks = counts.count13Weeks;
         this.count26Weeks = counts.count26Weeks;
@@ -74,6 +85,23 @@ var OnGoingReportComponent = (function () {
             _this.dataLoaded = true;
         }, function (error) { return _this.errorMessage = error; });
         //this._ogreportsrv.getWeekReportData(weekCount);
+    };
+    OnGoingReportComponent.prototype.downloadPdf = function () {
+    };
+    OnGoingReportComponent.prototype.downloadExcel = function () {
+    };
+    //Validations
+    OnGoingReportComponent.prototype.validateControlGroups = function () {
+        return this.controlGroupControl.valid || this.controlGroupControl.untouched;
+    };
+    OnGoingReportComponent.prototype.validateMeasurementEndDate = function () {
+        return this.measurementEndDateControl.valid || this.measurementEndDateControl.untouched;
+    };
+    OnGoingReportComponent.prototype.validateAvgThreashold = function () {
+        return this.avgWeeklyThresholdControl.valid || this.avgWeeklyThresholdControl.untouched;
+    };
+    OnGoingReportComponent.prototype.validateTypeOfHour = function () {
+        return this.typeOfHoursControl.valid || this.typeOfHoursControl.untouched;
     };
     OnGoingReportComponent.prototype.onCellClick = function (data) {
         console.log(data);

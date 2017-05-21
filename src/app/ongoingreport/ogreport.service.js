@@ -23,7 +23,6 @@ var OnGoingReportService = (function () {
     OnGoingReportService.prototype.getMeasurementEndDates = function () { return ['26-10-2016', '29-10-2017']; };
     OnGoingReportService.prototype.getControlGroups = function () { return ['Revolution', 'Cast & Crew']; };
     OnGoingReportService.prototype.getTypeOfHours = function () { return ['Union', 'Non Union']; };
-    OnGoingReportService.prototype.getNonFullTimeCategories = function () { return ['Part Time', 'Seasonal', 'Un Category', 'Variable']; };
     OnGoingReportService.prototype.getWeeklyCounts = function () { return { count13Weeks: "3", count26Weeks: "4", count47Weeks: "5", count52Weeks: "6" }; };
     OnGoingReportService.prototype.getWeekReportData = function (weekCount) {
         var fileName = '';

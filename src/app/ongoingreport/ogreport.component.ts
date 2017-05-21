@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { OnGoingReportService } from './ogreport.service';
 import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, NgTableSortingDirective } from 'ng2-table/ng2-table';
 
@@ -9,19 +10,19 @@ import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, Ng
 })
 export class OnGoingReportComponent implements OnInit {
 
-    dataLoaded:boolean;    
-    selectedMeasurementEndDates: string;
-    selectedControlGroup: string;
-    selectedTypeOfHours: string;
-    selectedNonFullTimeCatgeories: Array<string>;
-    AvgWeeklyHrsThr: string;
+    ogReportForm: FormGroup;
+    private controlGroupControl: FormControl;
+    private measurementEndDateControl: FormControl;
+    private avgWeeklyThresholdControl: FormControl;
+    private typeOfHoursControl: FormControl;
 
-    
+    dataLoaded: boolean;
+
     measurementEndDates: Array<string>;
-    ControlGroups: Array<string>;
-    TypeOfHours: Array<string>;
-    NonFullTimeCatgeories: Array<string>;
-    errorMessage:string;
+    controlGroups: Array<string>;
+    typeOfHours: Array<string>;
+
+    errorMessage: string;
     count13Weeks: string;
     count26Weeks: string;
     count47Weeks: string;
@@ -62,18 +63,30 @@ export class OnGoingReportComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // throw new Error("Method not implemented.");
-       
-        this.measurementEndDates = this._ogreportsrv.getMeasurementEndDates();
-        this.ControlGroups = this._ogreportsrv.getControlGroups();
-        this.TypeOfHours = this._ogreportsrv.getTypeOfHours();
-        this.NonFullTimeCatgeories = this._ogreportsrv.getNonFullTimeCategories();
-        this.AvgWeeklyHrsThr = "30";
+        this.controlGroupControl = new FormControl("", Validators.required);
+        this.typeOfHoursControl = new FormControl("", Validators.required);
+        this.measurementEndDateControl = new FormControl("", Validators.required);
+        this.avgWeeklyThresholdControl = new FormControl("30", Validators.required);
 
-       
-        this.selectedMeasurementEndDates="-1";
-        this.selectedControlGroup="-1";
-        this.selectedTypeOfHours="-1";
+        this.ogReportForm = new FormGroup(
+            {
+                controlGroup: this.controlGroupControl,
+                typeOfHour: this.typeOfHoursControl,
+                avgWeeklyHoursThreshold: this.avgWeeklyThresholdControl,
+                measurementEndDate: this.measurementEndDateControl
+            }
+        );
+        // throw new Error("Method not implemented.");
+
+        this.measurementEndDates = this._ogreportsrv.getMeasurementEndDates();
+        this.controlGroups = this._ogreportsrv.getControlGroups();
+        this.typeOfHours = this._ogreportsrv.getTypeOfHours();
+        // this.avgWeeklyHrsThr = "30";
+
+
+        // this.selectedMeasurementEndDates = "-1";
+        // this.selectedControlGroup = "-1";
+        // this.selectedTypeOfHours = "-1";
 
         this.count13Weeks = "0";
         this.count26Weeks = "0";
@@ -81,32 +94,60 @@ export class OnGoingReportComponent implements OnInit {
         this.count52Weeks = "0";
 
         this.onChangeTable(this.config);
-        this.dataLoaded=false;
+        this.dataLoaded = false;
     }
 
-    Search(): void {
+    Search(formValues: any): void {
+        debugger;
         let counts = this._ogreportsrv.getWeeklyCounts();
         this.count13Weeks = counts.count13Weeks;
         this.count26Weeks = counts.count26Weeks;
         this.count47Weeks = counts.count47Weeks;
-        this.count52Weeks = counts.count52Weeks;        
+        this.count52Weeks = counts.count52Weeks;
     }
 
     getWeekData(weekCount: number): void {
         // debugger;
-          this._ogreportsrv.getWeekReportData(weekCount).subscribe(workdetails => {
-                this.workDetails = workdetails;
-                this.onChangeTable(this.config);
-                this.dataLoaded=true;
-            },
+        this._ogreportsrv.getWeekReportData(weekCount).subscribe(workdetails => {
+            this.workDetails = workdetails;
+            this.onChangeTable(this.config);
+            this.dataLoaded = true;
+        },
             error => this.errorMessage = <any>error);
+
         //this._ogreportsrv.getWeekReportData(weekCount);
 
     }
+
+    downloadPdf(): void {
+
+    }
+
+    downloadExcel(): void {
+
+    }
+    //Validations
+
+    validateControlGroups(): boolean {
+        return this.controlGroupControl.valid || this.controlGroupControl.untouched;
+    }
+
+    validateMeasurementEndDate(): boolean {
+        return this.measurementEndDateControl.valid || this.measurementEndDateControl.untouched;
+    }
+
+    validateAvgThreashold(): boolean {
+        return this.avgWeeklyThresholdControl.valid || this.avgWeeklyThresholdControl.untouched;
+    }
+
+    validateTypeOfHour(): boolean {
+        return this.typeOfHoursControl.valid || this.typeOfHoursControl.untouched;
+    }
+
     public onCellClick(data: any): any {
         console.log(data);
     }
-    
+
     public changePage(page: any, data: Array<any> = this.workDetails): Array<any> {
         let start = (page.page - 1) * page.itemsPerPage;
         let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
@@ -180,6 +221,7 @@ export class OnGoingReportComponent implements OnInit {
             return 0;
         });
     }
+
     public onChangeTable(config: any, page: any = { page: this.page, itemsPerPage: this.itemsPerPage }): any {
         if (config.filtering) {
             Object.assign(this.config.filtering, config.filtering);
@@ -194,4 +236,5 @@ export class OnGoingReportComponent implements OnInit {
         this.rows = page && config.paging ? this.changePage(page, sortedData) : sortedData;
         this.length = sortedData.length;
     }
+
 }
