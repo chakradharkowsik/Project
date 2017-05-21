@@ -10,14 +10,14 @@ import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, Ng
 export class OnGoingReportComponent implements OnInit {
 
     dataLoaded:boolean;    
-    selectedHireMonth: string;
+    selectedMeasurementEndDates: string;
     selectedControlGroup: string;
     selectedTypeOfHours: string;
     selectedNonFullTimeCatgeories: Array<string>;
     AvgWeeklyHrsThr: string;
 
     
-    Months: Array<string>;
+    measurementEndDates: Array<string>;
     ControlGroups: Array<string>;
     TypeOfHours: Array<string>;
     NonFullTimeCatgeories: Array<string>;
@@ -64,14 +64,14 @@ export class OnGoingReportComponent implements OnInit {
     ngOnInit(): void {
         // throw new Error("Method not implemented.");
        
-        this.Months = this._ogreportsrv.getMonths();
+        this.measurementEndDates = this._ogreportsrv.getMeasurementEndDates();
         this.ControlGroups = this._ogreportsrv.getControlGroups();
         this.TypeOfHours = this._ogreportsrv.getTypeOfHours();
         this.NonFullTimeCatgeories = this._ogreportsrv.getNonFullTimeCategories();
         this.AvgWeeklyHrsThr = "30";
 
        
-        this.selectedHireMonth="-1";
+        this.selectedMeasurementEndDates="-1";
         this.selectedControlGroup="-1";
         this.selectedTypeOfHours="-1";
 

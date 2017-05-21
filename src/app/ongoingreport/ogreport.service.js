@@ -20,7 +20,7 @@ var OnGoingReportService = (function () {
         this._http = _http;
         this._onGoingReportUrl = 'app/api/';
     }
-    OnGoingReportService.prototype.getMonths = function () { return ['January', 'Feburary', 'March']; };
+    OnGoingReportService.prototype.getMeasurementEndDates = function () { return ['26-10-2016', '29-10-2017']; };
     OnGoingReportService.prototype.getControlGroups = function () { return ['Revolution', 'Cast & Crew']; };
     OnGoingReportService.prototype.getTypeOfHours = function () { return ['Union', 'Non Union']; };
     OnGoingReportService.prototype.getNonFullTimeCategories = function () { return ['Part Time', 'Seasonal', 'Un Category', 'Variable']; };

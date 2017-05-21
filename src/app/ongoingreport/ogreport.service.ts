@@ -14,7 +14,7 @@ export class OnGoingReportService {
 
     }
     
-    getMonths() { return ['January', 'Feburary', 'March'] }
+    getMeasurementEndDates() { return ['26-10-2016', '29-10-2017'] }
 
     getControlGroups() { return ['Revolution', 'Cast & Crew'] }
 
