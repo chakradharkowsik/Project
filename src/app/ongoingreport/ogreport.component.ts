@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { OnGoingReportService } from './ogreport.service';
 import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, NgTableSortingDirective } from 'ng2-table/ng2-table';
-
+import { ExportToExcelService } from '../shared/export.service';
 @Component({
     moduleId: module.id,
     templateUrl: './ogreport.html'
@@ -58,7 +58,7 @@ export class OnGoingReportComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _ogreportsrv: OnGoingReportService) {
+    constructor(private _ogreportsrv: OnGoingReportService,private _export:ExportToExcelService) {
 
     }
 
@@ -124,7 +124,14 @@ export class OnGoingReportComponent implements OnInit {
     }
 
     downloadExcel(): void {
+        debugger;
+        var tbl=document.getElementById('datatable');
 
+        if(tbl){
+            console.log(tbl.children[0]);
+        }
+        if(tbl&&tbl.children.length>0)
+            this._export.excelByTableElement(this, tbl.children[0], 'On Going Report');
     }
     //Validations
 

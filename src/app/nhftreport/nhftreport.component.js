@@ -9,15 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-var forms_1 = require("@angular/forms");
-var ogreport_service_1 = require("./ogreport.service");
-var export_service_1 = require("../shared/export.service");
-var OnGoingReportComponent = (function () {
-    function OnGoingReportComponent(_ogreportsrv, _export) {
-        this._ogreportsrv = _ogreportsrv;
-        this._export = _export;
-        this.workDetails = [];
+var nhftreport_service_1 = require("./nhftreport.service");
+var NewHireFullTimeComponent = (function () {
+    function NewHireFullTimeComponent(_newHireFullTimeService) {
+        this._newHireFullTimeService = _newHireFullTimeService;
+        this.eligibleFullTimeWorkers = "0";
+        this.workerDetails = [];
         this.rows = [];
+        this.page = 1;
+        this.itemsPerPage = 2;
+        this.maxSize = 5;
+        this.numPages = 1;
+        this.length = 0;
         this.columns = [
             { title: 'Control Group', className: 'va-m', name: 'controlGroup' },
             { title: 'Latest Production Company', className: 'va-m', name: 'mostRecentProductionCompany' },
@@ -27,16 +30,11 @@ var OnGoingReportComponent = (function () {
             { title: 'Last Name', className: 'va-m', name: 'lastName' },
             { title: 'Last Worked Date', className: 'va-m', name: 'lastWorkedDate' },
             { title: 'Hire Date', className: 'va-m', name: 'hireDate' },
-            { title: 'Union/Non-Union', className: 'va-m', name: 'unionType' },
-            { title: 'Weeks Since Last Worked', className: 'va-m', name: 'weeksSinceLastWorked' },
-            { title: 'Average Hours-SMP', className: 'va-m', name: 'avgHours' },
-            { title: 'Total Hours', className: 'va-m', name: 'totalHours' }
+            { title: 'Union Type', className: 'va-m', name: 'unionType' },
+            { title: 'Payroll Source', className: 'va-m', name: 'payrollSource' },
+            { title: 'Average Hours', className: 'va-m', name: 'avgHours' },
+            { title: 'Total Hours', className: 'va-m', name: 'totalHours' },
         ];
-        this.page = 1;
-        this.itemsPerPage = 1;
-        this.maxSize = 5;
-        this.numPages = 1;
-        this.length = 0;
         this.config = {
             paging: true,
             sorting: { columns: this.columns },
@@ -44,84 +42,39 @@ var OnGoingReportComponent = (function () {
             className: ['table', 'table-striped', 'table-bordered', 'table-hover']
         };
     }
-    OnGoingReportComponent.prototype.ngOnInit = function () {
-        this.controlGroupControl = new forms_1.FormControl("", forms_1.Validators.required);
-        this.typeOfHoursControl = new forms_1.FormControl("", forms_1.Validators.required);
-        this.measurementEndDateControl = new forms_1.FormControl("", forms_1.Validators.required);
-        this.avgWeeklyThresholdControl = new forms_1.FormControl("30", forms_1.Validators.required);
-        this.ogReportForm = new forms_1.FormGroup({
-            controlGroup: this.controlGroupControl,
-            typeOfHour: this.typeOfHoursControl,
-            avgWeeklyHoursThreshold: this.avgWeeklyThresholdControl,
-            measurementEndDate: this.measurementEndDateControl
-        });
-        // throw new Error("Method not implemented.");
-        this.measurementEndDates = this._ogreportsrv.getMeasurementEndDates();
-        this.controlGroups = this._ogreportsrv.getControlGroups();
-        this.typeOfHours = this._ogreportsrv.getTypeOfHours();
-        // this.avgWeeklyHrsThr = "30";
-        // this.selectedMeasurementEndDates = "-1";
-        // this.selectedControlGroup = "-1";
-        // this.selectedTypeOfHours = "-1";
-        this.count13Weeks = "0";
-        this.count26Weeks = "0";
-        this.count47Weeks = "0";
-        this.count52Weeks = "0";
+    NewHireFullTimeComponent.prototype.ngOnInit = function () {
+        this.Years = this._newHireFullTimeService.getYears();
+        this.Months = this._newHireFullTimeService.getMonths();
+        this.ControlGroups = this._newHireFullTimeService.getControlGroups();
+        this.selectedYear = "-1";
+        this.selectedHireMonth = "-1";
+        this.selectedControlGroup = "-1";
+        this.eligibleFullTimeWorkers = "0";
         this.onChangeTable(this.config);
         this.dataLoaded = false;
     };
-    OnGoingReportComponent.prototype.Search = function (formValues) {
-        debugger;
-        var counts = this._ogreportsrv.getWeeklyCounts();
-        this.count13Weeks = counts.count13Weeks;
-        this.count26Weeks = counts.count26Weeks;
-        this.count47Weeks = counts.count47Weeks;
-        this.count52Weeks = counts.count52Weeks;
-    };
-    OnGoingReportComponent.prototype.getWeekData = function (weekCount) {
+    NewHireFullTimeComponent.prototype.eligibleFullTimeReportData = function () {
         var _this = this;
-        // debugger;
-        this._ogreportsrv.getWeekReportData(weekCount).subscribe(function (workdetails) {
-            _this.workDetails = workdetails;
+        this._newHireFullTimeService.getEligibleFullTimeReportData().subscribe(function (workdetails) {
+            _this.workerDetails = workdetails;
             _this.onChangeTable(_this.config);
             _this.dataLoaded = true;
         }, function (error) { return _this.errorMessage = error; });
-        //this._ogreportsrv.getWeekReportData(weekCount);
     };
-    OnGoingReportComponent.prototype.downloadPdf = function () {
+    NewHireFullTimeComponent.prototype.Search = function () {
+        var counts = this._newHireFullTimeService.getEligibleFullTimeWorkers();
+        this.eligibleFullTimeWorkers = counts.eftworkers;
     };
-    OnGoingReportComponent.prototype.downloadExcel = function () {
-        debugger;
-        var tbl = document.getElementById('datatable');
-        if (tbl) {
-            console.log(tbl.children[0]);
-        }
-        if (tbl && tbl.children.length > 0)
-            this._export.excelByTableElement(this, tbl.children[0], 'On Going Report');
-    };
-    //Validations
-    OnGoingReportComponent.prototype.validateControlGroups = function () {
-        return this.controlGroupControl.valid || this.controlGroupControl.untouched;
-    };
-    OnGoingReportComponent.prototype.validateMeasurementEndDate = function () {
-        return this.measurementEndDateControl.valid || this.measurementEndDateControl.untouched;
-    };
-    OnGoingReportComponent.prototype.validateAvgThreashold = function () {
-        return this.avgWeeklyThresholdControl.valid || this.avgWeeklyThresholdControl.untouched;
-    };
-    OnGoingReportComponent.prototype.validateTypeOfHour = function () {
-        return this.typeOfHoursControl.valid || this.typeOfHoursControl.untouched;
-    };
-    OnGoingReportComponent.prototype.onCellClick = function (data) {
+    NewHireFullTimeComponent.prototype.onCellClick = function (data) {
         console.log(data);
     };
-    OnGoingReportComponent.prototype.changePage = function (page, data) {
-        if (data === void 0) { data = this.workDetails; }
+    NewHireFullTimeComponent.prototype.changePage = function (page, data) {
+        if (data === void 0) { data = this.workerDetails; }
         var start = (page.page - 1) * page.itemsPerPage;
         var end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
         return data.slice(start, end);
     };
-    OnGoingReportComponent.prototype.changeFilter = function (data, config) {
+    NewHireFullTimeComponent.prototype.changeFilter = function (data, config) {
         var _this = this;
         var filteredData = data;
         this.columns.forEach(function (column) {
@@ -154,7 +107,7 @@ var OnGoingReportComponent = (function () {
         filteredData = tempArray;
         return filteredData;
     };
-    OnGoingReportComponent.prototype.changeSort = function (data, config) {
+    NewHireFullTimeComponent.prototype.changeSort = function (data, config) {
         if (!config.sorting) {
             return data;
         }
@@ -181,7 +134,7 @@ var OnGoingReportComponent = (function () {
             return 0;
         });
     };
-    OnGoingReportComponent.prototype.onChangeTable = function (config, page) {
+    NewHireFullTimeComponent.prototype.onChangeTable = function (config, page) {
         if (page === void 0) { page = { page: this.page, itemsPerPage: this.itemsPerPage }; }
         if (config.filtering) {
             Object.assign(this.config.filtering, config.filtering);
@@ -189,19 +142,20 @@ var OnGoingReportComponent = (function () {
         if (config.sorting) {
             Object.assign(this.config.sorting, config.sorting);
         }
-        var filteredData = this.changeFilter(this.workDetails, this.config);
+        var filteredData = this.changeFilter(this.workerDetails, this.config);
         var sortedData = this.changeSort(filteredData, this.config);
         this.rows = page && config.paging ? this.changePage(page, sortedData) : sortedData;
         this.length = sortedData.length;
     };
-    return OnGoingReportComponent;
+    return NewHireFullTimeComponent;
 }());
-OnGoingReportComponent = __decorate([
+NewHireFullTimeComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
-        templateUrl: './ogreport.html'
+        selector: 'nhftreport',
+        templateUrl: 'nhftreport.html'
     }),
-    __metadata("design:paramtypes", [ogreport_service_1.OnGoingReportService, export_service_1.ExportToExcelService])
-], OnGoingReportComponent);
-exports.OnGoingReportComponent = OnGoingReportComponent;
-//# sourceMappingURL=ogreport.component.js.map
+    __metadata("design:paramtypes", [nhftreport_service_1.NewHireFullTimeService])
+], NewHireFullTimeComponent);
+exports.NewHireFullTimeComponent = NewHireFullTimeComponent;
+//# sourceMappingURL=nhftreport.component.js.map

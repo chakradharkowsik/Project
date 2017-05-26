@@ -5,11 +5,12 @@ import { HttpModule } from '@angular/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { SideNavComponent, TopNavComponent, ENFTReportComponent, ENFTReportService, OnGoingReportComponent, OnGoingReportService } from './index';
+import { SideNavComponent, TopNavComponent, ENFTReportComponent, ENFTReportService, OnGoingReportComponent,
+   OnGoingReportService,NewHireFullTimeComponent,NewHireFullTimeService } from './index';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { PaginationModule, TabsModule } from 'ng2-bootstrap';
 import { APPROUTES } from './app.routes';
-
+import { ExportToExcelService } from './shared/index';
 @NgModule({
   imports: [BrowserModule,
     FormsModule,
@@ -24,10 +25,13 @@ import { APPROUTES } from './app.routes';
     SideNavComponent,
     TopNavComponent,
     ENFTReportComponent,
-    OnGoingReportComponent],
+    OnGoingReportComponent,
+    NewHireFullTimeComponent],
   providers: [
     ENFTReportService,
-    OnGoingReportService
+    OnGoingReportService,
+    ExportToExcelService,
+    NewHireFullTimeService
   ],
   bootstrap: [AppComponent]
 })

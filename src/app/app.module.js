@@ -15,6 +15,7 @@ var index_1 = require("./index");
 var ng2_table_1 = require("ng2-table/ng2-table");
 var ng2_bootstrap_1 = require("ng2-bootstrap");
 var app_routes_1 = require("./app.routes");
+var index_2 = require("./shared/index");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -35,10 +36,13 @@ AppModule = __decorate([
             index_1.SideNavComponent,
             index_1.TopNavComponent,
             index_1.ENFTReportComponent,
-            index_1.OnGoingReportComponent],
+            index_1.OnGoingReportComponent,
+            index_1.NewHireFullTimeComponent],
         providers: [
             index_1.ENFTReportService,
-            index_1.OnGoingReportService
+            index_1.OnGoingReportService,
+            index_2.ExportToExcelService,
+            index_1.NewHireFullTimeService
         ],
         bootstrap: [app_component_1.AppComponent]
     })

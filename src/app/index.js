@@ -5,5 +5,6 @@ function __export(m) {
 __export(require("./app.component"));
 __export(require("./enftreport/index"));
 __export(require("./ongoingreport/index"));
+__export(require("./nhftreport/index"));
 __export(require("./layout/index"));
 //# sourceMappingURL=index.js.map
