@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ENFTReportService } from './enftreport.service';
 import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, NgTableSortingDirective } from 'ng2-table/ng2-table';
+import { ExportToExcelService } from '../shared/export.service';
 
 @Component({
     moduleId: module.id,
@@ -72,7 +73,7 @@ export class ENFTReportComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _enftreport: ENFTReportService) {
+    constructor(private _enftreport: ENFTReportService,private _export:ExportToExcelService) {
 
     }
 
@@ -117,6 +118,21 @@ export class ENFTReportComponent implements OnInit {
             error => this.errorMessage = <any>error);
         //this._enftreport.getWeekReportData(weekCount);
 
+    }
+
+      downloadPdf(): void {
+
+    }
+
+    downloadExcel(): void {
+        debugger;
+        var tbl=document.getElementById('datatable');
+        var btn=document.getElementById('btnDownloadExcel');
+        if(tbl){
+            console.log(tbl.children[0]);
+        }
+        if(tbl&&tbl.children.length>0)
+            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
     }
     public onCellClick(data: any): any {
         console.log(data);

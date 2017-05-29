@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NewHireFullTimeService } from './nhftreport.service';
-
+import { ExportToExcelService } from '../shared/export.service';
 @Component({
     moduleId: module.id,
     selector: 'nhftreport',
@@ -9,7 +9,7 @@ import { NewHireFullTimeService } from './nhftreport.service';
 
 export class NewHireFullTimeComponent implements OnInit {
 
-    constructor(private _newHireFullTimeService: NewHireFullTimeService) { }
+    constructor(private _newHireFullTimeService: NewHireFullTimeService,private _export:ExportToExcelService) { }
 
     selectedYear: string;
     selectedHireMonth: string;
@@ -75,7 +75,7 @@ export class NewHireFullTimeComponent implements OnInit {
             this.onChangeTable(this.config);
             this.dataLoaded = true;
         },
-        error => this.errorMessage = <any>error);
+            error => this.errorMessage = <any>error);
 
     }
 
@@ -86,6 +86,20 @@ export class NewHireFullTimeComponent implements OnInit {
     }
 
 
+    downloadPdf(): void {
+
+    }
+
+    downloadExcel(): void {
+        debugger;
+        var tbl = document.getElementById('datatable');
+        var btn = document.getElementById('btnDownloadExcel');
+        if (tbl) {
+            console.log(tbl.children[0]);
+        }
+        if (tbl && tbl.children.length > 0)
+            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Full Time Report');
+    }
     public onCellClick(data: any): any {
         console.log(data);
     }
@@ -99,12 +113,9 @@ export class NewHireFullTimeComponent implements OnInit {
 
     public changeFilter(data: any, config: any): any {
         let filteredData: Array<any> = data;
-        this.columns.forEach((column: any) => 
-        {
-            if (column.filtering) 
-            {
-                filteredData = filteredData.filter((item: any) => 
-                {
+        this.columns.forEach((column: any) => {
+            if (column.filtering) {
+                filteredData = filteredData.filter((item: any) => {
                     return item[column.name].match(column.filtering.filterString);
                 });
             }

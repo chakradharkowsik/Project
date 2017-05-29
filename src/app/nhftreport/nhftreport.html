@@ -10,8 +10,8 @@
                     <div class="panel-heading">
                         <span class="panel-title">New Hire Full Time Report</span>
                         <span class="panel-icon pull-right">
-                            <a href="#" class="fa fa-file-pdf-o"></a>
-                            <a href="#" class="fa fa-file-excel-o"></a>
+                           <a id="btnDownloadPdf"  class="fa fa-file-pdf-o" (click)="downloadPdf()"></a>
+                            <a id="btnDownloadExcel" class="fa fa-file-excel-o" (click)="downloadExcel()" ></a>
                         </span>
                     </div>
                     <div class="panel-body">
@@ -125,7 +125,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="table-responsive over-x_table">
-                            <ng-table ngclass="table table-striped table-bordered table-hover" [config]="config" (tableChanged)="onChangeTable(config)"
+                            <ng-table id="datatable" ngclass="table table-striped table-bordered table-hover" [config]="config" (tableChanged)="onChangeTable(config)"
                                 (cellClicked)="onCellClick($event)" [rows]="rows" [columns]="columns">
                             </ng-table>
                             <pagination *ngIf="config.paging" class="pagination-sm" [(ngModel)]="page" [totalItems]="length" [itemsPerPage]="itemsPerPage"

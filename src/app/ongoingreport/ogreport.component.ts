@@ -126,12 +126,12 @@ export class OnGoingReportComponent implements OnInit {
     downloadExcel(): void {
         debugger;
         var tbl=document.getElementById('datatable');
-
+        var btn=document.getElementById('btnDownloadExcel');
         if(tbl){
             console.log(tbl.children[0]);
         }
         if(tbl&&tbl.children.length>0)
-            this._export.excelByTableElement(this, tbl.children[0], 'On Going Report');
+            this._export.excelByTableElement(btn, tbl.children[0], 'On Going Report');
     }
     //Validations
 

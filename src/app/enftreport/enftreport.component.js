@@ -10,9 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var enftreport_service_1 = require("./enftreport.service");
+var export_service_1 = require("../shared/export.service");
 var ENFTReportComponent = (function () {
-    function ENFTReportComponent(_enftreport) {
+    function ENFTReportComponent(_enftreport, _export) {
         this._enftreport = _enftreport;
+        this._export = _export;
         this.workDetails = [];
         this.rows = [];
         this.columns = [
@@ -78,6 +80,18 @@ var ENFTReportComponent = (function () {
             _this.dataLoaded = true;
         }, function (error) { return _this.errorMessage = error; });
         //this._enftreport.getWeekReportData(weekCount);
+    };
+    ENFTReportComponent.prototype.downloadPdf = function () {
+    };
+    ENFTReportComponent.prototype.downloadExcel = function () {
+        debugger;
+        var tbl = document.getElementById('datatable');
+        var btn = document.getElementById('btnDownloadExcel');
+        if (tbl) {
+            console.log(tbl.children[0]);
+        }
+        if (tbl && tbl.children.length > 0)
+            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
     };
     ENFTReportComponent.prototype.onCellClick = function (data) {
         console.log(data);
@@ -168,7 +182,7 @@ ENFTReportComponent = __decorate([
         moduleId: module.id,
         templateUrl: 'enftreport.html'
     }),
-    __metadata("design:paramtypes", [enftreport_service_1.ENFTReportService])
+    __metadata("design:paramtypes", [enftreport_service_1.ENFTReportService, export_service_1.ExportToExcelService])
 ], ENFTReportComponent);
 exports.ENFTReportComponent = ENFTReportComponent;
 //# sourceMappingURL=enftreport.component.js.map
