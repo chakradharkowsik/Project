@@ -8,11 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var core_1 = require("@angular/core");
 var SideNavComponent = (function () {
     function SideNavComponent() {
-        this.route = 'aca';
+        this.route = 'reporting';
         this.dashboard = 'dashboard';
         this.nftreport = 'nhftreport';
         this.enftreport = 'enftreport';
         this.ogreport = 'ogreport';
+        this.pdareport = 'pdareport';
+        this.ercreport = 'ercreport';
+        this.empsummary = 'empsummary';
+        this.empeligilbility = 'empeligilbility';
+        this.empdemographics = 'empdemographics';
+        this.empbreakinservice = 'empbreakinservice';
     }
     return SideNavComponent;
 }());
@@ -20,7 +26,7 @@ SideNavComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         selector: 'sidenav',
-        templateUrl: 'sidenav.html',
+        templateUrl: 'sidenav.html'
     })
 ], SideNavComponent);
 exports.SideNavComponent = SideNavComponent;

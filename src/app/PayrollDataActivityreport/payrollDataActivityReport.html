@@ -16,15 +16,14 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-horizontal">
-                            <form novalidate [formGroup]="ogReportForm" (ngSubmit)="Search(ogReportForm.value)">
+                            <form novalidate [formGroup]="pdaReportForm" (ngSubmit)="Search(pdaReportForm.value)">
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="inputEmail3" class="col-sm-5 control-label"><i class="fa fa-calendar"></i> Year</label>
                                             <div class="col-sm-7">
-
                                                 <label class="field select">
-                                                <select id="selYear" name="country" [(ngModel)]="selectedYear" aria-placeholder="Select year">
+                                                <select id="selYear" name="country" formControlName="yearControl" aria-placeholder="Select year">
                                                     <option value="-1">Select Year</option>
                                                     <option *ngFor="let year of Years" value={{year}}>
                                                         {{year}}
@@ -43,7 +42,7 @@
                                                 <label class="field select">
                                                 <select id="selcontrolgroup" name="controlgroup" formControlName="controlGroup" [ngClass]="{'error':!validateControlGroups()}">
                                                     <option selected disabled value="">Select Value</option>
-                                                    <option *ngFor="let group of controlGroups" value={{group}}>
+                                                    <option *ngFor="let group of ControlGroups" value={{group}}>
                                                         {{group}}
                                                     </option>
                                                 </select>
@@ -54,74 +53,19 @@
                                         </div>
 
                                     </div>
-
-                                
-                                <div class="col-sm-8">
-                                    <div class="form-group">
-                                        <div class="col-sm-2">
-                                            <button class="btn btn-primary" type="submit">Filter</button>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <div class="col-sm-2">
+                                                <button class="btn btn-primary" type="submit">Filter</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                        </div>
-                        </form>
-                        <hr class="short" />
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h6>Summary</h6>
-                                <div class="summaryBlock clearfix">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-success btn-lg" (click)="getWeekData(13)">
-                                                        13 Weeks
-                                                    </button>
-                                                <button type="button" class="btn btn-success btn-lg">
-                                                        {{count13Weeks}}
-                                                    </button>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-primary btn-lg" (click)="getWeekData(26)">
-                                                        26 Weeks
-                                                    </button>
-                                                <button type="button" class="btn btn-primary btn-lg">
-                                                        {{count26Weeks}}
-                                                    </button>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-info btn-lg" (click)="getWeekData(47)">
-                                                        47 Weeks
-                                                    </button>
-                                                <button type="button" class="btn btn-info btn-lg">
-                                                        {{count47Weeks}}
-                                                    </button>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-warning btn-lg" (click)="getWeekData(52)">
-                                                        52 Weeks
-                                                    </button>
-                                                <button type="button" class="btn btn-warning btn-lg">
-                                                        {{count52Weeks}}
-                                                    </button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
+                            </form>                           
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </header>
     <!-- -------------- /Topbar -------------- -->

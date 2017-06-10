@@ -152,13 +152,13 @@
             } else if (window.URL.createObjectURL) {
                 blob = b64toBlob(base64data, exporttype);
                 var blobUrl = window.URL.createObjectURL(blob, exporttype, filename);
-                //anchor.href = blobUrl
-                window.open(blobUrl);
+                anchor.href = blobUrl
+                //window.open(blobUrl);
             } else {
                 var hrefvalue = "data:" + exporttype + ";base64," + base64data;
                 anchor.download = filename;
-                // anchor.href = hrefvalue;
-                window.open(hrefvalue);
+                anchor.href = hrefvalue;
+                //window.open(hrefvalue);
             }
 
             // Return true to allow the link to work
@@ -167,24 +167,24 @@
 
         var ee = {
             /** @export */
-            excelByTableElement: function (anchor, table, name) {
+            excelByTableElement: function (anchor, table, sheetName,excelName) {
                 // table = get(table);
                 debugger;
 
                 var htmlTableData = tableToHTML(table);
 
-                var ctx = { worksheet: name || 'Worksheet', table: htmlTableData };
+                var ctx = { worksheet: sheetName || 'Worksheet', table: htmlTableData };
                 var b64 = base64(format(template.excel, ctx));
-                return createDownloadLink(anchor, b64, 'application/vnd.ms-excel', 'export.xls');
+                return createDownloadLink(anchor, b64, 'application/vnd.ms-excel', excelName+'.xls');
             },
-            excel: function (anchor, table, name) {
+            excel: function (anchor, table, sheetName) {
                 table = get(table);
 
                 var htmlTableData = tableToHTML(table);
 
-                var ctx = { worksheet: name || 'Worksheet', table: htmlTableData };
+                var ctx = { worksheet: sheetName || 'Worksheet', table: htmlTableData };
                 var b64 = base64(format(template.excel, ctx));
-                return createDownloadLink(anchor, b64, 'application/vnd.ms-excel', 'export.xls');
+                return createDownloadLink(anchor, b64, 'application/vnd.ms-excel', excelName+'.xls');
             },
             /** @export */
             csv: function (anchor, table, delimiter, newLine) {
@@ -200,7 +200,7 @@
                 var b64 = base64(csvData);
                 return createDownloadLink(anchor, b64, 'application/csv', 'export.csv');
             },
-            csvByTableElement: function (anchor, table, name) {
+            csvByTableElement: function (anchor, table, sheetName) {
                 // table = get(table);
                 debugger;
                 if (delimiter !== undefined && delimiter) {
@@ -213,7 +213,7 @@
                 //table = get(table);
                 var csvData = tableToCSV(table);
                 var b64 = base64(csvData);
-                return createDownloadLink(anchor, b64, 'application/csv', 'export.csv');
+                return createDownloadLink(anchor, b64, 'application/csv', excelName+'.csv');
             }
         };
 

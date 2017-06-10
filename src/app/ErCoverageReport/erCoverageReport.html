@@ -8,7 +8,7 @@
                 <div class="panel panel-primary" id="p2" data-panel-color="false" data-panel-fullscreen="false" data-panel-remove="false"
                     data-panel-title="false">
                     <div class="panel-heading">
-                        <span class="panel-title">New Hire Full Time Report</span>
+                        <span class="panel-title">ER Coverage Report</span>
                         <span class="panel-icon pull-right">
                            <a id="btnDownloadPdf"  class="fa fa-file-pdf-o" (click)="downloadPdf()"></a>
                             <a id="btnDownloadExcel" class="fa fa-file-excel-o" (click)="downloadExcel()" ></a>
@@ -33,22 +33,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="ddlmonth" class="col-sm-5 control-label"><i class="fa fa-calendar"></i> Hire Month</label>
-                                        <div class="col-sm-7">
-                                            <label class="field select">
-                                                <select id="ddlmonth" name="ddlmonth" [(ngModel)]="selectedHireMonth">
-                                                    <option value="-1">Select Month</option>
-                                                    <option *ngFor="let month of Months" value={{month}}>
-                                                        {{month}}
-                                                    </option>
-                                                </select>
-                                                <i class="arrow"></i>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                               
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="ddlcontrolgroup" class="col-sm-5 control-label"><i class="fa fa-group"></i> Control Group</label>
@@ -62,10 +47,8 @@
                                                 </select>
                                                 <i class="arrow"></i>
                                             </label>
-                                        </div>
-                                        
+                                        </div>                                        
                                     </div>
-
                                 </div>  
                                 <div class="col-sm-3">
                                             <button class="btn btn-primary" type="button" (click)="Search()">Filter</button>
@@ -80,11 +63,11 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-success btn-lg" (click)="eligibleFullTimeReportData()">
-                                                        ACA Eligible Full Time
+                                                    <button type="button" class="btn btn-success btn-lg" (click)="annualizedMonthlyReportData()">
+                                                        Annualized Monthly
                                                     </button>
                                                     <button type="button" class="btn btn-success btn-lg">
-                                                        {{eligibleFullTimeWorkers}}
+                                                        {{annulaizedMonthly}}
                                                     </button>
                                                 </div>
                                             </div>                                            

@@ -1,9 +1,15 @@
 import { Component } from '@angular/core';
-import { AppComponent } from '../app.component';
+
 @Component({
-  moduleId:module.id,
+  moduleId: module.id,
   templateUrl: './login.html',
 })
-export class LoginComponent  implements AppComponent{ 
-  isNaviationEnabled:boolean=false;
- }
+export class LoginComponent {
+
+  route: string = "aca";
+  dashboard: string = "dashboard";
+
+  login(): void {
+      console.log('login/submitted');
+  }
+}

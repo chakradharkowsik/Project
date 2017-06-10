@@ -1,27 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { PayrollDataActivityReportService } from './pdareport.service';
+import { PayrollDataActivityReportService } from './payrollDataActivityReport.service';
 import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, NgTableSortingDirective } from 'ng2-table/ng2-table';
 import { ExportToExcelService } from '../shared/export.service';
 @Component({
     moduleId: module.id,
-    templateUrl: './pdareport.html'
+    templateUrl: './payrollDataActivityReport.html'
 
 })
 export class PayrollDataActivityReportComponent implements OnInit {
 
-    ogReportForm: FormGroup;
+    pdaReportForm: FormGroup;
     private controlGroupControl: FormControl;
-    private measurementEndDateControl: FormControl;
-    private avgWeeklyThresholdControl: FormControl;
-    private typeOfHoursControl: FormControl;
-
+    private yearControl: FormControl;
+    selectedYear: string;
     dataLoaded: boolean;
-
-    measurementEndDates: Array<string>;
-    controlGroups: Array<string>;
-    typeOfHours: Array<string>;
-
+    ControlGroups: Array<string>;
+    Years: Array<string>;
     errorMessage: string;
     count13Weeks: string;
     count26Weeks: string;
@@ -32,21 +27,32 @@ export class PayrollDataActivityReportComponent implements OnInit {
 
     public rows: Array<any> = [];
     public columns: Array<any> = [
-        { title: 'Control Group', className: 'va-m', name: 'controlGroup' },
-        { title: 'Latest Production Company', className: 'va-m', name: 'mostRecentProductionCompany' },
-        { title: 'Most Recent Show', className: 'va-m', name: 'mostRecentProject' },
-        { title: 'SSN Number', className: 'hidden-xs va-m', name: 'ssnNumber' },
-        { title: 'First Name', className: 'hidden-xs va-m', name: 'firstName' },
-        { title: 'Last Name', className: 'va-m', name: 'lastName' },
-        { title: 'Last Worked Date', className: 'va-m', name: 'lastWorkedDate' },
+        { title: 'SSN', className: 'hidden-xs va-m', name: 'ssnNumber' },
+        { title: 'Employee Name', className: 'hidden-xs va-m', name: 'employeeName' },
+        { title: 'EIN', className: 'va-m', name: 'ein' },
+        { title: 'Production Company', className: 'va-m', name: 'productionCompany' },
         { title: 'Hire Date', className: 'va-m', name: 'hireDate' },
-        { title: 'Union/Non-Union', className: 'va-m', name: 'unionType' },
-        { title: 'Weeks Since Last Worked', className: 'va-m', name: 'weeksSinceLastWorked' },
-        { title: 'Average Hours-SMP', className: 'va-m', name: 'avgHours' },
-        { title: 'Total Hours', className: 'va-m', name: 'totalHours' }
+        { title: 'Last Worked Date', className: 'va-m', name: 'lastWorkedDate' },
+        { title: 'Project', className: 'va-m', name: 'project' },
+        { title: 'ClientID', className: 'va-m', name: 'clientId' },
+        { title: 'Source', className: 'va-m', name: 'source' },
+        { title: 'Employment Status', className: 'va-m', name: 'employmentStatus' },
+        { title: 'Union Hours', className: 'va-m', name: 'unionHours' },
+        { title: 'Jan', className: 'va-m', name: 'jan' },
+        { title: 'Feb', className: 'va-m', name: 'feb' },
+        { title: 'Mar', className: 'va-m', name: 'mar' },
+        { title: 'Apr', className: 'va-m', name: 'apr' },
+        { title: 'May', className: 'va-m', name: 'may' },
+        { title: 'Jun', className: 'va-m', name: 'jun' },
+        { title: 'Jul', className: 'va-m', name: 'jul' },
+        { title: 'Aug', className: 'va-m', name: 'aug' },
+        { title: 'Sep', className: 'va-m', name: 'sep' },
+        { title: 'Oct', className: 'va-m', name: 'oct' },
+        { title: 'Nov', className: 'va-m', name: 'nov' },
+        { title: 'Dec', className: 'va-m', name: 'dec' }
     ];
     public page: number = 1;
-    public itemsPerPage: number = 1;
+    public itemsPerPage: number = 10;
     public maxSize: number = 5;
     public numPages: number = 1;
     public length: number = 0;
@@ -58,65 +64,36 @@ export class PayrollDataActivityReportComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _ogreportsrv: PayrollDataActivityReportService,private _export:ExportToExcelService) {
+    constructor(private _pdareportsrv: PayrollDataActivityReportService, private _export: ExportToExcelService) {
 
     }
 
     ngOnInit(): void {
         this.controlGroupControl = new FormControl("", Validators.required);
-        this.typeOfHoursControl = new FormControl("", Validators.required);
-        this.measurementEndDateControl = new FormControl("", Validators.required);
-        this.avgWeeklyThresholdControl = new FormControl("30", Validators.required);
-
-        this.ogReportForm = new FormGroup(
+        this.yearControl = new FormControl("-1");
+        this.pdaReportForm = new FormGroup(
             {
                 controlGroup: this.controlGroupControl,
-                typeOfHour: this.typeOfHoursControl,
-                avgWeeklyHoursThreshold: this.avgWeeklyThresholdControl,
-                measurementEndDate: this.measurementEndDateControl
+                yearControl: this.yearControl
             }
         );
-        // throw new Error("Method not implemented.");
-
-        this.measurementEndDates = this._ogreportsrv.getMeasurementEndDates();
-        this.controlGroups = this._ogreportsrv.getControlGroups();
-        this.typeOfHours = this._ogreportsrv.getTypeOfHours();
-        // this.avgWeeklyHrsThr = "30";
-
-
-        // this.selectedMeasurementEndDates = "-1";
-        // this.selectedControlGroup = "-1";
-        // this.selectedTypeOfHours = "-1";
-
         this.count13Weeks = "0";
         this.count26Weeks = "0";
         this.count47Weeks = "0";
         this.count52Weeks = "0";
-
+        this.ControlGroups = this._pdareportsrv.getControlGroups();
+        this.Years = this._pdareportsrv.getYears();
         this.onChangeTable(this.config);
         this.dataLoaded = false;
     }
 
     Search(formValues: any): void {
-        debugger;
-        let counts = this._ogreportsrv.getWeeklyCounts();
-        this.count13Weeks = counts.count13Weeks;
-        this.count26Weeks = counts.count26Weeks;
-        this.count47Weeks = counts.count47Weeks;
-        this.count52Weeks = counts.count52Weeks;
-    }
-
-    getWeekData(weekCount: number): void {
-        // debugger;
-        this._ogreportsrv.getWeekReportData(weekCount).subscribe(workdetails => {
+        this._pdareportsrv.getWeekReportData(26).subscribe(workdetails => {
             this.workDetails = workdetails;
             this.onChangeTable(this.config);
             this.dataLoaded = true;
         },
             error => this.errorMessage = <any>error);
-
-        //this._ogreportsrv.getWeekReportData(weekCount);
-
     }
 
     downloadPdf(): void {
@@ -125,30 +102,18 @@ export class PayrollDataActivityReportComponent implements OnInit {
 
     downloadExcel(): void {
         debugger;
-        var tbl=document.getElementById('datatable');
-        var btn=document.getElementById('btnDownloadExcel');
-        if(tbl){
+        var tbl = document.getElementById('datatable');
+        var btn = document.getElementById('btnDownloadExcel');
+        if (tbl) {
             console.log(tbl.children[0]);
         }
-        if(tbl&&tbl.children.length>0)
-            this._export.excelByTableElement(btn, tbl.children[0], 'On Going Report');
+        if (tbl && tbl.children.length > 0)
+            this._export.excelByTableElement(btn, tbl.children[0], 'Payroll Data Activity Report');
     }
     //Validations
 
     validateControlGroups(): boolean {
         return this.controlGroupControl.valid || this.controlGroupControl.untouched;
-    }
-
-    validateMeasurementEndDate(): boolean {
-        return this.measurementEndDateControl.valid || this.measurementEndDateControl.untouched;
-    }
-
-    validateAvgThreashold(): boolean {
-        return this.avgWeeklyThresholdControl.valid || this.avgWeeklyThresholdControl.untouched;
-    }
-
-    validateTypeOfHour(): boolean {
-        return this.typeOfHoursControl.valid || this.typeOfHoursControl.untouched;
     }
 
     public onCellClick(data: any): any {

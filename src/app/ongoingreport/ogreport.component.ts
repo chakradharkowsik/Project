@@ -76,17 +76,11 @@ export class OnGoingReportComponent implements OnInit {
                 measurementEndDate: this.measurementEndDateControl
             }
         );
-        // throw new Error("Method not implemented.");
+     
 
         this.measurementEndDates = this._ogreportsrv.getMeasurementEndDates();
         this.controlGroups = this._ogreportsrv.getControlGroups();
-        this.typeOfHours = this._ogreportsrv.getTypeOfHours();
-        // this.avgWeeklyHrsThr = "30";
-
-
-        // this.selectedMeasurementEndDates = "-1";
-        // this.selectedControlGroup = "-1";
-        // this.selectedTypeOfHours = "-1";
+        this.typeOfHours = this._ogreportsrv.getTypeOfHours();       
 
         this.count13Weeks = "0";
         this.count26Weeks = "0";

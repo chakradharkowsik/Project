@@ -9,17 +9,13 @@ import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class PayrollDataActivityReportService {
-    private _pdaGoingReportUrl = 'app/api/';
+    private _pdaReportUrl = 'app/api/';
     constructor(private _http: Http) {
 
     }
-    
-    getMeasurementEndDates() { return ['26-10-2016', '29-10-2017'] }
+      getYears() { return ['2016', '2017', '2018'] }
 
     getControlGroups() { return ['Revolution', 'Cast & Crew'] }
-
-    getTypeOfHours() { return ['Union', 'Non Union'] }
-   
 
     getWeeklyCounts(): any { return { count13Weeks: "3", count26Weeks: "4", count47Weeks: "5", count52Weeks: "6" }; }
 
@@ -37,7 +33,7 @@ export class PayrollDataActivityReportService {
             case 52:
                 break;
         }
-        return this._http.get(this._pdaGoingReportUrl + fileName)
+        return this._http.get(this._pdaReportUrl + fileName)
             .map((response: Response) => <IWorkDetails[]>response.json())
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);

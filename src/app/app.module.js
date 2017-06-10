@@ -40,13 +40,23 @@ AppModule = __decorate([
             index_1.ENFTReportComponent,
             index_1.OnGoingReportComponent,
             index_1.NewHireFullTimeComponent,
+            index_1.PayrollDataActivityReportComponent,
+            index_1.ErCoverageReportComponent,
+            index_1.EmployeeEligibilityReportComponent,
+            index_1.EmployeeDemographicReportComponent,
+            index_1.EmployeeBreakInServiceReportComponent,
             index_1.LoginComponent
         ],
         providers: [
             index_1.ENFTReportService,
             index_1.OnGoingReportService,
             index_2.ExportToExcelService,
-            index_1.NewHireFullTimeService
+            index_1.NewHireFullTimeService,
+            index_1.ErCoverageReportService,
+            index_1.EmployeeEligibilityReportService,
+            index_1.EmployeeDemographicReportService,
+            index_1.EmployeeBreakInServiceReportService,
+            index_1.PayrollDataActivityReportService
         ],
         bootstrap: [app_component_1.AppComponent]
     })

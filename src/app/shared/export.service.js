@@ -9,14 +9,17 @@ var core_1 = require("@angular/core");
 var ExportToExcelService = (function () {
     function ExportToExcelService() {
     }
-    ExportToExcelService.prototype.excel = function (anchor, table, name) {
-        ExcellentExport.excel(anchor, table, name);
+    ExportToExcelService.prototype.excel = function (anchor, table, sheetName, excelName) {
+        if (excelName === void 0) { excelName = 'export'; }
+        ExcellentExport.excel(anchor, table, sheetName, excelName);
     };
-    ExportToExcelService.prototype.excelByTableElement = function (anchor, table, name) {
-        var link = ExcellentExport.excelByTableElement(anchor, table, name);
+    ExportToExcelService.prototype.excelByTableElement = function (anchor, table, sheetName, excelName) {
+        if (excelName === void 0) { excelName = 'export'; }
+        var link = ExcellentExport.excelByTableElement(anchor, table, sheetName, excelName);
     };
-    ExportToExcelService.prototype.csvByTableElement = function (anchor, table, name) {
-        var link = ExcellentExport.csvByTableElement(anchor, table, name);
+    ExportToExcelService.prototype.csvByTableElement = function (anchor, table, sheetName, excelName) {
+        if (excelName === void 0) { excelName = 'export'; }
+        var link = ExcellentExport.csvByTableElement(anchor, table, sheetName, excelName);
     };
     return ExportToExcelService;
 }());
