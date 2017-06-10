@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { IEmpEligibleWorkDetail } from './empeligibleworkdetail';
 import { Observable } from 'rxjs/Observable';
+import { CONFIGURATION } from '../app.config';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -11,7 +12,7 @@ import 'rxjs/add/observable/throw';
 export class EmployeeEligibilityReportService {
 constructor(private _http: Http) { }
 
-private _empEligibleReportUrl = 'app/api/';
+private _empEligibleReportUrl = CONFIGURATION.baseServiceUrl;
 
 getEmployeeEligibleReports(): Observable<IEmpEligibleWorkDetail[]> {
         let fileName: string = 'empeligibility.json';        

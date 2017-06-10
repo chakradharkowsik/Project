@@ -7,12 +7,12 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
-
+import { CONFIGURATION } from '../app.config';
 @Injectable()
 export class NewHireFullTimeService
 {
    constructor(private _http:Http){}
-   private _enftreportUrl = 'app/api/';
+   private _enftreportUrl = CONFIGURATION.baseServiceUrl;
 
     getYears() { return ['2016', '2017', '2018'] }
 

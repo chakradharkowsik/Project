@@ -6,10 +6,10 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
-
+import { CONFIGURATION } from '../app.config';
 @Injectable()
 export class OnGoingReportService {
-    private _onGoingReportUrl = 'app/api/';
+    private _onGoingReportUrl = CONFIGURATION.baseServiceUrl;
     constructor(private _http: Http) {
 
     }

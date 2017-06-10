@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { IEmployeeBreakInServiceDetail } from './employeeBreakInServiceDetail';
 import { Observable } from 'rxjs/Observable';
+import { CONFIGURATION } from '../app.config';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -11,7 +12,7 @@ import 'rxjs/add/observable/throw';
 export class EmployeeBreakInServiceReportService {
 constructor(private _http: Http) { }
 
-private _empBreakInServiceReportUrl = 'app/api/';
+private _empBreakInServiceReportUrl =CONFIGURATION.baseServiceUrl;// 'app/api/';
 
 getEmployeeDemographicsReports(): Observable<IEmployeeBreakInServiceDetail[]> {
         let fileName: string = 'employeebreakinservice.json';        

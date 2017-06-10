@@ -15,10 +15,11 @@ require("rxjs/add/operator/do");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/map");
 require("rxjs/add/observable/throw");
+var app_config_1 = require("../app.config");
 var NewHireFullTimeService = (function () {
     function NewHireFullTimeService(_http) {
         this._http = _http;
-        this._enftreportUrl = 'app/api/';
+        this._enftreportUrl = app_config_1.CONFIGURATION.baseServiceUrl;
     }
     NewHireFullTimeService.prototype.getYears = function () { return ['2016', '2017', '2018']; };
     NewHireFullTimeService.prototype.getMonths = function () { return ['January', 'Feburary', 'March']; };

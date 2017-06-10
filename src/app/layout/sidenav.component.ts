@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CONFIGURATION } from '../app.config';
 
 @Component({
     moduleId: module.id,
@@ -6,15 +7,17 @@ import { Component } from '@angular/core';
     templateUrl: 'sidenav.html'
 })
 export class SideNavComponent {
-    route: string = 'reporting';
-    dashboard:string='dashboard';
-    nftreport: string = 'nhftreport';
-    enftreport: string = 'enftreport';
-    ogreport: string = 'ogreport';
-    pdareport:string='pdareport';
-    ercreport:string='ercreport';
-    empsummary:string='empsummary';
-    empeligilbility:string='empeligilbility';
-    empdemographics:string='empdemographics';
-    empbreakinservice:string='empbreakinservice';
+    route: string = CONFIGURATION.reportingroute;
+    dashboard: string = CONFIGURATION.dashboard;
+    nftreport: string = CONFIGURATION.nftreport;
+    enftreport: string = CONFIGURATION.enftreport;
+    ogreport: string = CONFIGURATION.ogreport;
+    pdareport: string = CONFIGURATION.pdareport;
+    ercreport: string = CONFIGURATION.ercreport;
+    empsummary: string = CONFIGURATION.empsummary;
+    empeligilbility: string = CONFIGURATION.empeligilbility;
+    empdemographics: string = CONFIGURATION.empdemographics;
+    empbreakinservice: string = CONFIGURATION.empbreakinservice;
+
+
 }

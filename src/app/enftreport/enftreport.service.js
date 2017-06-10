@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 var Observable_1 = require("rxjs/Observable");
+var app_config_1 = require("../app.config");
 require("rxjs/add/operator/do");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/map");
@@ -18,7 +19,7 @@ require("rxjs/add/observable/throw");
 var ENFTReportService = (function () {
     function ENFTReportService(_http) {
         this._http = _http;
-        this._enftreportUrl = 'app/api/';
+        this._enftreportUrl = app_config_1.CONFIGURATION.baseServiceUrl;
     }
     ENFTReportService.prototype.getYears = function () { return ['2016', '2017', '2018']; };
     ENFTReportService.prototype.getMonths = function () { return ['January', 'Feburary', 'March']; };

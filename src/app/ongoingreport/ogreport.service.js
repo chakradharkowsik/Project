@@ -15,10 +15,11 @@ require("rxjs/add/operator/do");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/map");
 require("rxjs/add/observable/throw");
+var app_config_1 = require("../app.config");
 var OnGoingReportService = (function () {
     function OnGoingReportService(_http) {
         this._http = _http;
-        this._onGoingReportUrl = 'app/api/';
+        this._onGoingReportUrl = app_config_1.CONFIGURATION.baseServiceUrl;
     }
     OnGoingReportService.prototype.getMeasurementEndDates = function () { return ['26-10-2016', '29-10-2017']; };
     OnGoingReportService.prototype.getControlGroups = function () { return ['Revolution', 'Cast & Crew']; };

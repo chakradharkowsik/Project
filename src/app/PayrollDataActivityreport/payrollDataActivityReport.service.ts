@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { IWorkDetails } from './workdetail';
 import { Observable } from 'rxjs/Observable';
+
+import { CONFIGURATION } from '../app.config';
+
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -9,7 +12,7 @@ import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class PayrollDataActivityReportService {
-    private _pdaReportUrl = 'app/api/';
+    private _pdaReportUrl = CONFIGURATION.baseServiceUrl;
     constructor(private _http: Http) {
 
     }

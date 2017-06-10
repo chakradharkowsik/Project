@@ -6,19 +6,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var core_1 = require("@angular/core");
+var app_config_1 = require("../app.config");
 var SideNavComponent = (function () {
     function SideNavComponent() {
-        this.route = 'reporting';
-        this.dashboard = 'dashboard';
-        this.nftreport = 'nhftreport';
-        this.enftreport = 'enftreport';
-        this.ogreport = 'ogreport';
-        this.pdareport = 'pdareport';
-        this.ercreport = 'ercreport';
-        this.empsummary = 'empsummary';
-        this.empeligilbility = 'empeligilbility';
-        this.empdemographics = 'empdemographics';
-        this.empbreakinservice = 'empbreakinservice';
+        this.route = app_config_1.CONFIGURATION.reportingroute;
+        this.dashboard = app_config_1.CONFIGURATION.dashboard;
+        this.nftreport = app_config_1.CONFIGURATION.nftreport;
+        this.enftreport = app_config_1.CONFIGURATION.enftreport;
+        this.ogreport = app_config_1.CONFIGURATION.ogreport;
+        this.pdareport = app_config_1.CONFIGURATION.pdareport;
+        this.ercreport = app_config_1.CONFIGURATION.ercreport;
+        this.empsummary = app_config_1.CONFIGURATION.empsummary;
+        this.empeligilbility = app_config_1.CONFIGURATION.empeligilbility;
+        this.empdemographics = app_config_1.CONFIGURATION.empdemographics;
+        this.empbreakinservice = app_config_1.CONFIGURATION.empbreakinservice;
     }
     return SideNavComponent;
 }());
