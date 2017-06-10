@@ -1,11 +1,15 @@
-import {Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-    moduleId:module.id,
-    selector:'sidenav',
-    templateUrl:'sidenav.html',
-    
+    moduleId: module.id,
+    selector: 'sidenav',
+    templateUrl: 'sidenav.html',
+
 })
-export class SideNavComponent{
- nftreport:string='nhftreport';
+export class SideNavComponent {
+    route: string = 'aca';
+    dashboard:string='dashboard';
+    nftreport: string = 'nhftreport';
+    enftreport: string = 'enftreport';
+    ogreport: string = 'ogreport';
 }

@@ -10,7 +10,7 @@
                     <div class="sidebar-widget menu-widget">
                         <div class="row text-center mbn">
                             <div class="col-xs-2 pln prn">
-                                <a href="dashboard2.html" class="text-primary" data-toggle="tooltip" data-placement="top" title="Dashboard">
+                                <a [routerLink]="['\aca\dashboard']" class="text-primary" data-toggle="tooltip" data-placement="top" title="Dashboard">
                                 <span class="fa fa-dashboard"></span>
                             </a>
                             </div>
@@ -61,7 +61,7 @@
                                 <span class="fa fa-file-text-o"></span> Add Customer </a>
                             </li>
                             <li class="active">
-                                <a href="dashboard2.html">
+                                <a [routerLink]="['/',route,dashboard]">
                                 <span class="fa fa-file-text-o"></span> List Customers </a>
                             </li>
                         </ul>
@@ -162,15 +162,15 @@
                     </a>
                         <ul class="nav sub-nav">
                             <li>
-                                <a [routerLink]="['/',nftreport]" routerLinkActive="active">
+                                <a [routerLink]="['/',route,nftreport]" routerLinkActive="active">
                                 <span class="glyphicon glyphicon-book"></span> New Hire Full Time </a>
                             </li>
                             <li>
-                                <a [routerLink]="['/enftreport']">
+                                <a [routerLink]="['/',route,enftreport]">
                                 <span class="glyphicon glyphicon-modal-window"></span> New Hire Part Time </a>
                             </li>
                             <li>
-                                <a [routerLink]="['/ogreport']">
+                                <a [routerLink]="['/',route,ogreport]">
                                 <span class="glyphicon glyphicon-equalizer"></span> On Going </a>
                             </li>
                             <li>

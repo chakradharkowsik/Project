@@ -5,4 +5,6 @@ import { Component } from '@angular/core';
   selector: 'my-app',
   templateUrl: 'layout.html',
 })
-export class AppComponent  { name = 'Angular'; }
+export class AppComponent  { 
+  isNaviationEnabled:boolean=true;
+ }

@@ -32,12 +32,16 @@ AppModule = __decorate([
             ng2_bootstrap_1.PaginationModule.forRoot(),
             ng2_bootstrap_1.TabsModule.forRoot()
         ],
-        declarations: [app_component_1.AppComponent,
+        declarations: [
+            app_component_1.AppComponent,
+            index_1.DashboardComponent,
             index_1.SideNavComponent,
             index_1.TopNavComponent,
             index_1.ENFTReportComponent,
             index_1.OnGoingReportComponent,
-            index_1.NewHireFullTimeComponent],
+            index_1.NewHireFullTimeComponent,
+            index_1.LoginComponent
+        ],
         providers: [
             index_1.ENFTReportService,
             index_1.OnGoingReportService,

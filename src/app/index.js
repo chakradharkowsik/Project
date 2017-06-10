@@ -7,4 +7,6 @@ __export(require("./enftreport/index"));
 __export(require("./ongoingreport/index"));
 __export(require("./nhftreport/index"));
 __export(require("./layout/index"));
+__export(require("./dashboard/index"));
+__export(require("./login/index"));
 //# sourceMappingURL=index.js.map

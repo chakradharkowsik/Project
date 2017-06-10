@@ -8,7 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var core_1 = require("@angular/core");
 var SideNavComponent = (function () {
     function SideNavComponent() {
+        this.route = 'aca';
+        this.dashboard = 'dashboard';
         this.nftreport = 'nhftreport';
+        this.enftreport = 'enftreport';
+        this.ogreport = 'ogreport';
     }
     return SideNavComponent;
 }());

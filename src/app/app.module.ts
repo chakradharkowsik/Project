@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { SideNavComponent, TopNavComponent, ENFTReportComponent, ENFTReportService, OnGoingReportComponent,
-   OnGoingReportService,NewHireFullTimeComponent,NewHireFullTimeService } from './index';
+import {
+  SideNavComponent, TopNavComponent, ENFTReportComponent, ENFTReportService, OnGoingReportComponent,
+  OnGoingReportService, NewHireFullTimeComponent, NewHireFullTimeService, DashboardComponent, LoginComponent
+} from './index';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { PaginationModule, TabsModule } from 'ng2-bootstrap';
 import { APPROUTES } from './app.routes';
@@ -21,12 +23,16 @@ import { ExportToExcelService } from './shared/index';
     PaginationModule.forRoot(),
     TabsModule.forRoot()
   ],
-  declarations: [AppComponent,
+  declarations: [
+    AppComponent,
+    DashboardComponent,
     SideNavComponent,
     TopNavComponent,
     ENFTReportComponent,
     OnGoingReportComponent,
-    NewHireFullTimeComponent],
+    NewHireFullTimeComponent,
+    LoginComponent
+  ],
   providers: [
     ENFTReportService,
     OnGoingReportService,
