@@ -12,7 +12,7 @@ import 'rxjs/add/observable/throw';
 export class EmployeeBreakInServiceReportService {
 constructor(private _http: Http) { }
 
-private _empBreakInServiceReportUrl =CONFIGURATION.baseServiceUrl;// 'app/api/';
+private _empBreakInServiceReportUrl = 'app/api/';
 
 getEmployeeDemographicsReports(): Observable<IEmployeeBreakInServiceDetail[]> {
         let fileName: string = 'employeebreakinservice.json';        

@@ -18,6 +18,17 @@ export class SideNavComponent {
     empeligilbility: string = CONFIGURATION.empeligilbility;
     empdemographics: string = CONFIGURATION.empdemographics;
     empbreakinservice: string = CONFIGURATION.empbreakinservice;
-
-
+    addcustomer: string = CONFIGURATION.addcustomer;
+    listcustomer: string = CONFIGURATION.listcustomer;
+    onboardingcustomerinformation: string = CONFIGURATION.onboardingcustomerinformation;
+    clientpayroll: string = CONFIGURATION.clientpayroll;
+    onboardingpersonalinformation: string = CONFIGURATION.onboardingpersonalinformation;
+    uploaddata: string = CONFIGURATION.uploaddata;
+    aledataupload: string = CONFIGURATION.aledataupload;
+    payrolldataupload:string=CONFIGURATION.payrolldataupload;
+    insurancedataupload:string=CONFIGURATION.insurancedataupload;
+    onezeroninefourdataupload:string=CONFIGURATION.onezeroninefourdataupload;
+    onezeroninefivedataupload:string=CONFIGURATION.onezeroninefivedataupload;
+    controlgroup=CONFIGURATION.controlgroup;
+    ale=CONFIGURATION.ale;
 }

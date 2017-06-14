@@ -9,7 +9,7 @@ import { ExportToExcelService } from '../shared/export.service';
 
 export class NewHireFullTimeComponent implements OnInit {
 
-    constructor(private _newHireFullTimeService: NewHireFullTimeService,private _export:ExportToExcelService) { }
+    constructor(private _newHireFullTimeService: NewHireFullTimeService, private _export: ExportToExcelService) { }
 
     selectedYear: string;
     selectedHireMonth: string;
@@ -25,7 +25,7 @@ export class NewHireFullTimeComponent implements OnInit {
     dataLoaded: boolean;
     public rows: Array<any> = [];
     public page: number = 1;
-    public itemsPerPage: number = 2;
+    public itemsPerPage: number = 50;
     public maxSize: number = 5;
     public numPages: number = 1;
     public length: number = 0;
@@ -48,9 +48,13 @@ export class NewHireFullTimeComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.Years = this._newHireFullTimeService.getYears();
-        this.Months = this._newHireFullTimeService.getMonths();
-        this.ControlGroups = this._newHireFullTimeService.getControlGroups();
+         this._newHireFullTimeService.getReportData().subscribe(data => {
+
+            this.Years = data.WorkYear;
+            this.Months = data.WorkMonth;
+            this.ControlGroups = data.ControlGroup;
+        },
+            error => this.errorMessage = <any>error);
 
         this.selectedYear = "-1";
         this.selectedHireMonth = "-1";
@@ -70,7 +74,9 @@ export class NewHireFullTimeComponent implements OnInit {
     };
 
     eligibleFullTimeReportData(): void {
-        this._newHireFullTimeService.getEligibleFullTimeReportData().subscribe(workdetails => {
+        let filterCriteria = this.getFilterValues();
+        filterCriteria.acaEligibleCount=this.eligibleFullTimeWorkers;
+        this._newHireFullTimeService.getEligibleFullTimeReportData(filterCriteria).subscribe(workdetails => {
             this.workerDetails = workdetails;
             this.onChangeTable(this.config);
             this.dataLoaded = true;
@@ -79,9 +85,46 @@ export class NewHireFullTimeComponent implements OnInit {
 
     }
 
+
+    getFilterValues(): any {
+        let year = this.selectedYear;
+        if (year == "-1") {
+            year = "''";
+        }
+        let month = this.selectedHireMonth;
+        if (month == "-1") {
+            month = "''";;
+        }
+        let cg = this.selectedControlGroup;
+        if (cg == "All" || cg == "-1") {
+            cg = "''";;
+        }
+
+        let filterCriteria: any = {
+            selectedYear: year, selectedHireMonth: month, selectedControlGroup: cg
+        };
+
+        return filterCriteria;
+    }
+
     Search(): void {
-        let counts = this._newHireFullTimeService.getEligibleFullTimeWorkers();
-        this.eligibleFullTimeWorkers = counts.eftworkers;
+        this.dataLoaded = false;
+        let filterCriteria = this.getFilterValues();
+        this.eligibleFullTimeWorkers = "0";
+
+        let counts = this._newHireFullTimeService.getEligibleFullTimeWorkers(filterCriteria)
+            .subscribe(counts => {
+                debugger;
+                if (counts == undefined || counts == null) {
+                    return;
+                }
+                counts.forEach((element: any) => {
+                    this.eligibleFullTimeWorkers = element.acaEligibleCount;
+                });
+
+            },
+            (error: any) => this.errorMessage = <any>error);
+
 
     }
 

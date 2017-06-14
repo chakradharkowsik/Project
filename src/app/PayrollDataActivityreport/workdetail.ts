@@ -1,10 +1,12 @@
 export interface IWorkDetails {
     ssnNumber: string;
-    employeeName: string;
+    // employeeName: string;
+    firstName:string;
+    lastName:string;
     ein: string;
     productionCompany: string;
     hireDate: string;
-    lastWorkedDate: string;
+    lastDateWorked: string;
     project: string;
     clientId: string;
     source: string;

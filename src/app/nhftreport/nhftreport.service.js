@@ -19,16 +19,30 @@ var app_config_1 = require("../app.config");
 var NewHireFullTimeService = (function () {
     function NewHireFullTimeService(_http) {
         this._http = _http;
-        this._enftreportUrl = app_config_1.CONFIGURATION.baseServiceUrl;
+        this._nhftreportUrl = app_config_1.CONFIGURATION.baseServiceUrl;
     }
-    NewHireFullTimeService.prototype.getYears = function () { return ['2016', '2017', '2018']; };
-    NewHireFullTimeService.prototype.getMonths = function () { return ['January', 'Feburary', 'March']; };
-    NewHireFullTimeService.prototype.getControlGroups = function () { return ['Revolution', 'Cast & Crew']; };
-    NewHireFullTimeService.prototype.getEligibleFullTimeWorkers = function () { return { eftworkers: "26" }; };
-    NewHireFullTimeService.prototype.getEligibleFullTimeReportData = function () {
-        var fileName = 'enftreport26.json';
-        return this._http.get(this._enftreportUrl + fileName)
-            .map(function (response) { return response.json(); })
+    NewHireFullTimeService.prototype.getReportData = function () {
+        return this._http.get(this._nhftreportUrl + 'newHiresFullTime/getNewHireFullTimeReferenceData')
+            .map(function (response) { return response.json().EligibilityNewHiresFullTimeReferenceData; })
+            .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
+            .catch(this.handleError);
+    };
+    NewHireFullTimeService.prototype.getEligibleFullTimeWorkers = function (filterCriteria) {
+        var fileName = "newHiresFullTime/getACAEligibleCount?WorkYear=" + filterCriteria.selectedYear
+            + "&WorkMonth=" + filterCriteria.selectedHireMonth
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup;
+        return this._http.get(this._nhftreportUrl + fileName)
+            .map(function (response) { return response.json().summaryCountForNewHireFullTimeVO; })
+            .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
+            .catch(this.handleError);
+        // return { eftworkers: "26" }; 
+    };
+    NewHireFullTimeService.prototype.getEligibleFullTimeReportData = function (filterCriteria) {
+        var fileName = "newHiresFullTime/getReportByACAEligibleCount?WorkYear=" + filterCriteria.selectedYear
+            + "&WorkMonth=" + filterCriteria.selectedHireMonth
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup;
+        return this._http.get(this._nhftreportUrl + fileName)
+            .map(function (response) { return response.json().reportByACAEligibleCount; })
             .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
             .catch(this.handleError);
     };

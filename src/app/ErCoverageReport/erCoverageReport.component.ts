@@ -8,7 +8,7 @@ import { ExportToExcelService } from '../shared/export.service';
 
 export class ErCoverageReportComponent implements OnInit {
 
-    constructor(private _erCoverageReportService: ErCoverageReportService,private _export:ExportToExcelService) { }
+    constructor(private _erCoverageReportService: ErCoverageReportService, private _export: ExportToExcelService) { }
 
     selectedYear: string;
     selectedHireMonth: string;
@@ -17,32 +17,36 @@ export class ErCoverageReportComponent implements OnInit {
     errorMessage: string;
 
     Years: Array<string>;
-    Months: Array<string>;
     ControlGroups: Array<string>;
     workerDetails: Array<any> = [];
 
     dataLoaded: boolean;
     public rows: Array<any> = [];
     public page: number = 1;
-    public itemsPerPage: number = 2;
+    public itemsPerPage: number = 50;
     public maxSize: number = 5;
     public numPages: number = 1;
     public length: number = 0;
 
     public columns: Array<any> = [
         { title: 'Control Group', className: 'va-m', name: 'controlGroup' },
-        { title: 'Year Month', className: 'va-m', name: 'yearMonth' },
-        { title: 'Worker pool FTE Status', className: 'va-m', name: 'workerPoolFteStatus' },       
+        { title: 'Year', className: 'va-m', name: 'workYear' },
+        { title: 'Month', className: 'va-m', name: 'workMonth' },
+        { title: 'Worker pool FTE Status', className: 'va-m', name: 'workerPoolFteStatus' },
         { title: 'First Name', className: 'hidden-xs va-m', name: 'firstName' },
         { title: 'Last Name', className: 'va-m', name: 'lastName' },
         { title: 'Worked Hours', className: 'va-m', name: 'workedHours' },
-        { title: 'Worker Pool FTE Count', className: 'va-m', name: 'workerPoolFteCount' },  
+        { title: 'Worker Pool FTE Count', className: 'va-m', name: 'workerPoolFteCount' },
     ];
 
 
     ngOnInit(): void {
-        this.Years = this._erCoverageReportService.getYears();        
-        this.ControlGroups = this._erCoverageReportService.getControlGroups();
+
+        this._erCoverageReportService.getReportData().subscribe(data => {
+            this.Years = data.WorkYears;
+            this.ControlGroups = data.ControlGroups;
+        },
+            error => this.errorMessage = <any>error);
 
         this.selectedYear = "-1";
         this.selectedHireMonth = "-1";
@@ -62,7 +66,10 @@ export class ErCoverageReportComponent implements OnInit {
     };
 
     annualizedMonthlyReportData(): void {
-        this._erCoverageReportService.getAnnulaizedMonthlyWorkersReportData().subscribe(workdetails => {
+        this.dataLoaded = false;
+        let filterCriteria = this.getFilterValues();
+        filterCriteria.annulaizedMonthly = this.annulaizedMonthly;
+        this._erCoverageReportService.getAnnulaizedMonthlyWorkersReportData(filterCriteria).subscribe(workdetails => {
             this.workerDetails = workdetails;
             this.onChangeTable(this.config);
             this.dataLoaded = true;
@@ -71,10 +78,42 @@ export class ErCoverageReportComponent implements OnInit {
 
     }
 
-    Search(): void {
-        let counts = this._erCoverageReportService.getAnnulaizedMonthlyWorkers();
-        this.annulaizedMonthly = counts.annulaizedMonthly;
 
+
+    getFilterValues(): any {
+        let year = this.selectedYear;
+        if (year == "-1") {
+            year = "''";
+        }
+
+        let cg = this.selectedControlGroup;
+        if (cg == "All" || cg == "-1") {
+            cg = "''";;
+        }
+
+        let filterCriteria: any = {
+            selectedYear: year, selectedControlGroup: cg
+        };
+
+        return filterCriteria;
+    }
+
+    Search(): void {
+
+        let filterCriteria = this.getFilterValues();
+        this.annulaizedMonthly = "0";
+        let counts = this._erCoverageReportService.getAnnulaizedMonthlyWorkers(filterCriteria)
+            .subscribe(counts => {
+                debugger;
+                if (counts == undefined || counts == null) {
+                    return;
+                }
+                counts.forEach((element: any) => {
+                    this.annulaizedMonthly = element.ANNUALIZED_MONTHLY_COUNT;
+                });
+
+            },
+            (error: any) => this.errorMessage = <any>error);
     }
 
 

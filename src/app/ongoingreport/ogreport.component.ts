@@ -43,10 +43,11 @@ export class OnGoingReportComponent implements OnInit {
         { title: 'Union/Non-Union', className: 'va-m', name: 'unionType' },
         { title: 'Weeks Since Last Worked', className: 'va-m', name: 'weeksSinceLastWorked' },
         { title: 'Average Hours-SMP', className: 'va-m', name: 'avgHours' },
-        { title: 'Total Hours', className: 'va-m', name: 'totalHours' }
-    ];
+        { title: 'Total Hours', className: 'va-m', name: 'totalHours' },
+        { title: 'Employee Type', className: 'va-m', name: 'employeeType' }
+            ];
     public page: number = 1;
-    public itemsPerPage: number = 1;
+    public itemsPerPage: number = 50;
     public maxSize: number = 5;
     public numPages: number = 1;
     public length: number = 0;
@@ -58,7 +59,7 @@ export class OnGoingReportComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _ogreportsrv: OnGoingReportService,private _export:ExportToExcelService) {
+    constructor(private _ogreportsrv: OnGoingReportService, private _export: ExportToExcelService) {
 
     }
 
@@ -76,11 +77,14 @@ export class OnGoingReportComponent implements OnInit {
                 measurementEndDate: this.measurementEndDateControl
             }
         );
-     
 
-        this.measurementEndDates = this._ogreportsrv.getMeasurementEndDates();
-        this.controlGroups = this._ogreportsrv.getControlGroups();
-        this.typeOfHours = this._ogreportsrv.getTypeOfHours();       
+        this._ogreportsrv.getReportData().subscribe(data => {
+
+            this.measurementEndDates = data.measurementDate;
+            this.controlGroups = data.ControlGroup;
+            this.typeOfHours = data.typeOfHours;
+        },
+            error => this.errorMessage = <any>error);
 
         this.count13Weeks = "0";
         this.count26Weeks = "0";
@@ -91,25 +95,77 @@ export class OnGoingReportComponent implements OnInit {
         this.dataLoaded = false;
     }
 
+    getFilterValues(): any {
+        let measurementDate = this.measurementEndDateControl.value;
+        if (measurementDate == undefined || measurementDate == "") {
+            measurementDate = "''";
+        }
+        let cg = this.controlGroupControl.value;
+        if (cg == undefined || cg == "All" || cg == "") {
+            cg = "''";;
+        }
+        let emptype = this.typeOfHoursControl.value;
+        if (emptype == undefined || emptype == "") {
+            emptype = "''";;
+        }
+        let cat = this.avgWeeklyThresholdControl.value;
+        if (cat == undefined || cat == "") {
+            cat = "''";
+        }
+        let filterCriteria: any = {
+            selectedMeasuredDate: measurementDate,
+            selectedControlGroup: cg,
+            selectedTypeOfHours: emptype,
+            avgWeeklyThreshold: cat,
+            reportCount: 13
+        };
+
+        return filterCriteria;
+    }
+
     Search(formValues: any): void {
-        debugger;
-        let counts = this._ogreportsrv.getWeeklyCounts();
-        this.count13Weeks = counts.count13Weeks;
-        this.count26Weeks = counts.count26Weeks;
-        this.count47Weeks = counts.count47Weeks;
-        this.count52Weeks = counts.count52Weeks;
+        this.dataLoaded = false;
+        let filterCriteria = this.getFilterValues();
+        this.count13Weeks = "0";
+        this.count26Weeks = "0";
+        this.count47Weeks = "0";
+        this.count52Weeks = "0";
+        let counts = this._ogreportsrv.getOnGoingReportDataCount(filterCriteria).subscribe(counts => {
+            debugger;
+            if (counts == undefined || counts == null || (counts != null && counts.onGoingCountByWeeks == null)) {
+                return;
+            }
+            counts.onGoingCountByWeeks.forEach((element: any) => {
+                switch (element.WEEKS_WORKED) {
+                    case "13":
+                        this.count13Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                    case "26":
+                        this.count26Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                    case "47":
+                        this.count47Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                    case "52":
+                        this.count52Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                }
+            });
+
+        },
+            (error: any) => this.errorMessage = <any>error);
     }
 
     getWeekData(weekCount: number): void {
-        // debugger;
-        this._ogreportsrv.getWeekReportData(weekCount).subscribe(workdetails => {
+        let filterCriteria = this.getFilterValues();
+        filterCriteria.reportCount = weekCount;
+        this._ogreportsrv.getOnGoingReportData(filterCriteria).subscribe(workdetails => {  
+            debugger;          
             this.workDetails = workdetails;
             this.onChangeTable(this.config);
             this.dataLoaded = true;
         },
             error => this.errorMessage = <any>error);
-
-        //this._ogreportsrv.getWeekReportData(weekCount);
 
     }
 
@@ -119,12 +175,12 @@ export class OnGoingReportComponent implements OnInit {
 
     downloadExcel(): void {
         debugger;
-        var tbl=document.getElementById('datatable');
-        var btn=document.getElementById('btnDownloadExcel');
-        if(tbl){
+        var tbl = document.getElementById('datatable');
+        var btn = document.getElementById('btnDownloadExcel');
+        if (tbl) {
             console.log(tbl.children[0]);
         }
-        if(tbl&&tbl.children.length>0)
+        if (tbl && tbl.children.length > 0)
             this._export.excelByTableElement(btn, tbl.children[0], 'On Going Report');
     }
     //Validations

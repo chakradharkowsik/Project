@@ -41,10 +41,23 @@ AppModule = __decorate([
             index_1.OnGoingReportComponent,
             index_1.NewHireFullTimeComponent,
             index_1.PayrollDataActivityReportComponent,
+            index_1.AddCustomerComponent,
+            index_1.ListCustomerComponent,
+            index_1.OnboardingCustomerInformationComponent,
+            index_1.ClientPayrollComponent,
+            index_1.OnboardingPersonalInformationComponent,
+            index_1.AleDataUploadComponent,
+            index_1.ControlGroupComponent,
+            index_1.ApplicableLargeEmployeeComponent,
             index_1.ErCoverageReportComponent,
             index_1.EmployeeEligibilityReportComponent,
             index_1.EmployeeDemographicReportComponent,
             index_1.EmployeeBreakInServiceReportComponent,
+            index_1.EmployeeSummaryReportComponent,
+            index_1.InsuranceDataUploadComponent,
+            index_1.OneZeroNineFourDataUploadComponent,
+            index_1.OneZeroNineFiveDataUploadComponent,
+            index_1.PayrollDataUploadComponent,
             index_1.LoginComponent
         ],
         providers: [
@@ -56,7 +69,8 @@ AppModule = __decorate([
             index_1.EmployeeEligibilityReportService,
             index_1.EmployeeDemographicReportService,
             index_1.EmployeeBreakInServiceReportService,
-            index_1.PayrollDataActivityReportService
+            index_1.PayrollDataActivityReportService,
+            index_1.EmployeeSummaryReportService
         ],
         bootstrap: [app_component_1.AppComponent]
     })

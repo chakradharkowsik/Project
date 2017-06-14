@@ -28,11 +28,12 @@ export class PayrollDataActivityReportComponent implements OnInit {
     public rows: Array<any> = [];
     public columns: Array<any> = [
         { title: 'SSN', className: 'hidden-xs va-m', name: 'ssnNumber' },
-        { title: 'Employee Name', className: 'hidden-xs va-m', name: 'employeeName' },
+        { title: 'First Name', className: 'hidden-xs va-m', name: 'firstName' },
+        { title: 'Last Name', className: 'hidden-xs va-m', name: 'lastName' },
         { title: 'EIN', className: 'va-m', name: 'ein' },
         { title: 'Production Company', className: 'va-m', name: 'productionCompany' },
         { title: 'Hire Date', className: 'va-m', name: 'hireDate' },
-        { title: 'Last Worked Date', className: 'va-m', name: 'lastWorkedDate' },
+        { title: 'Last Worked Date', className: 'va-m', name: 'lastDateWorked' },
         { title: 'Project', className: 'va-m', name: 'project' },
         { title: 'ClientID', className: 'va-m', name: 'clientId' },
         { title: 'Source', className: 'va-m', name: 'source' },
@@ -52,7 +53,7 @@ export class PayrollDataActivityReportComponent implements OnInit {
         { title: 'Dec', className: 'va-m', name: 'dec' }
     ];
     public page: number = 1;
-    public itemsPerPage: number = 10;
+    public itemsPerPage: number = 50;
     public maxSize: number = 5;
     public numPages: number = 1;
     public length: number = 0;
@@ -77,18 +78,43 @@ export class PayrollDataActivityReportComponent implements OnInit {
                 yearControl: this.yearControl
             }
         );
+        this._pdareportsrv.getReportData().subscribe(data => {
+            this.ControlGroups = data.ControlGroups;
+            this.Years = data.WorkYears;
+        },
+            error => this.errorMessage = <any>error);
         this.count13Weeks = "0";
         this.count26Weeks = "0";
         this.count47Weeks = "0";
         this.count52Weeks = "0";
-        this.ControlGroups = this._pdareportsrv.getControlGroups();
-        this.Years = this._pdareportsrv.getYears();
+
         this.onChangeTable(this.config);
         this.dataLoaded = false;
     }
 
+    getFilterValues(): any {
+
+        let cg = this.controlGroupControl.value;
+        if (cg == undefined || cg == "All" || cg == "") {
+            cg = "''";;
+        }
+        let year = this.yearControl.value;
+        if (year == undefined || year == "" || year == "-1") {
+            year = "''";;
+        }
+        let filterCriteria: any = {
+            selectedYear: year,
+            selectedControlGroup: cg
+        };
+
+        return filterCriteria;
+    }
+
     Search(formValues: any): void {
-        this._pdareportsrv.getWeekReportData(26).subscribe(workdetails => {
+        this.dataLoaded = false;
+        let filterCriteria = this.getFilterValues();
+        this._pdareportsrv.getPayrollDataActivityReportData(filterCriteria).subscribe(workdetails => {
+            debugger;
             this.workDetails = workdetails;
             this.onChangeTable(this.config);
             this.dataLoaded = true;

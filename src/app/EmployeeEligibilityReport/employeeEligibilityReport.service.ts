@@ -12,7 +12,7 @@ import 'rxjs/add/observable/throw';
 export class EmployeeEligibilityReportService {
 constructor(private _http: Http) { }
 
-private _empEligibleReportUrl = CONFIGURATION.baseServiceUrl;
+private _empEligibleReportUrl =  'app/api/';
 
 getEmployeeEligibleReports(): Observable<IEmpEligibleWorkDetail[]> {
         let fileName: string = 'empeligibility.json';        

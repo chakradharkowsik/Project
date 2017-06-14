@@ -1,5 +1,5 @@
 export const CONFIGURATION = {
-    "baseServiceUrl": "app/api/",
+    "baseServiceUrl": "http://localhost:8080/NHNFTReportWebAPI/rest/",
     "reportingroute": "reporting",
     "dashboard": "dashboard",
     "nftreport": "nhftreport",
@@ -10,5 +10,18 @@ export const CONFIGURATION = {
     "empsummary": "empsummary",
     "empeligilbility": "empeligilbility",
     "empdemographics": "empdemographics",
-    "empbreakinservice": "empbreakinservice"
+    "empbreakinservice": "empbreakinservice",
+    "addcustomer":"addcustomer",
+    "listcustomer":"listcustomer",
+    "onboardingcustomerinformation":"onboardingcustomerinformation",
+    "clientpayroll":"clientpayroll",
+    "onboardingpersonalinformation":"onboardingpersonalinformation",
+    "uploaddata":"uploaddata",
+    "aledataupload":"aledataupload",
+    "payrolldataupload":"payrolldataupload",
+    "insurancedataupload":"insurancedataupload",
+    "onezeroninefourdataupload":"onezeroninefourdataupload",
+    "onezeroninefivedataupload":"onezeroninefivedataupload",
+    "controlgroup":"controlgroup",
+    "ale":"ale"
 };

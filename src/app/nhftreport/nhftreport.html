@@ -55,7 +55,7 @@
                                         <div class="col-sm-7">
                                             <label class="field select">
                                                 <select id="ddlcontrolgroup" name="ddlcontrolgroup" [(ngModel)]="selectedControlGroup">
-                                                    <option value="-1">Select Value</option>
+                                                    <option value="-1">All</option>
                                                     <option *ngFor="let group of ControlGroups" value={{group}}>
                                                         {{group}}
                                                     </option>
@@ -83,7 +83,7 @@
                                                     <button type="button" class="btn btn-success btn-lg" (click)="eligibleFullTimeReportData()">
                                                         ACA Eligible Full Time
                                                     </button>
-                                                    <button type="button" class="btn btn-success btn-lg">
+                                                    <button type="button" class="btn btn-success btn-lg" (click)="eligibleFullTimeReportData()">
                                                         {{eligibleFullTimeWorkers}}
                                                     </button>
                                                 </div>

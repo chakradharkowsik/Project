@@ -11,41 +11,54 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class ENFTReportService {
     private _enftreportUrl = CONFIGURATION.baseServiceUrl;
+    private data: any;
     constructor(private _http: Http) {
 
     }
-    getYears() { return ['2016', '2017', '2018'] }
 
-    getMonths() { return ['January', 'Feburary', 'March'] }
+    getReportData(): Observable<any> {
+        return this._http.get(this._enftreportUrl + 'newHiresNonFullTime/getNewHireNonFullTImeReferenceData')
+            .map((response: Response) => response.json().EligibilityNewHiresNonFullTimeReferenceData)
+            .do(data =>console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+    getYears() { return this.data.WorkYear; }
 
-    getControlGroups() { return ['Revolution', 'Cast & Crew'] }
+    getMonths() { return this.data.WorkMonth; }
 
-    getTypeOfHours() { return ['Union', 'Non Union'] }
+    getControlGroups() { return this.data.ControlGroup; }
 
-    getNonFullTimeCategories() { return ['Part Time', 'Seasonal', 'Un Category', 'Variable'] }
+    getTypeOfHours() { return this.data.UnionType; }
 
-    getWeeklyCounts(): any { return { count13Weeks: "3", count26Weeks: "4", count47Weeks: "5", count52Weeks: "6" }; }
+    getNonFullTimeCategories() { return this.data.EmployeeType; }
 
-    getWeekReportData(weekCount: number): Observable<IWorkDetails[]> {
-        let fileName: string = '';
-        switch (weekCount) {
-            case 13:
-                fileName = "enftreport13.json";
-                break;
-            case 26:
-                fileName = "enftreport26.json";
-                break;
-            case 47:
-                break;
-            case 52:
-                break;
-        }
+    getWeeklyCounts(filterCriteria:any): Observable<any> { 
+        debugger;
+        let fileName:string ="newHiresNonFullTime/getReportCountByWeek?WorkYear="+filterCriteria.selectedYear
+        +"&WorkMonth="+filterCriteria.selectedHireMonth
+        +"&ControlGroup="+filterCriteria.selectedControlGroup
+        +"&UnionType="+filterCriteria.selectedTypeOfHours
+        +"&EmployeeType="+filterCriteria.selectedNonFullTimeCatgeories+"";
         return this._http.get(this._enftreportUrl + fileName)
-            .map((response: Response) => <IWorkDetails[]>response.json())
+            .map((response: Response) => response.json())
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+        // return { count13Weeks: "3", count26Weeks: "4", count47Weeks: "5", count52Weeks: "6" };
+     }
+
+    getWeekReportData(filterCriteria: any): Observable<IWorkDetails[]> {
+         let fileName:string ="newHiresNonFullTime/getReportsByWeeksCount?WorkYear="+filterCriteria.selectedYear
+        +"&WorkMonth="+filterCriteria.selectedHireMonth
+        +"&ControlGroup="+filterCriteria.selectedControlGroup
+        +"&UnionType="+filterCriteria.selectedTypeOfHours
+        +"&EmployeeType="+filterCriteria.selectedNonFullTimeCatgeories+"&ReportOfWeek="+filterCriteria.reportCount;   
+        return this._http.get(this._enftreportUrl + fileName)
+            .map((response: Response) => <IWorkDetails[]>response.json().reportByWeekCount)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
     private handleError(error: Response) {
+        debugger;
         // in a real world app, we may send the server to some remote logging infrastructure
         // instead of just logging it to the console
         console.error(error);

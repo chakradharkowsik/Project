@@ -1,7 +1,8 @@
 export interface IErCoverageWorkDetail
 {    
     controlGroup: string;
-    yearMonth:string;
+    workYear:string;
+    workMonth:string;
     workerPoolFteStatus:string;
     firstName: string;
     lastName: string;

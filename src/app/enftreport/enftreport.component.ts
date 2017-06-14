@@ -10,7 +10,7 @@ import { ExportToExcelService } from '../shared/export.service';
 })
 export class ENFTReportComponent implements OnInit {
 
-    dataLoaded:boolean;
+    dataLoaded: boolean;
     selectedYear: string;
     selectedHireMonth: string;
     selectedControlGroup: string;
@@ -23,7 +23,7 @@ export class ENFTReportComponent implements OnInit {
     ControlGroups: Array<string>;
     TypeOfHours: Array<string>;
     NonFullTimeCatgeories: Array<string>;
-    errorMessage:string;
+    errorMessage: string;
     count13Weeks: string;
     count26Weeks: string;
     count47Weeks: string;
@@ -33,8 +33,6 @@ export class ENFTReportComponent implements OnInit {
 
     public rows: Array<any> = [];
     public columns: Array<any> = [
-        // { title: 'Work Year', className: 'va-m blueHeader', name: 'WorkYear' },
-        // { title: 'Work Month', className: 'va-m', name: 'workMonth' },
         { title: 'Control Group', className: 'va-m', name: 'controlGroup' },
         { title: 'Latest Production Company', className: 'va-m', name: 'mostRecentProductionCompany' },
         { title: 'Most Recent Show', className: 'va-m', name: 'mostRecentProject' },
@@ -46,22 +44,10 @@ export class ENFTReportComponent implements OnInit {
         { title: 'Union Type', className: 'va-m', name: 'unionType' },
         { title: 'Payroll Source', className: 'va-m', name: 'payrollSource' },
         { title: 'Average Hours', className: 'va-m', name: 'avgHours' },
-        { title: 'Total Hours', className: 'va-m', name: 'totalHours' },
-        // { title: 'All Control Group', className: 'va-m', name: 'allControlGroup' },        
-        // { title: 'All Union Type', className: 'va-m', name: 'allUnionType' },
-        // { title: 'Employee Type', className: 'va-m', name: 'employeeType' },
-        // { title: 'Label Summary 13 Weeks', className: 'va-m', name: 'lastSummary13Weeks' },
-        // { title: 'Summary 13 Weeks', className: 'va-m', name: 'summary13Weeks' },
-        // { title: 'Label Summary 26 Weeks', className: 'va-m', name: 'lastSummary26Weeks' },
-        // { title: 'Summary 26 Weeks', className: 'va-m', name: 'summary26Weeks' },
-        // { title: 'Label Summary 47 Weeks', className: 'va-m', name: 'lastSummary47Weeks' },
-        // { title: 'Summary 47 Weeks', className: 'va-m', name: 'summary47Weeks' },
-        // { title: 'Label Summary 52 Weeks', className: 'va-m', name: 'lastSummary52Weeks' },
-        // { title: 'Summary 52 Weeks', className: 'va-m', name: 'summary52Weeks' },
-        // { title: 'Avg. Weekly Threshold', className: 'va-m', name: 'avgWeeklyThreshold' }
+        { title: 'Total Hours', className: 'va-m', name: 'totalHours' }
     ];
     public page: number = 1;
-    public itemsPerPage: number = 1;
+    public itemsPerPage: number = 50;
     public maxSize: number = 5;
     public numPages: number = 1;
     public length: number = 0;
@@ -73,23 +59,29 @@ export class ENFTReportComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _enftreport: ENFTReportService,private _export:ExportToExcelService) {
+    constructor(private _enftreport: ENFTReportService, private _export: ExportToExcelService) {
 
     }
 
     ngOnInit(): void {
         // throw new Error("Method not implemented.");
-        this.Years = this._enftreport.getYears();
-        this.Months = this._enftreport.getMonths();
-        this.ControlGroups = this._enftreport.getControlGroups();
-        this.TypeOfHours = this._enftreport.getTypeOfHours();
-        this.NonFullTimeCatgeories = this._enftreport.getNonFullTimeCategories();
+
+        this._enftreport.getReportData().subscribe(data => {
+
+            this.Years = data.WorkYear;
+            this.Months = data.WorkMonth;
+            this.ControlGroups = data.ControlGroup;
+            this.TypeOfHours = data.UnionType;
+            this.NonFullTimeCatgeories = data.EmployeeType;
+        },
+            error => this.errorMessage = <any>error);
+
         this.AvgWeeklyHrsThr = "30";
 
-        this.selectedYear="-1";
-        this.selectedHireMonth="-1";
-        this.selectedControlGroup="-1";
-        this.selectedTypeOfHours="-1";
+        this.selectedYear = "-1";
+        this.selectedHireMonth = "-1";
+        this.selectedControlGroup = "-1";
+        this.selectedTypeOfHours = "-1";
 
         this.count13Weeks = "0";
         this.count26Weeks = "0";
@@ -97,47 +89,106 @@ export class ENFTReportComponent implements OnInit {
         this.count52Weeks = "0";
 
         this.onChangeTable(this.config);
-        this.dataLoaded=false;
+        this.dataLoaded = false;
     }
+    getFilterValues(): any {
+        let year = this.selectedYear;
+        if (year == "-1") {
+            year = "''";
+        }
+        let month = this.selectedHireMonth;
+        if (month == "-1") {
+            month = "''";;
+        }
+        let cg = this.selectedControlGroup;
+        if (cg == "All" || cg == "-1") {
+            cg = "''";;
+        }
+        let emptype = this.selectedTypeOfHours;
+        if (emptype == "-1") {
+            emptype = "''";;
+        }
+        let cat = this.selectedNonFullTimeCatgeories;
+        if (cat == undefined || cat.length == 0) {
+            cat = ["''"];
+        }
+        let filterCriteria: any = {
+            selectedYear: year, selectedHireMonth: month, selectedControlGroup: cg,
+            selectedTypeOfHours: emptype, selectedNonFullTimeCatgeories: cat,
+            avgWeeklyThreshold: this.AvgWeeklyHrsThr,
+            reportCount:13
+        };
 
+        return filterCriteria;
+    }
     Search(): void {
-        let counts = this._enftreport.getWeeklyCounts();
-        this.count13Weeks = counts.count13Weeks;
-        this.count26Weeks = counts.count26Weeks;
-        this.count47Weeks = counts.count47Weeks;
-        this.count52Weeks = counts.count52Weeks;        
+        this.dataLoaded = false;
+        let filterCriteria = this.getFilterValues();
+        this.count13Weeks = "0";
+        this.count26Weeks = "0";
+        this.count47Weeks = "0";
+        this.count52Weeks = "0";
+        let counts = this._enftreport.getWeeklyCounts(filterCriteria)
+            .subscribe(counts => {                
+                if (counts == undefined || counts == null || (counts != null && counts.reportCountByWeek == null)) {
+                    return;
+                }
+                counts.reportCountByWeek.forEach((element: any) => {
+                    switch (element.WEEKS_WORKED) {
+                        case "13":
+                            this.count13Weeks = element.WEEKS_WORKED_COUNT;
+                            break;
+                        case "26":
+                            this.count26Weeks = element.WEEKS_WORKED_COUNT;
+                            break;
+                        case "47":
+                            this.count47Weeks = element.WEEKS_WORKED_COUNT;
+                            break;
+                        case "52":
+                            this.count52Weeks = element.WEEKS_WORKED_COUNT;
+                            break;
+                    }
+                });
+
+            },
+            (error: any) => this.errorMessage = <any>error);
+
     }
 
     getWeekData(weekCount: number): void {
+        
         debugger;
-          this._enftreport.getWeekReportData(weekCount).subscribe(workdetails => {
-                this.workDetails = workdetails;
-                this.onChangeTable(this.config);
-                this.dataLoaded=true;
-            },
+         let filterCriteria = this.getFilterValues();
+         filterCriteria.reportCount=weekCount;
+        this._enftreport.getWeekReportData(filterCriteria).subscribe(workdetails => {
+            debugger;
+            this.workDetails = workdetails;
+            this.onChangeTable(this.config);
+            this.dataLoaded = true;
+        },
             error => this.errorMessage = <any>error);
         //this._enftreport.getWeekReportData(weekCount);
 
     }
 
-      downloadPdf(): void {
+    downloadPdf(): void {
 
     }
 
     downloadExcel(): void {
         debugger;
-        var tbl=document.getElementById('datatable');
-        var btn=document.getElementById('btnDownloadExcel');
-        if(tbl){
+        var tbl = document.getElementById('datatable');
+        var btn = document.getElementById('btnDownloadExcel');
+        if (tbl) {
             console.log(tbl.children[0]);
         }
-        if(tbl&&tbl.children.length>0)
+        if (tbl && tbl.children.length > 0)
             this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
     }
     public onCellClick(data: any): any {
         console.log(data);
     }
-    
+
     public changePage(page: any, data: Array<any> = this.workDetails): Array<any> {
         let start = (page.page - 1) * page.itemsPerPage;
         let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;

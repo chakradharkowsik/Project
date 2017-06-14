@@ -25,7 +25,7 @@
                                             <div class="col-sm-7">
                                                 <label class="field select">
                                                 <select id="selcontrolgroup" name="controlgroup" formControlName="controlGroup" [ngClass]="{'error':!validateControlGroups()}">
-                                                    <option selected disabled value="">Select Value</option>
+                                                    <option selected disabled value="">All</option>
                                                     <option *ngFor="let group of controlGroups" value={{group}}>
                                                         {{group}}
                                                     </option>
@@ -113,7 +113,7 @@
                                                     <button type="button" class="btn btn-success btn-lg" (click)="getWeekData(13)">
                                                         13 Weeks
                                                     </button>
-                                                    <button type="button" class="btn btn-success btn-lg">
+                                                    <button type="button" class="btn btn-success btn-lg" (click)="getWeekData(13)">
                                                         {{count13Weeks}}
                                                     </button>
                                                 </div>
@@ -123,7 +123,7 @@
                                                     <button type="button" class="btn btn-primary btn-lg" (click)="getWeekData(26)">
                                                         26 Weeks
                                                     </button>
-                                                    <button type="button" class="btn btn-primary btn-lg">
+                                                    <button type="button" class="btn btn-primary btn-lg" (click)="getWeekData(26)">
                                                         {{count26Weeks}}
                                                     </button>
                                                 </div>
@@ -133,7 +133,7 @@
                                                     <button type="button" class="btn btn-info btn-lg" (click)="getWeekData(47)">
                                                         47 Weeks
                                                     </button>
-                                                    <button type="button" class="btn btn-info btn-lg">
+                                                    <button type="button" class="btn btn-info btn-lg" (click)="getWeekData(47)">
                                                         {{count47Weeks}}
                                                     </button>
                                                 </div>
@@ -143,7 +143,7 @@
                                                     <button type="button" class="btn btn-warning btn-lg" (click)="getWeekData(52)">
                                                         52 Weeks
                                                     </button>
-                                                    <button type="button" class="btn btn-warning btn-lg">
+                                                    <button type="button" class="btn btn-warning btn-lg" (click)="getWeekData(52)">
                                                         {{count52Weeks}}
                                                     </button>
                                                 </div>

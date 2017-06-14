@@ -16,6 +16,23 @@ export class PayrollDataActivityReportService {
     constructor(private _http: Http) {
 
     }
+
+    getReportData(): Observable<any> {
+        return this._http.get(this._pdaReportUrl + 'payrollDataActivityReport/getPayrollReferenceData')
+            .map((response: Response) => response.json().payrollRefDataVO)
+            .do(data =>console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+    
+    getPayrollDataActivityReportData(filterCriteria:any): Observable<IWorkDetails[]> {
+
+      let fileName:string ="payrollDataActivityReport/getReportsForPayrollDataActivity?WorkYear="+filterCriteria.selectedYear       
+        +"&ControlGroup="+filterCriteria.selectedControlGroup       
+        return this._http.get(this._pdaReportUrl + fileName)
+            .map((response: Response) => <IWorkDetails[]>response.json().reportsForPayrollDataActivity)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);       
+    }
       getYears() { return ['2016', '2017', '2018'] }
 
     getControlGroups() { return ['Revolution', 'Cast & Crew'] }

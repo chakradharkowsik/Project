@@ -30,10 +30,11 @@ var OnGoingReportComponent = (function () {
             { title: 'Union/Non-Union', className: 'va-m', name: 'unionType' },
             { title: 'Weeks Since Last Worked', className: 'va-m', name: 'weeksSinceLastWorked' },
             { title: 'Average Hours-SMP', className: 'va-m', name: 'avgHours' },
-            { title: 'Total Hours', className: 'va-m', name: 'totalHours' }
+            { title: 'Total Hours', className: 'va-m', name: 'totalHours' },
+            { title: 'Employee Type', className: 'va-m', name: 'employeeType' }
         ];
         this.page = 1;
-        this.itemsPerPage = 1;
+        this.itemsPerPage = 50;
         this.maxSize = 5;
         this.numPages = 1;
         this.length = 0;
@@ -45,6 +46,7 @@ var OnGoingReportComponent = (function () {
         };
     }
     OnGoingReportComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.controlGroupControl = new forms_1.FormControl("", forms_1.Validators.required);
         this.typeOfHoursControl = new forms_1.FormControl("", forms_1.Validators.required);
         this.measurementEndDateControl = new forms_1.FormControl("", forms_1.Validators.required);
@@ -55,9 +57,11 @@ var OnGoingReportComponent = (function () {
             avgWeeklyHoursThreshold: this.avgWeeklyThresholdControl,
             measurementEndDate: this.measurementEndDateControl
         });
-        this.measurementEndDates = this._ogreportsrv.getMeasurementEndDates();
-        this.controlGroups = this._ogreportsrv.getControlGroups();
-        this.typeOfHours = this._ogreportsrv.getTypeOfHours();
+        this._ogreportsrv.getReportData().subscribe(function (data) {
+            _this.measurementEndDates = data.measurementDate;
+            _this.controlGroups = data.ControlGroup;
+            _this.typeOfHours = data.typeOfHours;
+        }, function (error) { return _this.errorMessage = error; });
         this.count13Weeks = "0";
         this.count26Weeks = "0";
         this.count47Weeks = "0";
@@ -65,23 +69,75 @@ var OnGoingReportComponent = (function () {
         this.onChangeTable(this.config);
         this.dataLoaded = false;
     };
+    OnGoingReportComponent.prototype.getFilterValues = function () {
+        var measurementDate = this.measurementEndDateControl.value;
+        if (measurementDate == undefined || measurementDate == "") {
+            measurementDate = "''";
+        }
+        var cg = this.controlGroupControl.value;
+        if (cg == undefined || cg == "All" || cg == "") {
+            cg = "''";
+            ;
+        }
+        var emptype = this.typeOfHoursControl.value;
+        if (emptype == undefined || emptype == "") {
+            emptype = "''";
+            ;
+        }
+        var cat = this.avgWeeklyThresholdControl.value;
+        if (cat == undefined || cat == "") {
+            cat = "''";
+        }
+        var filterCriteria = {
+            selectedMeasuredDate: measurementDate,
+            selectedControlGroup: cg,
+            selectedTypeOfHours: emptype,
+            avgWeeklyThreshold: cat,
+            reportCount: 13
+        };
+        return filterCriteria;
+    };
     OnGoingReportComponent.prototype.Search = function (formValues) {
-        debugger;
-        var counts = this._ogreportsrv.getWeeklyCounts();
-        this.count13Weeks = counts.count13Weeks;
-        this.count26Weeks = counts.count26Weeks;
-        this.count47Weeks = counts.count47Weeks;
-        this.count52Weeks = counts.count52Weeks;
+        var _this = this;
+        this.dataLoaded = false;
+        var filterCriteria = this.getFilterValues();
+        this.count13Weeks = "0";
+        this.count26Weeks = "0";
+        this.count47Weeks = "0";
+        this.count52Weeks = "0";
+        var counts = this._ogreportsrv.getOnGoingReportDataCount(filterCriteria).subscribe(function (counts) {
+            debugger;
+            if (counts == undefined || counts == null || (counts != null && counts.onGoingCountByWeeks == null)) {
+                return;
+            }
+            counts.onGoingCountByWeeks.forEach(function (element) {
+                switch (element.WEEKS_WORKED) {
+                    case "13":
+                        _this.count13Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                    case "26":
+                        _this.count26Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                    case "47":
+                        _this.count47Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                    case "52":
+                        _this.count52Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                }
+            });
+        }, function (error) { return _this.errorMessage = error; });
     };
     OnGoingReportComponent.prototype.getWeekData = function (weekCount) {
         var _this = this;
-        // debugger;
-        this._ogreportsrv.getWeekReportData(weekCount).subscribe(function (workdetails) {
+        var filterCriteria = this.getFilterValues();
+        filterCriteria.reportCount = weekCount;
+        this._ogreportsrv.getOnGoingReportData(filterCriteria).subscribe(function (workdetails) {
+            debugger;
             _this.workDetails = workdetails;
             _this.onChangeTable(_this.config);
             _this.dataLoaded = true;
         }, function (error) { return _this.errorMessage = error; });
-        //this._ogreportsrv.getWeekReportData(weekCount);
     };
     OnGoingReportComponent.prototype.downloadPdf = function () {
     };

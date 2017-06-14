@@ -21,32 +21,43 @@ var ENFTReportService = (function () {
         this._http = _http;
         this._enftreportUrl = app_config_1.CONFIGURATION.baseServiceUrl;
     }
-    ENFTReportService.prototype.getYears = function () { return ['2016', '2017', '2018']; };
-    ENFTReportService.prototype.getMonths = function () { return ['January', 'Feburary', 'March']; };
-    ENFTReportService.prototype.getControlGroups = function () { return ['Revolution', 'Cast & Crew']; };
-    ENFTReportService.prototype.getTypeOfHours = function () { return ['Union', 'Non Union']; };
-    ENFTReportService.prototype.getNonFullTimeCategories = function () { return ['Part Time', 'Seasonal', 'Un Category', 'Variable']; };
-    ENFTReportService.prototype.getWeeklyCounts = function () { return { count13Weeks: "3", count26Weeks: "4", count47Weeks: "5", count52Weeks: "6" }; };
-    ENFTReportService.prototype.getWeekReportData = function (weekCount) {
-        var fileName = '';
-        switch (weekCount) {
-            case 13:
-                fileName = "enftreport13.json";
-                break;
-            case 26:
-                fileName = "enftreport26.json";
-                break;
-            case 47:
-                break;
-            case 52:
-                break;
-        }
+    ENFTReportService.prototype.getReportData = function () {
+        return this._http.get(this._enftreportUrl + 'newHiresNonFullTime/getNewHireNonFullTImeReferenceData')
+            .map(function (response) { return response.json().EligibilityNewHiresNonFullTimeReferenceData; })
+            .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
+            .catch(this.handleError);
+    };
+    ENFTReportService.prototype.getYears = function () { return this.data.WorkYear; };
+    ENFTReportService.prototype.getMonths = function () { return this.data.WorkMonth; };
+    ENFTReportService.prototype.getControlGroups = function () { return this.data.ControlGroup; };
+    ENFTReportService.prototype.getTypeOfHours = function () { return this.data.UnionType; };
+    ENFTReportService.prototype.getNonFullTimeCategories = function () { return this.data.EmployeeType; };
+    ENFTReportService.prototype.getWeeklyCounts = function (filterCriteria) {
+        debugger;
+        var fileName = "newHiresNonFullTime/getReportCountByWeek?WorkYear=" + filterCriteria.selectedYear
+            + "&WorkMonth=" + filterCriteria.selectedHireMonth
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup
+            + "&UnionType=" + filterCriteria.selectedTypeOfHours
+            + "&EmployeeType=" + filterCriteria.selectedNonFullTimeCatgeories + "";
         return this._http.get(this._enftreportUrl + fileName)
             .map(function (response) { return response.json(); })
             .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
             .catch(this.handleError);
+        // return { count13Weeks: "3", count26Weeks: "4", count47Weeks: "5", count52Weeks: "6" };
+    };
+    ENFTReportService.prototype.getWeekReportData = function (filterCriteria) {
+        var fileName = "newHiresNonFullTime/getReportsByWeeksCount?WorkYear=" + filterCriteria.selectedYear
+            + "&WorkMonth=" + filterCriteria.selectedHireMonth
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup
+            + "&UnionType=" + filterCriteria.selectedTypeOfHours
+            + "&EmployeeType=" + filterCriteria.selectedNonFullTimeCatgeories + "&ReportOfWeek=" + filterCriteria.reportCount;
+        return this._http.get(this._enftreportUrl + fileName)
+            .map(function (response) { return response.json().reportByWeekCount; })
+            .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
+            .catch(this.handleError);
     };
     ENFTReportService.prototype.handleError = function (error) {
+        debugger;
         // in a real world app, we may send the server to some remote logging infrastructure
         // instead of just logging it to the console
         console.error(error);

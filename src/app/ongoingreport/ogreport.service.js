@@ -21,6 +21,34 @@ var OnGoingReportService = (function () {
         this._http = _http;
         this._onGoingReportUrl = app_config_1.CONFIGURATION.baseServiceUrl;
     }
+    OnGoingReportService.prototype.getReportData = function () {
+        return this._http.get(this._onGoingReportUrl + 'eligibilityReportOngoing/getOnGoingReportReferenceData')
+            .map(function (response) { return response.json().eligibilityReportOngoingVO; })
+            .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
+            .catch(this.handleError);
+    };
+    OnGoingReportService.prototype.getOnGoingReportDataCount = function (filterCriteria) {
+        var fileName = "eligibilityReportOngoing/getOnGoingCountByWeeks?MeasurementEndDate=" + filterCriteria.selectedMeasuredDate
+            + "&AvgWeeklyHours=" + filterCriteria.avgWeeklyThreshold
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup
+            + "&UnionType=" + filterCriteria.selectedTypeOfHours;
+        return this._http.get(this._onGoingReportUrl + fileName)
+            .map(function (response) { return response.json(); })
+            .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
+            .catch(this.handleError);
+    };
+    OnGoingReportService.prototype.getOnGoingReportData = function (filterCriteria) {
+        debugger;
+        var fileName = "eligibilityReportOngoing/getOnGoingReportsByWeeksCount?MeasurementEndDate=" + filterCriteria.selectedMeasuredDate
+            + "&AvgWeeklyHours=" + filterCriteria.avgWeeklyThreshold
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup
+            + "&UnionType=" + filterCriteria.selectedTypeOfHours
+            + "&ReportOfWeek=" + filterCriteria.reportCount;
+        return this._http.get(this._onGoingReportUrl + fileName)
+            .map(function (response) { return response.json().onGoingReportsByWeekCount; })
+            .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
+            .catch(this.handleError);
+    };
     OnGoingReportService.prototype.getMeasurementEndDates = function () { return ['26-10-2016', '29-10-2017']; };
     OnGoingReportService.prototype.getControlGroups = function () { return ['Revolution', 'Cast & Crew']; };
     OnGoingReportService.prototype.getTypeOfHours = function () { return ['Union', 'Non Union']; };
@@ -45,6 +73,7 @@ var OnGoingReportService = (function () {
             .catch(this.handleError);
     };
     OnGoingReportService.prototype.handleError = function (error) {
+        debugger;
         // in a real world app, we may send the server to some remote logging infrastructure
         // instead of just logging it to the console
         console.error(error);

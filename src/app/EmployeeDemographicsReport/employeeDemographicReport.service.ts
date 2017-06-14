@@ -12,7 +12,7 @@ import 'rxjs/add/observable/throw';
 export class EmployeeDemographicReportService {
 constructor(private _http: Http) { }
 
-private _empDemographicsReportUrl =CONFIGURATION.baseServiceUrl;
+private _empDemographicsReportUrl = 'app/api/';
 
 getEmployeeDemographicsReports(): Observable<IEmployeeDemographicDetail[]> {
         let fileName: string = 'employeedemographic.json';        

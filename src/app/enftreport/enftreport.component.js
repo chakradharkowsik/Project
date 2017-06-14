@@ -18,8 +18,6 @@ var ENFTReportComponent = (function () {
         this.workDetails = [];
         this.rows = [];
         this.columns = [
-            // { title: 'Work Year', className: 'va-m blueHeader', name: 'WorkYear' },
-            // { title: 'Work Month', className: 'va-m', name: 'workMonth' },
             { title: 'Control Group', className: 'va-m', name: 'controlGroup' },
             { title: 'Latest Production Company', className: 'va-m', name: 'mostRecentProductionCompany' },
             { title: 'Most Recent Show', className: 'va-m', name: 'mostRecentProject' },
@@ -31,10 +29,10 @@ var ENFTReportComponent = (function () {
             { title: 'Union Type', className: 'va-m', name: 'unionType' },
             { title: 'Payroll Source', className: 'va-m', name: 'payrollSource' },
             { title: 'Average Hours', className: 'va-m', name: 'avgHours' },
-            { title: 'Total Hours', className: 'va-m', name: 'totalHours' },
+            { title: 'Total Hours', className: 'va-m', name: 'totalHours' }
         ];
         this.page = 1;
-        this.itemsPerPage = 1;
+        this.itemsPerPage = 50;
         this.maxSize = 5;
         this.numPages = 1;
         this.length = 0;
@@ -47,11 +45,14 @@ var ENFTReportComponent = (function () {
     }
     ENFTReportComponent.prototype.ngOnInit = function () {
         // throw new Error("Method not implemented.");
-        this.Years = this._enftreport.getYears();
-        this.Months = this._enftreport.getMonths();
-        this.ControlGroups = this._enftreport.getControlGroups();
-        this.TypeOfHours = this._enftreport.getTypeOfHours();
-        this.NonFullTimeCatgeories = this._enftreport.getNonFullTimeCategories();
+        var _this = this;
+        this._enftreport.getReportData().subscribe(function (data) {
+            _this.Years = data.WorkYear;
+            _this.Months = data.WorkMonth;
+            _this.ControlGroups = data.ControlGroup;
+            _this.TypeOfHours = data.UnionType;
+            _this.NonFullTimeCatgeories = data.EmployeeType;
+        }, function (error) { return _this.errorMessage = error; });
         this.AvgWeeklyHrsThr = "30";
         this.selectedYear = "-1";
         this.selectedHireMonth = "-1";
@@ -64,17 +65,76 @@ var ENFTReportComponent = (function () {
         this.onChangeTable(this.config);
         this.dataLoaded = false;
     };
+    ENFTReportComponent.prototype.getFilterValues = function () {
+        var year = this.selectedYear;
+        if (year == "-1") {
+            year = "''";
+        }
+        var month = this.selectedHireMonth;
+        if (month == "-1") {
+            month = "''";
+            ;
+        }
+        var cg = this.selectedControlGroup;
+        if (cg == "All" || cg == "-1") {
+            cg = "''";
+            ;
+        }
+        var emptype = this.selectedTypeOfHours;
+        if (emptype == "-1") {
+            emptype = "''";
+            ;
+        }
+        var cat = this.selectedNonFullTimeCatgeories;
+        if (cat == undefined || cat.length == 0) {
+            cat = ["''"];
+        }
+        var filterCriteria = {
+            selectedYear: year, selectedHireMonth: month, selectedControlGroup: cg,
+            selectedTypeOfHours: emptype, selectedNonFullTimeCatgeories: cat,
+            avgWeeklyThreshold: this.AvgWeeklyHrsThr,
+            reportCount: 13
+        };
+        return filterCriteria;
+    };
     ENFTReportComponent.prototype.Search = function () {
-        var counts = this._enftreport.getWeeklyCounts();
-        this.count13Weeks = counts.count13Weeks;
-        this.count26Weeks = counts.count26Weeks;
-        this.count47Weeks = counts.count47Weeks;
-        this.count52Weeks = counts.count52Weeks;
+        var _this = this;
+        this.dataLoaded = false;
+        var filterCriteria = this.getFilterValues();
+        this.count13Weeks = "0";
+        this.count26Weeks = "0";
+        this.count47Weeks = "0";
+        this.count52Weeks = "0";
+        var counts = this._enftreport.getWeeklyCounts(filterCriteria)
+            .subscribe(function (counts) {
+            if (counts == undefined || counts == null || (counts != null && counts.reportCountByWeek == null)) {
+                return;
+            }
+            counts.reportCountByWeek.forEach(function (element) {
+                switch (element.WEEKS_WORKED) {
+                    case "13":
+                        _this.count13Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                    case "26":
+                        _this.count26Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                    case "47":
+                        _this.count47Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                    case "52":
+                        _this.count52Weeks = element.WEEKS_WORKED_COUNT;
+                        break;
+                }
+            });
+        }, function (error) { return _this.errorMessage = error; });
     };
     ENFTReportComponent.prototype.getWeekData = function (weekCount) {
         var _this = this;
         debugger;
-        this._enftreport.getWeekReportData(weekCount).subscribe(function (workdetails) {
+        var filterCriteria = this.getFilterValues();
+        filterCriteria.reportCount = weekCount;
+        this._enftreport.getWeekReportData(filterCriteria).subscribe(function (workdetails) {
+            debugger;
             _this.workDetails = workdetails;
             _this.onChangeTable(_this.config);
             _this.dataLoaded = true;

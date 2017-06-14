@@ -41,7 +41,7 @@
                                             <div class="col-sm-7">
                                                 <label class="field select">
                                                 <select id="selcontrolgroup" name="controlgroup" formControlName="controlGroup" [ngClass]="{'error':!validateControlGroups()}">
-                                                    <option selected disabled value="">Select Value</option>
+                                                    <option selected disabled value="">All</option>
                                                     <option *ngFor="let group of ControlGroups" value={{group}}>
                                                         {{group}}
                                                     </option>

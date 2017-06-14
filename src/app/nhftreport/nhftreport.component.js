@@ -19,7 +19,7 @@ var NewHireFullTimeComponent = (function () {
         this.workerDetails = [];
         this.rows = [];
         this.page = 1;
-        this.itemsPerPage = 2;
+        this.itemsPerPage = 50;
         this.maxSize = 5;
         this.numPages = 1;
         this.length = 0;
@@ -45,9 +45,12 @@ var NewHireFullTimeComponent = (function () {
         };
     }
     NewHireFullTimeComponent.prototype.ngOnInit = function () {
-        this.Years = this._newHireFullTimeService.getYears();
-        this.Months = this._newHireFullTimeService.getMonths();
-        this.ControlGroups = this._newHireFullTimeService.getControlGroups();
+        var _this = this;
+        this._newHireFullTimeService.getReportData().subscribe(function (data) {
+            _this.Years = data.WorkYear;
+            _this.Months = data.WorkMonth;
+            _this.ControlGroups = data.ControlGroup;
+        }, function (error) { return _this.errorMessage = error; });
         this.selectedYear = "-1";
         this.selectedHireMonth = "-1";
         this.selectedControlGroup = "-1";
@@ -57,15 +60,49 @@ var NewHireFullTimeComponent = (function () {
     };
     NewHireFullTimeComponent.prototype.eligibleFullTimeReportData = function () {
         var _this = this;
-        this._newHireFullTimeService.getEligibleFullTimeReportData().subscribe(function (workdetails) {
+        var filterCriteria = this.getFilterValues();
+        filterCriteria.acaEligibleCount = this.eligibleFullTimeWorkers;
+        this._newHireFullTimeService.getEligibleFullTimeReportData(filterCriteria).subscribe(function (workdetails) {
             _this.workerDetails = workdetails;
             _this.onChangeTable(_this.config);
             _this.dataLoaded = true;
         }, function (error) { return _this.errorMessage = error; });
     };
+    NewHireFullTimeComponent.prototype.getFilterValues = function () {
+        var year = this.selectedYear;
+        if (year == "-1") {
+            year = "''";
+        }
+        var month = this.selectedHireMonth;
+        if (month == "-1") {
+            month = "''";
+            ;
+        }
+        var cg = this.selectedControlGroup;
+        if (cg == "All" || cg == "-1") {
+            cg = "''";
+            ;
+        }
+        var filterCriteria = {
+            selectedYear: year, selectedHireMonth: month, selectedControlGroup: cg
+        };
+        return filterCriteria;
+    };
     NewHireFullTimeComponent.prototype.Search = function () {
-        var counts = this._newHireFullTimeService.getEligibleFullTimeWorkers();
-        this.eligibleFullTimeWorkers = counts.eftworkers;
+        var _this = this;
+        this.dataLoaded = false;
+        var filterCriteria = this.getFilterValues();
+        this.eligibleFullTimeWorkers = "0";
+        var counts = this._newHireFullTimeService.getEligibleFullTimeWorkers(filterCriteria)
+            .subscribe(function (counts) {
+            debugger;
+            if (counts == undefined || counts == null) {
+                return;
+            }
+            counts.forEach(function (element) {
+                _this.eligibleFullTimeWorkers = element.acaEligibleCount;
+            });
+        }, function (error) { return _this.errorMessage = error; });
     };
     NewHireFullTimeComponent.prototype.downloadPdf = function () {
     };

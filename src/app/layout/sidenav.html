@@ -10,7 +10,7 @@
             <div class="sidebar-widget menu-widget">
                 <div class="row text-center mbn">
                     <div class="col-xs-2 pln prn">
-                        <a [routerLink]="['\aca\dashboard']" class="text-primary" data-toggle="tooltip" data-placement="top" title="Dashboard">
+                        <a [routerLink]="['/',route,dashboard]" class="text-primary" data-toggle="tooltip" data-placement="top" title="Dashboard">
                                 <span class="fa fa-dashboard"></span>
                             </a>
                     </div>
@@ -57,11 +57,11 @@
                     </a>
                 <ul class="nav sub-nav">
                     <li class="active">
-                        <a href="userfields.html">
+                        <a [routerLink]="['/',route,addcustomer]">
                                 <span class="fa fa-file-text-o"></span> Add Customer </a>
                     </li>
                     <li class="active">
-                        <a [routerLink]="['/',route,dashboard]">
+                        <a [routerLink]="['/',route,listcustomer]">
                                 <span class="fa fa-file-text-o"></span> List Customers </a>
                     </li>
                 </ul>
@@ -75,15 +75,15 @@
                     </a>
                 <ul class="nav sub-nav">
                     <li class="active">
-                        <a>
+                        <a [routerLink]="['/',route,onboardingcustomerinformation]">
                                 <span class="fa fa-file-text-o"></span> Client Onboarding </a>
                     </li>
                     <li class="active">
-                        <a>
+                        <a [routerLink]="['/',route,controlgroup]">
                                 <span class="fa fa-file-text-o"></span> Control Group </a>
                     </li>
                     <li class="active">
-                        <a>
+                        <a [routerLink]="['/',route,ale]">
                                 <span class="fa fa-file-text-o"></span> ALE </a>
                     </li>
                 </ul>
@@ -98,20 +98,24 @@
                         <span class="caret"></span>
                     </a>
                 <ul class="nav sub-nav">
-                    <li class="active">
-                        <a>
+                    <li>
+                        <a [routerLink]="['/',route,aledataupload]" routerLinkActive="active">
+                                <span class="fa fa-file-text-o"></span> ALE Data </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/',route,payrolldataupload]" routerLinkActive="active">
                                 <span class="fa fa-file-text-o"></span> Payroll Data </a>
                     </li>
-                    <li class="active">
-                        <a>
+                    <li>
+                        <a [routerLink]="['/',route,insurancedataupload]" routerLinkActive="active">
                                 <span class="fa fa-file-text-o"></span> Insurance Data </a>
                     </li>
-                    <li class="active">
-                        <a>
+                    <li>
+                        <a [routerLink]="['/',route,onezeroninefourdataupload]" routerLinkActive="active">
                                 <span class="fa fa-file-text-o"></span> 1094 </a>
                     </li>
-                    <li class="active">
-                        <a>
+                    <li>
+                        <a [routerLink]="['/',route,onezeroninefivedataupload]" routerLinkActive="active">
                                 <span class="fa fa-file-text-o"></span> 1095 </a>
                     </li>
                 </ul>
@@ -132,19 +136,19 @@
                     </a>
                 <ul class="nav sub-nav">
                     <li class="active">
-                        <a>
+                        <a [routerLink]="['/',route,onboardingcustomerinformation]">
                                 <span class="fa fa-file-text-o"></span> Payroll Data </a>
                     </li>
                     <li class="active">
-                        <a>
+                        <a [routerLink]="['/',route,onboardingcustomerinformation]">
                                 <span class="fa fa-file-text-o"></span> Insurance Data </a>
                     </li>
                     <li class="active">
-                        <a>
+                        <a [routerLink]="['/',route,onboardingcustomerinformation]">
                                 <span class="fa fa-file-text-o"></span> 1094 </a>
                     </li>
                     <li class="active">
-                        <a>
+                        <a [routerLink]="['/',route,onboardingcustomerinformation]">
                                 <span class="fa fa-file-text-o"></span> 1095 </a>
                     </li>
                 </ul>
@@ -161,7 +165,7 @@
                         <span class="caret"></span>
                     </a>
                 <ul class="nav sub-nav">
-                     <li>
+                    <li>
                         <a [routerLink]="['/',route,empsummary]" routerLinkActive="active">
                                 <span class="glyphicon glyphicon-equalizer"></span> Employee Summary </a>
                     </li>
@@ -177,7 +181,7 @@
                         <a [routerLink]="['/',route,empbreakinservice]" routerLinkActive="active">
                                 <span class="glyphicon glyphicon-equalizer"></span> Break In Service </a>
                     </li>
-                   
+
                     <li>
                         <a [routerLink]="['/',route,nftreport]" routerLinkActive="active">
                                 <span class="glyphicon glyphicon-book"></span> New Hire Full Time </a>
@@ -216,7 +220,7 @@
                     </li>
                     <li>
                         <a>
-                                <span class="glyphicon glyphicon-calendar"></span> 1095 </a>
+                                <span class="glyphicon glyphicon-calendar"></span> AIR Submission 1094/1095 </a>
                     </li>
 
                 </ul>

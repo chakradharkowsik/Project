@@ -11,24 +11,42 @@ import { CONFIGURATION } from '../app.config';
 @Injectable()
 export class NewHireFullTimeService
 {
+    private _nhftreportUrl = CONFIGURATION.baseServiceUrl;
+    private data: any;
    constructor(private _http:Http){}
-   private _enftreportUrl = CONFIGURATION.baseServiceUrl;
+   
 
-    getYears() { return ['2016', '2017', '2018'] }
-
-    getMonths() { return ['January', 'Feburary', 'March'] }
-
-    getControlGroups() { return ['Revolution', 'Cast & Crew'] }
-
-    getEligibleFullTimeWorkers(): any { return { eftworkers: "26" }; }
-
-    getEligibleFullTimeReportData(): Observable<InhftWorkDetail[]> {
-        let fileName: string = 'enftreport26.json';        
-        return this._http.get(this._enftreportUrl + fileName)
-            .map((response: Response) => <InhftWorkDetail[]>response.json())
-            .do(data => console.log('All: ' + JSON.stringify(data)))
+    getReportData(): Observable<any> {
+        return this._http.get(this._nhftreportUrl + 'newHiresFullTime/getNewHireFullTimeReferenceData')
+            .map((response: Response) => response.json().EligibilityNewHiresFullTimeReferenceData)
+            .do(data =>console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
+    
+    getEligibleFullTimeWorkers(filterCriteria:any): Observable<any>
+     { 
+       let fileName:string ="newHiresFullTime/getACAEligibleCount?WorkYear="+filterCriteria.selectedYear
+        +"&WorkMonth="+filterCriteria.selectedHireMonth
+        +"&ControlGroup="+filterCriteria.selectedControlGroup        
+        return this._http.get(this._nhftreportUrl + fileName)
+            .map((response: Response) => response.json().summaryCountForNewHireFullTimeVO)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+       
+        // return { eftworkers: "26" }; 
+    }   
+    
+    getEligibleFullTimeReportData(filterCriteria:any): Observable<InhftWorkDetail[]> {
+
+      let fileName:string ="newHiresFullTime/getReportByACAEligibleCount?WorkYear="+filterCriteria.selectedYear
+        +"&WorkMonth="+filterCriteria.selectedHireMonth
+        +"&ControlGroup="+filterCriteria.selectedControlGroup       
+        return this._http.get(this._nhftreportUrl + fileName)
+            .map((response: Response) => <InhftWorkDetail[]>response.json().reportByACAEligibleCount)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);       
+    }
+
     private handleError(error: Response) {
         // in a real world app, we may send the server to some remote logging infrastructure
         // instead of just logging it to the console

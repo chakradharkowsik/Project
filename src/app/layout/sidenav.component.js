@@ -20,6 +20,19 @@ var SideNavComponent = (function () {
         this.empeligilbility = app_config_1.CONFIGURATION.empeligilbility;
         this.empdemographics = app_config_1.CONFIGURATION.empdemographics;
         this.empbreakinservice = app_config_1.CONFIGURATION.empbreakinservice;
+        this.addcustomer = app_config_1.CONFIGURATION.addcustomer;
+        this.listcustomer = app_config_1.CONFIGURATION.listcustomer;
+        this.onboardingcustomerinformation = app_config_1.CONFIGURATION.onboardingcustomerinformation;
+        this.clientpayroll = app_config_1.CONFIGURATION.clientpayroll;
+        this.onboardingpersonalinformation = app_config_1.CONFIGURATION.onboardingpersonalinformation;
+        this.uploaddata = app_config_1.CONFIGURATION.uploaddata;
+        this.aledataupload = app_config_1.CONFIGURATION.aledataupload;
+        this.payrolldataupload = app_config_1.CONFIGURATION.payrolldataupload;
+        this.insurancedataupload = app_config_1.CONFIGURATION.insurancedataupload;
+        this.onezeroninefourdataupload = app_config_1.CONFIGURATION.onezeroninefourdataupload;
+        this.onezeroninefivedataupload = app_config_1.CONFIGURATION.onezeroninefivedataupload;
+        this.controlgroup = app_config_1.CONFIGURATION.controlgroup;
+        this.ale = app_config_1.CONFIGURATION.ale;
     }
     return SideNavComponent;
 }());
