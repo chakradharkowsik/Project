@@ -2,20 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { IEmployeeDemographicDetail } from './employeeDemographicDetail';
 import { Observable } from 'rxjs/Observable';
-import { CONFIGURATION } from '../app.config';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class EmployeeDemographicReportService {
+private _empDemographicsReportUrl = 'app/api/';
 constructor(private _http: Http) { }
 
-private _empDemographicsReportUrl = 'app/api/';
-
 getEmployeeDemographicsReports(): Observable<IEmployeeDemographicDetail[]> {
-        let fileName: string = 'employeedemographic.json';        
+        let fileName = 'employeedemographic.json';
         return this._http.get(this._empDemographicsReportUrl + fileName)
             .map((response: Response) => <IEmployeeDemographicDetail[]>response.json())
             .do(data => console.log('All: ' + JSON.stringify(data)))

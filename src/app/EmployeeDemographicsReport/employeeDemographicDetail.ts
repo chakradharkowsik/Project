@@ -1,5 +1,4 @@
-export interface IEmployeeDemographicDetail{
-    
+export interface IEmployeeDemographicDetail {
     parentCompany: string;
     productionCompany: string;
     showName: string;

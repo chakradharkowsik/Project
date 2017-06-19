@@ -12,10 +12,6 @@ var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 var Observable_1 = require("rxjs/Observable");
 var app_config_1 = require("../app.config");
-require("rxjs/add/operator/do");
-require("rxjs/add/operator/catch");
-require("rxjs/add/operator/map");
-require("rxjs/add/observable/throw");
 var ENFTReportService = (function () {
     function ENFTReportService(_http) {
         this._http = _http;
@@ -33,7 +29,6 @@ var ENFTReportService = (function () {
     ENFTReportService.prototype.getTypeOfHours = function () { return this.data.UnionType; };
     ENFTReportService.prototype.getNonFullTimeCategories = function () { return this.data.EmployeeType; };
     ENFTReportService.prototype.getWeeklyCounts = function (filterCriteria) {
-        debugger;
         var fileName = "newHiresNonFullTime/getReportCountByWeek?WorkYear=" + filterCriteria.selectedYear
             + "&WorkMonth=" + filterCriteria.selectedHireMonth
             + "&ControlGroup=" + filterCriteria.selectedControlGroup
@@ -57,7 +52,6 @@ var ENFTReportService = (function () {
             .catch(this.handleError);
     };
     ENFTReportService.prototype.handleError = function (error) {
-        debugger;
         // in a real world app, we may send the server to some remote logging infrastructure
         // instead of just logging it to the console
         console.error(error);

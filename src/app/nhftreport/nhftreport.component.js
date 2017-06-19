@@ -15,7 +15,7 @@ var NewHireFullTimeComponent = (function () {
     function NewHireFullTimeComponent(_newHireFullTimeService, _export) {
         this._newHireFullTimeService = _newHireFullTimeService;
         this._export = _export;
-        this.eligibleFullTimeWorkers = "0";
+        this.eligibleFullTimeWorkers = '0';
         this.workerDetails = [];
         this.rows = [];
         this.page = 1;
@@ -51,10 +51,10 @@ var NewHireFullTimeComponent = (function () {
             _this.Months = data.WorkMonth;
             _this.ControlGroups = data.ControlGroup;
         }, function (error) { return _this.errorMessage = error; });
-        this.selectedYear = "-1";
-        this.selectedHireMonth = "-1";
-        this.selectedControlGroup = "-1";
-        this.eligibleFullTimeWorkers = "0";
+        this.selectedYear = '-1';
+        this.selectedHireMonth = '-1';
+        this.selectedControlGroup = '-1';
+        this.eligibleFullTimeWorkers = '0';
         this.onChangeTable(this.config);
         this.dataLoaded = false;
     };
@@ -70,16 +70,15 @@ var NewHireFullTimeComponent = (function () {
     };
     NewHireFullTimeComponent.prototype.getFilterValues = function () {
         var year = this.selectedYear;
-        if (year == "-1") {
+        if (year === '-1') {
             year = "''";
         }
         var month = this.selectedHireMonth;
-        if (month == "-1") {
+        if (month === '-1') {
             month = "''";
-            ;
         }
         var cg = this.selectedControlGroup;
-        if (cg == "All" || cg == "-1") {
+        if (cg === "All" || cg === '-1') {
             cg = "''";
             ;
         }
@@ -92,11 +91,10 @@ var NewHireFullTimeComponent = (function () {
         var _this = this;
         this.dataLoaded = false;
         var filterCriteria = this.getFilterValues();
-        this.eligibleFullTimeWorkers = "0";
-        var counts = this._newHireFullTimeService.getEligibleFullTimeWorkers(filterCriteria)
+        this.eligibleFullTimeWorkers = '0';
+        this._newHireFullTimeService.getEligibleFullTimeWorkers(filterCriteria)
             .subscribe(function (counts) {
-            debugger;
-            if (counts == undefined || counts == null) {
+            if (counts === undefined || counts == null) {
                 return;
             }
             counts.forEach(function (element) {
@@ -107,14 +105,14 @@ var NewHireFullTimeComponent = (function () {
     NewHireFullTimeComponent.prototype.downloadPdf = function () {
     };
     NewHireFullTimeComponent.prototype.downloadExcel = function () {
-        debugger;
         var tbl = document.getElementById('datatable');
         var btn = document.getElementById('btnDownloadExcel');
         if (tbl) {
             console.log(tbl.children[0]);
         }
-        if (tbl && tbl.children.length > 0)
-            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Full Time Report');
+        if (tbl && tbl.children.length > 0) {
+            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
+        }
     };
     NewHireFullTimeComponent.prototype.onCellClick = function (data) {
         console.log(data);

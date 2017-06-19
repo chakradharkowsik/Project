@@ -70,8 +70,8 @@ export class PayrollDataActivityReportComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.controlGroupControl = new FormControl("", Validators.required);
-        this.yearControl = new FormControl("-1");
+        this.controlGroupControl = new FormControl('', Validators.required);
+        this.yearControl = new FormControl('-1');
         this.pdaReportForm = new FormGroup(
             {
                 controlGroup: this.controlGroupControl,
@@ -83,10 +83,10 @@ export class PayrollDataActivityReportComponent implements OnInit {
             this.Years = data.WorkYears;
         },
             error => this.errorMessage = <any>error);
-        this.count13Weeks = "0";
-        this.count26Weeks = "0";
-        this.count47Weeks = "0";
-        this.count52Weeks = "0";
+        this.count13Weeks = '0';
+        this.count26Weeks = '0';
+        this.count47Weeks = '0';
+        this.count52Weeks = '0';
 
         this.onChangeTable(this.config);
         this.dataLoaded = false;
@@ -95,11 +95,11 @@ export class PayrollDataActivityReportComponent implements OnInit {
     getFilterValues(): any {
 
         let cg = this.controlGroupControl.value;
-        if (cg == undefined || cg == "All" || cg == "") {
+        if (cg === undefined || cg === "All" || cg === "") {
             cg = "''";;
         }
         let year = this.yearControl.value;
-        if (year == undefined || year == "" || year == "-1") {
+        if (year === undefined || year === '' || year === '-1') {
             year = "''";;
         }
         let filterCriteria: any = {
@@ -114,7 +114,6 @@ export class PayrollDataActivityReportComponent implements OnInit {
         this.dataLoaded = false;
         let filterCriteria = this.getFilterValues();
         this._pdareportsrv.getPayrollDataActivityReportData(filterCriteria).subscribe(workdetails => {
-            debugger;
             this.workDetails = workdetails;
             this.onChangeTable(this.config);
             this.dataLoaded = true;
@@ -127,16 +126,17 @@ export class PayrollDataActivityReportComponent implements OnInit {
     }
 
     downloadExcel(): void {
-        debugger;
-        var tbl = document.getElementById('datatable');
-        var btn = document.getElementById('btnDownloadExcel');
+
+        let tbl = document.getElementById('datatable');
+        let btn = document.getElementById('btnDownloadExcel');
         if (tbl) {
             console.log(tbl.children[0]);
         }
-        if (tbl && tbl.children.length > 0)
-            this._export.excelByTableElement(btn, tbl.children[0], 'Payroll Data Activity Report');
+        if (tbl && tbl.children.length > 0) {
+            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
+        }
     }
-    //Validations
+    // Validations
 
     validateControlGroups(): boolean {
         return this.controlGroupControl.valid || this.controlGroupControl.untouched;

@@ -1,5 +1,4 @@
-export interface IEmpEligibleWorkDetail{
-    
+export interface IEmpEligibleWorkDetail {
     employeeName: string;
     unionStatus: string;
     ssnNumber: string;
@@ -9,5 +8,4 @@ export interface IEmpEligibleWorkDetail{
     totalHours: string;
     standardMeasuredEligibility: string;
     benefitsEffective: string;
-    
 }

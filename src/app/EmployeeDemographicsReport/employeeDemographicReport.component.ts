@@ -46,7 +46,7 @@ export class EmployeeDemographicReportComponent implements OnInit {
 
     employeeDemographicDetails: Array<any> = [];
     errorMessage: string;
-    constructor(private _employeeDemographicReportService: EmployeeDemographicReportService,private _export:ExportToExcelService) { }
+    constructor(private _employeeDemographicReportService: EmployeeDemographicReportService, private _export: ExportToExcelService) { }
 
     ngOnInit(): void {
 
@@ -70,14 +70,14 @@ export class EmployeeDemographicReportComponent implements OnInit {
     }
 
     downloadExcel(): void {
-        debugger;
-        var tbl = document.getElementById('datatable');
-        var btn = document.getElementById('btnDownloadExcel');
+        let tbl = document.getElementById('datatable');
+        let btn = document.getElementById('btnDownloadExcel');
         if (tbl) {
             console.log(tbl.children[0]);
         }
-        if (tbl && tbl.children.length > 0)
+        if (tbl && tbl.children.length > 0) {
             this._export.excelByTableElement(btn, tbl.children[0], 'Employee Demographic Report');
+         }
     }
     public changeSort(data: any, config: any): any {
         if (!config.sorting) {

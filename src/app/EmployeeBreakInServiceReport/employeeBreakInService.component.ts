@@ -38,7 +38,8 @@ export class EmployeeBreakInServiceReportComponent implements OnInit {
 
     employeeBeakInService: Array<any> = [];
     errorMessage: string;
-    constructor(private _employeeBreakInServiceReportService: EmployeeBreakInServiceReportService,private _export:ExportToExcelService) { }
+    constructor(private _employeeBreakInServiceReportService: EmployeeBreakInServiceReportService,
+        private _export: ExportToExcelService) { }
 
     ngOnInit(): void {
 
@@ -62,14 +63,15 @@ export class EmployeeBreakInServiceReportComponent implements OnInit {
     }
 
     downloadExcel(): void {
-        debugger;
-        var tbl = document.getElementById('datatable');
-        var btn = document.getElementById('btnDownloadExcel');
+        let tbl = document.getElementById('datatable');
+        let btn = document.getElementById('btnDownloadExcel');
         if (tbl) {
             console.log(tbl.children[0]);
         }
-        if (tbl && tbl.children.length > 0)
-            this._export.excelByTableElement(btn, tbl.children[0], 'Break In Service Report','EmployeeBreakInService');
+        if (tbl && tbl.children.length > 0) {
+            this._export.excelByTableElement(btn, tbl.children[0],
+                'Break In Service Report', 'EmployeeBreakInService');
+        }
     }
     public changeSort(data: any, config: any): any {
         if (!config.sorting) {

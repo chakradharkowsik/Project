@@ -45,7 +45,7 @@ export class OnGoingReportComponent implements OnInit {
         { title: 'Average Hours-SMP', className: 'va-m', name: 'avgHours' },
         { title: 'Total Hours', className: 'va-m', name: 'totalHours' },
         { title: 'Employee Type', className: 'va-m', name: 'employeeType' }
-            ];
+    ];
     public page: number = 1;
     public itemsPerPage: number = 50;
     public maxSize: number = 5;
@@ -64,10 +64,10 @@ export class OnGoingReportComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.controlGroupControl = new FormControl("", Validators.required);
-        this.typeOfHoursControl = new FormControl("", Validators.required);
-        this.measurementEndDateControl = new FormControl("", Validators.required);
-        this.avgWeeklyThresholdControl = new FormControl("30", Validators.required);
+        this.controlGroupControl = new FormControl('', Validators.required);
+        this.typeOfHoursControl = new FormControl('', Validators.required);
+        this.measurementEndDateControl = new FormControl('', Validators.required);
+        this.avgWeeklyThresholdControl = new FormControl('30', Validators.required);
 
         this.ogReportForm = new FormGroup(
             {
@@ -86,10 +86,10 @@ export class OnGoingReportComponent implements OnInit {
         },
             error => this.errorMessage = <any>error);
 
-        this.count13Weeks = "0";
-        this.count26Weeks = "0";
-        this.count47Weeks = "0";
-        this.count52Weeks = "0";
+        this.count13Weeks = '0';
+        this.count26Weeks = '0';
+        this.count47Weeks = '0';
+        this.count52Weeks = '0';
 
         this.onChangeTable(this.config);
         this.dataLoaded = false;
@@ -97,19 +97,19 @@ export class OnGoingReportComponent implements OnInit {
 
     getFilterValues(): any {
         let measurementDate = this.measurementEndDateControl.value;
-        if (measurementDate == undefined || measurementDate == "") {
+        if (measurementDate === undefined || measurementDate === '') {
             measurementDate = "''";
         }
         let cg = this.controlGroupControl.value;
-        if (cg == undefined || cg == "All" || cg == "") {
+        if (cg === undefined || cg === "All" || cg === '') {
             cg = "''";;
         }
         let emptype = this.typeOfHoursControl.value;
-        if (emptype == undefined || emptype == "") {
+        if (emptype === undefined || emptype === '') {
             emptype = "''";;
         }
         let cat = this.avgWeeklyThresholdControl.value;
-        if (cat == undefined || cat == "") {
+        if (cat === undefined || cat === '') {
             cat = "''";
         }
         let filterCriteria: any = {
@@ -126,27 +126,26 @@ export class OnGoingReportComponent implements OnInit {
     Search(formValues: any): void {
         this.dataLoaded = false;
         let filterCriteria = this.getFilterValues();
-        this.count13Weeks = "0";
-        this.count26Weeks = "0";
-        this.count47Weeks = "0";
-        this.count52Weeks = "0";
-        let counts = this._ogreportsrv.getOnGoingReportDataCount(filterCriteria).subscribe(counts => {
-            debugger;
-            if (counts == undefined || counts == null || (counts != null && counts.onGoingCountByWeeks == null)) {
+        this.count13Weeks = '0';
+        this.count26Weeks = '0';
+        this.count47Weeks = '0';
+        this.count52Weeks = '0';
+        this._ogreportsrv.getOnGoingReportDataCount(filterCriteria).subscribe(counts => {
+            if (counts === undefined || counts == null || (counts != null && counts.onGoingCountByWeeks == null)) {
                 return;
             }
             counts.onGoingCountByWeeks.forEach((element: any) => {
                 switch (element.WEEKS_WORKED) {
-                    case "13":
+                    case '13':
                         this.count13Weeks = element.WEEKS_WORKED_COUNT;
                         break;
-                    case "26":
+                    case '26':
                         this.count26Weeks = element.WEEKS_WORKED_COUNT;
                         break;
-                    case "47":
+                    case '47':
                         this.count47Weeks = element.WEEKS_WORKED_COUNT;
                         break;
-                    case "52":
+                    case '52':
                         this.count52Weeks = element.WEEKS_WORKED_COUNT;
                         break;
                 }
@@ -159,8 +158,7 @@ export class OnGoingReportComponent implements OnInit {
     getWeekData(weekCount: number): void {
         let filterCriteria = this.getFilterValues();
         filterCriteria.reportCount = weekCount;
-        this._ogreportsrv.getOnGoingReportData(filterCriteria).subscribe(workdetails => {  
-            debugger;          
+        this._ogreportsrv.getOnGoingReportData(filterCriteria).subscribe(workdetails => {
             this.workDetails = workdetails;
             this.onChangeTable(this.config);
             this.dataLoaded = true;
@@ -174,16 +172,17 @@ export class OnGoingReportComponent implements OnInit {
     }
 
     downloadExcel(): void {
-        debugger;
-        var tbl = document.getElementById('datatable');
-        var btn = document.getElementById('btnDownloadExcel');
+
+        let tbl = document.getElementById('datatable');
+        let btn = document.getElementById('btnDownloadExcel');
         if (tbl) {
             console.log(tbl.children[0]);
         }
-        if (tbl && tbl.children.length > 0)
-            this._export.excelByTableElement(btn, tbl.children[0], 'On Going Report');
+        if (tbl && tbl.children.length > 0) {
+            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
+        }
     }
-    //Validations
+    // Validations
 
     validateControlGroups(): boolean {
         return this.controlGroupControl.valid || this.controlGroupControl.untouched;

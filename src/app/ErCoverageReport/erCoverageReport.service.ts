@@ -2,43 +2,40 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { IErCoverageWorkDetail } from './erCoverageWorkDetail';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/throw';
+import { CONFIGURATION } from '../app.config';
+
 
 @Injectable()
 export class ErCoverageReportService {
 
-    //private _erCoverageReportUrl = 'app/api/';
-    private _erCoverageReportUrl = "http://localhost:8080/NHNFTReportWebAPI/rest/";
-    
+    // private _erCoverageReportUrl = 'app/api/';
+    private _erCoverageReportUrl = CONFIGURATION.baseServiceUrl;
+
     constructor(private _http: Http) { }
 
-     getReportData(): Observable<any> {
+    getReportData(): Observable<any> {
         return this._http.get(this._erCoverageReportUrl + 'erCoverageReport/getERCoverageReferenceData')
             .map((response: Response) => response.json().erCoverageReferanceDataVO)
-            .do(data =>console.log('All: ' + JSON.stringify(data)))
+            .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
-    
-    getAnnulaizedMonthlyWorkers(filterCriteria:any): Observable<any> 
-    { 
-         let fileName:string ="erCoverageReport/getAnnualizedMonthlyCount?WorkYear="+filterCriteria.selectedYear
-        +"&ControlGroup="+filterCriteria.selectedControlGroup        
+
+    getAnnulaizedMonthlyWorkers(filterCriteria: any): Observable<any> {
+        let fileName: string = "erCoverageReport/getAnnualizedMonthlyCount?WorkYear=" + filterCriteria.selectedYear
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup;
         return this._http.get(this._erCoverageReportUrl + fileName)
             .map((response: Response) => response.json().annualizedMonthlyCountVO)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
-      
-      //  return { annulaizedMonthly: "26" };
+
+        //  return { annulaizedMonthly: "26" };
     }
 
-    getAnnulaizedMonthlyWorkersReportData(filterCriteria:any): Observable<IErCoverageWorkDetail[]> {
-        debugger;
-        let fileName:string ="erCoverageReport/getReportsByAnnualizedMonthlyCount?WorkYear="+filterCriteria.selectedYear
-        +"&ControlGroup="+filterCriteria.selectedControlGroup 
-        +"";       
+    getAnnulaizedMonthlyWorkersReportData(filterCriteria: any): Observable<IErCoverageWorkDetail[]> {
+
+        let fileName = "erCoverageReport/getReportsByAnnualizedMonthlyCount?WorkYear=" + filterCriteria.selectedYear
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup
+            + "";
         return this._http.get(this._erCoverageReportUrl + fileName)
             .map((response: Response) => <IErCoverageWorkDetail[]>response.json().reportsByAnnualizedMonthlyCountVO)
             .do(data => console.log('All: ' + JSON.stringify(data)))
