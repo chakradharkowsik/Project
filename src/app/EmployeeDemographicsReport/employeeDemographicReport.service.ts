@@ -8,13 +8,33 @@ import { CONFIGURATION } from '../app.config';
 export class EmployeeDemographicReportService {
     private _empDemographicsReportUrl = CONFIGURATION.baseServiceUrl + 'demographicsreportservice/';
     constructor(private _http: Http) { }
-
-    getEmployeeDemographicsReports(): Observable<IEmployeeDemographicDetail[]> {
-        let fileName = 'getDemographicsReportData';
-        return this._http.get(this._empDemographicsReportUrl + fileName)
-            .map((response: Response) => <IEmployeeDemographicDetail[]>response.json())
+    getReportData(): Observable<any> {
+        return this._http.get(this._empDemographicsReportUrl + 'getDemographicsReferenceData')
+            .map((response: Response) => response.json().demoGraphicsReferanceData)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
+    }
+
+    getEmployeeDemographicsReports(filterCriteria: any): Observable<IEmployeeDemographicDetail[]> {
+        let fileName = 'getDemographicsReportData?WorkYear=' + filterCriteria.selectedYear
+            + '&ControlGroup=' + filterCriteria.selectedContorlGroup
+            + '&ParentCompnay=' + filterCriteria.selectedParentCompany
+            + '&Proudctioncompany=' + filterCriteria.selectedProductionCompany
+            + '&PayrollCompany=' + filterCriteria.selectedPayrollCompany;
+        return this._http.get(this._empDemographicsReportUrl + fileName)
+            .map((response: Response) => <IEmployeeDemographicDetail[]>response.json().demoGraphicsReportData)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    downloadExcelReport(filterCriteria: any): void {
+        let fileName = 'processDemographicsServiceReportExcelUpload?WorkYear='
+            + filterCriteria.selectedYear + '&ControlGroup=' + filterCriteria.selectedContorlGroup
+            + '&ParentCompnay=' + filterCriteria.selectedParentCompany
+            + '&Proudctioncompany=' + filterCriteria.selectedProductionCompany
+            + '&PayrollCompany=' + filterCriteria.selectedPayrollCompany;
+
+        window.open(this._empDemographicsReportUrl + fileName, '_bank');
     }
 
     private handleError(error: Response) {

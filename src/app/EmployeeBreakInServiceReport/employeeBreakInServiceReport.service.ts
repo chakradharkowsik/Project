@@ -10,12 +10,27 @@ export class EmployeeBreakInServiceReportService {
     private _empBreakInServiceReportUrl = CONFIGURATION.baseServiceUrl + 'breakinreportservice/';
     constructor(private _http: Http) { }
 
-    getEmployeeDemographicsReports(): Observable<IEmployeeBreakInServiceDetail[]> {
-        let fileName = 'getBreakInServiceReportData';
-        return this._http.get(this._empBreakInServiceReportUrl + fileName)
-            .map((response: Response) => <IEmployeeBreakInServiceDetail[]>response.json())
+    getReportData(): Observable<any> {
+        return this._http.get(this._empBreakInServiceReportUrl + 'getBreakInReportReferenceData')
+            .map((response: Response) => response.json().breakInReferanceData)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
+    }
+
+    getEmployeeBreakInServiceReports(filterCriteria: any): Observable<IEmployeeBreakInServiceDetail[]> {
+        let fileName = 'getBreakInServiceReportData?WorkYear=' + filterCriteria.selectedYear
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup;
+        return this._http.get(this._empBreakInServiceReportUrl + fileName)
+            .map((response: Response) => <IEmployeeBreakInServiceDetail[]>response.json().breakInReportData)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    downloadExcelReport(filterCriteria: any): void {
+        let fileName = 'processBreakInServiceReportExcelUpload?WorkYear=' + filterCriteria.selectedYear
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup;
+
+        window.open(this._empBreakInServiceReportUrl + fileName, '_bank');
     }
 
     private handleError(error: Response) {

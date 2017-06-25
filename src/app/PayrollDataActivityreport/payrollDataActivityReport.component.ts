@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PayrollDataActivityReportService } from './payrollDataActivityReport.service';
-import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, NgTableSortingDirective } from 'ng2-table/ng2-table';
-import { ExportToExcelService } from '../shared/export.service';
+
+
 @Component({
     moduleId: module.id,
     templateUrl: './payrollDataActivityReport.html'
@@ -65,7 +65,7 @@ export class PayrollDataActivityReportComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _pdareportsrv: PayrollDataActivityReportService, private _export: ExportToExcelService) {
+    constructor(private _pdareportsrv: PayrollDataActivityReportService) {
 
     }
 
@@ -127,14 +127,8 @@ export class PayrollDataActivityReportComponent implements OnInit {
 
     downloadExcel(): void {
 
-        let tbl = document.getElementById('datatable');
-        let btn = document.getElementById('btnDownloadExcel');
-        if (tbl) {
-            console.log(tbl.children[0]);
-        }
-        if (tbl && tbl.children.length > 0) {
-            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
-        }
+        let filterCriteria = this.getFilterValues();
+        this._pdareportsrv.downloadExcelReport(filterCriteria);
     }
     // Validations
 

@@ -23,17 +23,20 @@ export class PayrollDataActivityReportService {
 
     getPayrollDataActivityReportData(filterCriteria: any): Observable<IWorkDetails[]> {
 
-        let fileName: string = "getPayrollDataActivityReportData?WorkYear=" + filterCriteria.selectedYear
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup;
+        let fileName = 'getPayrollDataActivityReportData?WorkYear=' + filterCriteria.selectedYear
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup;
         return this._http.get(this._pdaReportUrl + fileName)
             .map((response: Response) => <IWorkDetails[]>response.json().reportsForPayrollDataActivity)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
-    getYears() { return ['2016', '2017', '2018']; }
 
-    getControlGroups() { return ['Revolution', 'Cast & Crew']; }
+    downloadExcelReport(filterCriteria: any): void {
+        let fileName = 'processPayrollDataActivityReportExcelUpload?WorkYear=' + filterCriteria.selectedYear
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup;
 
+        window.open(this._pdaReportUrl + fileName, '_bank');
+    }
     private handleError(error: Response) {
         // in a real world app, we may send the server to some remote logging infrastructure
         // instead of just logging it to the console

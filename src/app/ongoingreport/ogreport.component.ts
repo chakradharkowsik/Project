@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { OnGoingReportService } from './ogreport.service';
-import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, NgTableSortingDirective } from 'ng2-table/ng2-table';
-import { ExportToExcelService } from '../shared/export.service';
+
 @Component({
     moduleId: module.id,
     templateUrl: './ogreport.html'
@@ -15,7 +14,7 @@ export class OnGoingReportComponent implements OnInit {
     private measurementEndDateControl: FormControl;
     private avgWeeklyThresholdControl: FormControl;
     private typeOfHoursControl: FormControl;
-
+    selectedweekCount: number;
     dataLoaded: boolean;
 
     measurementEndDates: Array<string>;
@@ -59,7 +58,7 @@ export class OnGoingReportComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _ogreportsrv: OnGoingReportService, private _export: ExportToExcelService) {
+    constructor(private _ogreportsrv: OnGoingReportService) {
 
     }
 
@@ -68,7 +67,7 @@ export class OnGoingReportComponent implements OnInit {
         this.typeOfHoursControl = new FormControl('', Validators.required);
         this.measurementEndDateControl = new FormControl('', Validators.required);
         this.avgWeeklyThresholdControl = new FormControl('30', Validators.required);
-
+        this.selectedweekCount = 13;
         this.ogReportForm = new FormGroup(
             {
                 controlGroup: this.controlGroupControl,
@@ -117,7 +116,7 @@ export class OnGoingReportComponent implements OnInit {
             selectedControlGroup: cg,
             selectedTypeOfHours: emptype,
             avgWeeklyThreshold: cat,
-            reportCount: 13
+            reportCount: this.selectedweekCount
         };
 
         return filterCriteria;
@@ -156,8 +155,9 @@ export class OnGoingReportComponent implements OnInit {
     }
 
     getWeekData(weekCount: number): void {
+        this.selectedweekCount = weekCount;
         let filterCriteria = this.getFilterValues();
-        filterCriteria.reportCount = weekCount;
+        filterCriteria.reportCount = this.selectedweekCount;
         this._ogreportsrv.getOnGoingReportData(filterCriteria).subscribe(workdetails => {
             this.workDetails = workdetails;
             this.onChangeTable(this.config);
@@ -172,15 +172,9 @@ export class OnGoingReportComponent implements OnInit {
     }
 
     downloadExcel(): void {
-
-        let tbl = document.getElementById('datatable');
-        let btn = document.getElementById('btnDownloadExcel');
-        if (tbl) {
-            console.log(tbl.children[0]);
-        }
-        if (tbl && tbl.children.length > 0) {
-            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
-        }
+        let filterCriteria = this.getFilterValues();
+        filterCriteria.reportCount = this.selectedweekCount;
+        this._ogreportsrv.downloadExcelReport(filterCriteria);
     }
     // Validations
 

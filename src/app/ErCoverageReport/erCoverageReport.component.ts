@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ErCoverageReportService } from './erCoverageReport.service';
-import { ExportToExcelService } from '../shared/export.service';
+
 @Component({
     moduleId: module.id,
     templateUrl: 'erCoverageReport.html'
@@ -42,7 +42,7 @@ export class ErCoverageReportComponent implements OnInit {
         filtering: { filterString: '' },
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
-    constructor(private _erCoverageReportService: ErCoverageReportService, private _export: ExportToExcelService) { }
+    constructor(private _erCoverageReportService: ErCoverageReportService) { }
 
     ngOnInit(): void {
 
@@ -61,8 +61,6 @@ export class ErCoverageReportComponent implements OnInit {
         this.dataLoaded = false;
 
     }
-
-
 
     annualizedMonthlyReportData(): void {
         this.dataLoaded = false;
@@ -118,16 +116,10 @@ export class ErCoverageReportComponent implements OnInit {
     }
 
     downloadExcel(): void {
-
-        let tbl = document.getElementById('datatable');
-        let btn = document.getElementById('btnDownloadExcel');
-        if (tbl) {
-            console.log(tbl.children[0]);
-        }
-        if (tbl && tbl.children.length > 0) {
-            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
-        }
+        let filterCriteria = this.getFilterValues();
+        this._erCoverageReportService.downloadExcelReport(filterCriteria);
     }
+
     public onCellClick(data: any): any {
         console.log(data);
     }

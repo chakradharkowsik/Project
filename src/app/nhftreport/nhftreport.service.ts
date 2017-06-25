@@ -32,13 +32,21 @@ export class NewHireFullTimeService {
 
     getEligibleFullTimeReportData(filterCriteria: any): Observable<InhftWorkDetail[]> {
 
-        let fileName: string = "getNewHiresFullTimeReportData?WorkYear=" + filterCriteria.selectedYear
+        let fileName = "getNewHiresFullTimeReportData?WorkYear=" + filterCriteria.selectedYear
             + "&WorkMonth=" + filterCriteria.selectedHireMonth
             + "&ControlGroup=" + filterCriteria.selectedControlGroup;
         return this._http.get(this._nhftreportUrl + fileName)
             .map((response: Response) => <InhftWorkDetail[]>response.json().reportByACAEligibleCount)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
+    }
+
+      downloadExcelReport(filterCriteria: any): void {
+        let fileName = "processNewHireFullTimeExcelUpload?WorkYear=" + filterCriteria.selectedYear
+            + "&WorkMonth=" + filterCriteria.selectedHireMonth
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup;
+
+        window.open(this._nhftreportUrl + fileName, '_bank');
     }
 
     private handleError(error: Response) {

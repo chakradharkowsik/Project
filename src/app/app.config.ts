@@ -1,5 +1,5 @@
 export const CONFIGURATION = {
-    'baseServiceUrl': 'http://localhost:9988/ReportingPortalWebAPI/rest/',
+    'baseServiceUrl': 'http://13.59.27.17:8080/ReportingPortalWebAPI/rest/',
     'reportingroute': 'reporting',
     'dashboard': 'dashboard',
     'nftreport': 'nhftreport',

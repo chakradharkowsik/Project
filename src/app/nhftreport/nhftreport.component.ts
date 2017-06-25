@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NewHireFullTimeService } from './nhftreport.service';
-import { ExportToExcelService } from '../shared/export.service';
+
 @Component({
     moduleId: module.id,
     selector: 'nhftreport',
@@ -52,7 +52,7 @@ export class NewHireFullTimeComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _newHireFullTimeService: NewHireFullTimeService, private _export: ExportToExcelService) { }
+    constructor(private _newHireFullTimeService: NewHireFullTimeService) { }
 
     ngOnInit(): void {
         this._newHireFullTimeService.getReportData().subscribe(data => {
@@ -134,15 +134,9 @@ export class NewHireFullTimeComponent implements OnInit {
     }
 
     downloadExcel(): void {
+        let filterCriteria = this.getFilterValues();
 
-        let tbl = document.getElementById('datatable');
-        let btn = document.getElementById('btnDownloadExcel');
-        if (tbl) {
-            console.log(tbl.children[0]);
-        }
-        if (tbl && tbl.children.length > 0) {
-            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
-        }
+        this._newHireFullTimeService.downloadExcelReport(filterCriteria);
     }
     public onCellClick(data: any): any {
         console.log(data);

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ENFTReportService } from './enftreport.service';
-import { NgTableComponent, NgTableFilteringDirective, NgTablePagingDirective, NgTableSortingDirective } from 'ng2-table/ng2-table';
-import { ExportToExcelService } from '../shared/export.service';
+
 
 @Component({
     moduleId: module.id,
@@ -17,6 +16,7 @@ export class ENFTReportComponent implements OnInit {
     selectedTypeOfHours: string;
     selectedNonFullTimeCatgeories: Array<string>;
     AvgWeeklyHrsThr: string;
+    selectedweekCount: number;
 
     Years: Array<string>;
     Months: Array<string>;
@@ -59,7 +59,7 @@ export class ENFTReportComponent implements OnInit {
         className: ['table', 'table-striped', 'table-bordered', 'table-hover']
     };
 
-    constructor(private _enftreport: ENFTReportService, private _export: ExportToExcelService) {
+    constructor(private _enftreport: ENFTReportService) {
 
     }
 
@@ -90,6 +90,7 @@ export class ENFTReportComponent implements OnInit {
 
         this.onChangeTable(this.config);
         this.dataLoaded = false;
+        this.selectedweekCount = 13;
     }
     getFilterValues(): any {
         let year = this.selectedYear;
@@ -156,8 +157,11 @@ export class ENFTReportComponent implements OnInit {
     }
 
     getWeekData(weekCount: number): void {
+
+        this.selectedweekCount = weekCount;
+
         let filterCriteria = this.getFilterValues();
-        filterCriteria.reportCount = weekCount;
+        filterCriteria.reportCount = this.selectedweekCount;
 
         this._enftreport.getWeekReportData(filterCriteria).subscribe(workdetails => {
             this.workDetails = workdetails;
@@ -174,16 +178,9 @@ export class ENFTReportComponent implements OnInit {
     }
 
     downloadExcel(): void {
-
-
-        // let tbl = document.getElementById('datatable');
-        // let btn = document.getElementById('btnDownloadExcel');
-        // if (tbl) {
-        //     console.log(tbl.children[0]);
-        // }
-        // if (tbl && tbl.children.length > 0) {
-        //     this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
-        // }
+        let filterCriteria = this.getFilterValues();
+        filterCriteria.reportCount = this.selectedweekCount;
+        this._enftreport.downloadExcelReport(filterCriteria);
     }
     public onCellClick(data: any): any {
         console.log(data);

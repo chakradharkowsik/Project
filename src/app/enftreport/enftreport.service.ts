@@ -13,7 +13,7 @@ export class ENFTReportService {
     }
 
     getReportData(): Observable<any> {
-        return this._http.get(this._enftreportUrl + 'getNewHireNonFullTImeReferenceData')
+        return this._http.get(this._enftreportUrl + 'getNewHiresNonFullTimeReportReferenceData')
             .map((response: Response) => response.json().EligibilityNewHiresNonFullTimeReferenceData)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
@@ -29,11 +29,11 @@ export class ENFTReportService {
     getNonFullTimeCategories() { return this.data.EmployeeType; }
 
     getWeeklyCounts(filterCriteria: any): Observable<any> {
-        let fileName = "getReportCountByWeek?WorkYear=" + filterCriteria.selectedYear
-            + "&WorkMonth=" + filterCriteria.selectedHireMonth
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup
-            + "&UnionType=" + filterCriteria.selectedTypeOfHours
-            + "&EmployeeType=" + filterCriteria.selectedNonFullTimeCatgeories + "";
+        let fileName = 'getNewHiresNonFullTimeCountByWeek?WorkYear=' + filterCriteria.selectedYear
+            + '&WorkMonth=' + filterCriteria.selectedHireMonth
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '&UnionType=' + filterCriteria.selectedTypeOfHours
+            + '&EmployeeType=' + filterCriteria.selectedNonFullTimeCatgeories + '';
         return this._http.get(this._enftreportUrl + fileName)
             .map((response: Response) => response.json())
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -42,27 +42,24 @@ export class ENFTReportService {
     }
 
     getWeekReportData(filterCriteria: any): Observable<IWorkDetails[]> {
-        let fileName = "getNewHiresNonFullTimeReportData?WorkYear=" + filterCriteria.selectedYear
-            + "&WorkMonth=" + filterCriteria.selectedHireMonth
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup
-            + "&UnionType=" + filterCriteria.selectedTypeOfHours
-            + "&EmployeeType=" + filterCriteria.selectedNonFullTimeCatgeories + "&ReportOfWeek=" + filterCriteria.reportCount;
+        let fileName = 'getNewHiresNonFullTimeReportData?WorkYear=' + filterCriteria.selectedYear
+            + '&WorkMonth=' + filterCriteria.selectedHireMonth
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '&UnionType=' + filterCriteria.selectedTypeOfHours
+            + '&EmployeeType=' + filterCriteria.selectedNonFullTimeCatgeories + '&ReportOfWeek=' + filterCriteria.reportCount;
         return this._http.get(this._enftreportUrl + fileName)
             .map((response: Response) => <IWorkDetails[]>response.json().reportByWeekCount)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
-    downloadExcelReport(filterCriteria: any): Observable<IWorkDetails[]> {
-        let fileName = "processnewhiresnonfulltimeexcelzipdownload?WorkYear=" + filterCriteria.selectedYear
-            + "&WorkMonth=" + filterCriteria.selectedHireMonth
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup
-            + "&UnionType=" + filterCriteria.selectedTypeOfHours
-            + "&EmployeeType=" + filterCriteria.selectedNonFullTimeCatgeories + "&ReportOfWeek=" + filterCriteria.reportCount;
+    downloadExcelReport(filterCriteria: any): void {
+        let fileName = 'processnewhiresnonfulltimeexcelzipdownload?WorkYear=' + filterCriteria.selectedYear
+            + '&WorkMonth=' + filterCriteria.selectedHireMonth
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '&UnionType=' + filterCriteria.selectedTypeOfHours
+            + '&EmployeeType=' + filterCriteria.selectedNonFullTimeCatgeories + '&ReportOfWeek=' + filterCriteria.reportCount;
 
-        return this._http.get(this._enftreportUrl + fileName)
-            .map((response: Response) => response['_body'])
-            // .do(data => window.open(window.URL.createObjectURL(data))
-            .catch(this.handleError);
+        window.open(this._enftreportUrl + fileName, '_bank');
     }
     private handleError(error: Response) {
         // in a real world app, we may send the server to some remote logging infrastructure

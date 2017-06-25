@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { CONFIGURATION } from '../app.config';
 @Injectable()
 export class OnGoingReportService {
-    private _onGoingReportUrl = CONFIGURATION.baseServiceUrl+'ongoingreportservice/';
+    private _onGoingReportUrl = CONFIGURATION.baseServiceUrl + 'ongoingreportservice/';
 
     constructor(private _http: Http) {
 
@@ -13,17 +13,17 @@ export class OnGoingReportService {
 
     getReportData(): Observable<any> {
         return this._http.get(this._onGoingReportUrl + 'getonGoingreportreferencedata')
-            .map((response: Response) => response.json().eligibilityReportOngoingVO)
+            .map((response: Response) => response.json().ongoingReportVO)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
 
 
     getOnGoingReportDataCount(filterCriteria: any): Observable<any> {
-        let fileName: string = "getOnGoingReportCountByWeek?MeasurementEndDate=" + filterCriteria.selectedMeasuredDate
-            + "&AvgWeeklyHours=" + filterCriteria.avgWeeklyThreshold
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup
-            + "&UnionType=" + filterCriteria.selectedTypeOfHours;
+        let fileName: string = 'getOnGoingReportCountByWeek?MeasurementEndDate=' + filterCriteria.selectedMeasuredDate
+            + '&AvgWeeklyHours=' + filterCriteria.avgWeeklyThreshold
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '&UnionType=' + filterCriteria.selectedTypeOfHours;
 
         return this._http.get(this._onGoingReportUrl + fileName)
             .map((response: Response) => response.json())
@@ -33,17 +33,28 @@ export class OnGoingReportService {
 
     getOnGoingReportData(filterCriteria: any): Observable<IWorkDetails[]> {
 
-        let fileName: string = "getOnGoingReportReportData?MeasurementEndDate=" 
-        + filterCriteria.selectedMeasuredDate
-            + "&AvgWeeklyHours=" + filterCriteria.avgWeeklyThreshold
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup
-            + "&UnionType=" + filterCriteria.selectedTypeOfHours
-            + "&ReportOfWeek=" + filterCriteria.reportCount;
+        let fileName = 'getOnGoingReportReportData?MeasurementEndDate='
+            + filterCriteria.selectedMeasuredDate
+            + '&AvgWeeklyHours=' + filterCriteria.avgWeeklyThreshold
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '&UnionType=' + filterCriteria.selectedTypeOfHours
+            + '&ReportOfWeek=' + filterCriteria.reportCount;
 
         return this._http.get(this._onGoingReportUrl + fileName)
             .map((response: Response) => <IWorkDetails[]>response.json().onGoingReportsByWeekCount)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
+    }
+
+    downloadExcelReport(filterCriteria: any): void {
+        let fileName = 'processOnGoingReportExcelUpload?MeasurementEndDate='
+            + filterCriteria.selectedMeasuredDate
+            + '&AvgWeeklyHours=' + filterCriteria.avgWeeklyThreshold
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '&UnionType=' + filterCriteria.selectedTypeOfHours
+            + '&ReportOfWeek=' + filterCriteria.reportCount;
+
+        window.open(this._onGoingReportUrl + fileName, '_bank');
     }
     private handleError(error: Response) {
         // in a real world app, we may send the server to some remote logging infrastructure

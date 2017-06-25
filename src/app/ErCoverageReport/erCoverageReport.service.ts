@@ -21,8 +21,8 @@ export class ErCoverageReportService {
     }
 
     getAnnulaizedMonthlyWorkers(filterCriteria: any): Observable<any> {
-        let fileName: string = "getERCoverageReportCountByWeek?WorkYear=" + filterCriteria.selectedYear
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup;
+        let fileName: string = 'getERCoverageReportCountByWeek?WorkYear=' + filterCriteria.selectedYear
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup;
         return this._http.get(this._erCoverageReportUrl + fileName)
             .map((response: Response) => response.json().annualizedMonthlyCountVO)
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -33,14 +33,23 @@ export class ErCoverageReportService {
 
     getAnnulaizedMonthlyWorkersReportData(filterCriteria: any): Observable<IErCoverageWorkDetail[]> {
 
-        let fileName = "getERCoverageReportData?WorkYear=" + filterCriteria.selectedYear
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup
-            + "";
+        let fileName = 'getERCoverageReportData?WorkYear=' + filterCriteria.selectedYear
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '';
         return this._http.get(this._erCoverageReportUrl + fileName)
             .map((response: Response) => <IErCoverageWorkDetail[]>response.json().reportsByAnnualizedMonthlyCountVO)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
+
+     downloadExcelReport(filterCriteria: any): void {
+        let fileName = 'processERCoverageReportExcelUpload?WorkYear=' + filterCriteria.selectedYear
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '';
+
+        window.open(this._erCoverageReportUrl + fileName, '_bank');
+    }
+
     private handleError(error: Response) {
         // in a real world app, we may send the server to some remote logging infrastructure
         // instead of just logging it to the console
