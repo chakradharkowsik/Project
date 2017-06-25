@@ -9,13 +9,13 @@ import { CONFIGURATION } from '../app.config';
 
 @Injectable()
 export class PayrollDataActivityReportService {
-    private _pdaReportUrl = CONFIGURATION.baseServiceUrl;
+    private _pdaReportUrl = CONFIGURATION.baseServiceUrl + 'payrolldataactivityreportservice/';
     constructor(private _http: Http) {
 
     }
 
     getReportData(): Observable<any> {
-        return this._http.get(this._pdaReportUrl + 'payrollDataActivityReport/getPayrollReferenceData')
+        return this._http.get(this._pdaReportUrl + 'getPayrollDataActivityReportReferenceData')
             .map((response: Response) => response.json().payrollRefDataVO)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
@@ -23,7 +23,7 @@ export class PayrollDataActivityReportService {
 
     getPayrollDataActivityReportData(filterCriteria: any): Observable<IWorkDetails[]> {
 
-        let fileName: string = "payrollDataActivityReport/getReportsForPayrollDataActivity?WorkYear=" + filterCriteria.selectedYear
+        let fileName: string = "getPayrollDataActivityReportData?WorkYear=" + filterCriteria.selectedYear
             + "&ControlGroup=" + filterCriteria.selectedControlGroup;
         return this._http.get(this._pdaReportUrl + fileName)
             .map((response: Response) => <IWorkDetails[]>response.json().reportsForPayrollDataActivity)

@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { IEmployeeBreakInServiceDetail } from './employeeBreakInServiceDetail';
 import { Observable } from 'rxjs/Observable';
-
+import { CONFIGURATION } from '../app.config';
 
 @Injectable()
 export class EmployeeBreakInServiceReportService {
 
-    private _empBreakInServiceReportUrl = 'app/api/';
+    private _empBreakInServiceReportUrl = CONFIGURATION.baseServiceUrl + 'breakinreportservice/';
     constructor(private _http: Http) { }
 
     getEmployeeDemographicsReports(): Observable<IEmployeeBreakInServiceDetail[]> {
-        let fileName = 'employeebreakinservice.json';
+        let fileName = 'getBreakInServiceReportData';
         return this._http.get(this._empBreakInServiceReportUrl + fileName)
             .map((response: Response) => <IEmployeeBreakInServiceDetail[]>response.json())
             .do(data => console.log('All: ' + JSON.stringify(data)))

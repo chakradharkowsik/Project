@@ -7,19 +7,19 @@ import { CONFIGURATION } from '../app.config';
 
 @Injectable()
 export class NewHireFullTimeService {
-    private _nhftreportUrl = CONFIGURATION.baseServiceUrl;
+    private _nhftreportUrl = CONFIGURATION.baseServiceUrl + 'newhiresfulltimereportservice/';
     constructor(private _http: Http) { }
 
 
     getReportData(): Observable<any> {
-        return this._http.get(this._nhftreportUrl + 'newHiresFullTime/getNewHireFullTimeReferenceData')
+        return this._http.get(this._nhftreportUrl + 'getNewHiresFullTimeReportReferenceData')
             .map((response: Response) => response.json().EligibilityNewHiresFullTimeReferenceData)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
 
     getEligibleFullTimeWorkers(filterCriteria: any): Observable<any> {
-        let fileName: string = "newHiresFullTime/getACAEligibleCount?WorkYear=" + filterCriteria.selectedYear
+        let fileName: string = "getNewHiresFullTimeCountByWeek?WorkYear=" + filterCriteria.selectedYear
             + "&WorkMonth=" + filterCriteria.selectedHireMonth
             + "&ControlGroup=" + filterCriteria.selectedControlGroup;
         return this._http.get(this._nhftreportUrl + fileName)
@@ -32,7 +32,7 @@ export class NewHireFullTimeService {
 
     getEligibleFullTimeReportData(filterCriteria: any): Observable<InhftWorkDetail[]> {
 
-        let fileName: string = "newHiresFullTime/getReportByACAEligibleCount?WorkYear=" + filterCriteria.selectedYear
+        let fileName: string = "getNewHiresFullTimeReportData?WorkYear=" + filterCriteria.selectedYear
             + "&WorkMonth=" + filterCriteria.selectedHireMonth
             + "&ControlGroup=" + filterCriteria.selectedControlGroup;
         return this._http.get(this._nhftreportUrl + fileName)

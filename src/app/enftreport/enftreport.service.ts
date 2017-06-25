@@ -6,14 +6,14 @@ import { CONFIGURATION } from '../app.config';
 
 @Injectable()
 export class ENFTReportService {
-    private _enftreportUrl = CONFIGURATION.baseServiceUrl;
+    private _enftreportUrl = CONFIGURATION.baseServiceUrl + 'newhiresnonfulltimereportservice/';
     private data: any;
     constructor(private _http: Http) {
 
     }
 
     getReportData(): Observable<any> {
-        return this._http.get(this._enftreportUrl + 'newHiresNonFullTime/getNewHireNonFullTImeReferenceData')
+        return this._http.get(this._enftreportUrl + 'getNewHireNonFullTImeReferenceData')
             .map((response: Response) => response.json().EligibilityNewHiresNonFullTimeReferenceData)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
@@ -29,7 +29,7 @@ export class ENFTReportService {
     getNonFullTimeCategories() { return this.data.EmployeeType; }
 
     getWeeklyCounts(filterCriteria: any): Observable<any> {
-        let fileName = "newHiresNonFullTime/getReportCountByWeek?WorkYear=" + filterCriteria.selectedYear
+        let fileName = "getReportCountByWeek?WorkYear=" + filterCriteria.selectedYear
             + "&WorkMonth=" + filterCriteria.selectedHireMonth
             + "&ControlGroup=" + filterCriteria.selectedControlGroup
             + "&UnionType=" + filterCriteria.selectedTypeOfHours
@@ -42,7 +42,7 @@ export class ENFTReportService {
     }
 
     getWeekReportData(filterCriteria: any): Observable<IWorkDetails[]> {
-        let fileName = "newHiresNonFullTime/getReportsByWeeksCount?WorkYear=" + filterCriteria.selectedYear
+        let fileName = "getNewHiresNonFullTimeReportData?WorkYear=" + filterCriteria.selectedYear
             + "&WorkMonth=" + filterCriteria.selectedHireMonth
             + "&ControlGroup=" + filterCriteria.selectedControlGroup
             + "&UnionType=" + filterCriteria.selectedTypeOfHours
@@ -50,6 +50,18 @@ export class ENFTReportService {
         return this._http.get(this._enftreportUrl + fileName)
             .map((response: Response) => <IWorkDetails[]>response.json().reportByWeekCount)
             .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+    downloadExcelReport(filterCriteria: any): Observable<IWorkDetails[]> {
+        let fileName = "processnewhiresnonfulltimeexcelzipdownload?WorkYear=" + filterCriteria.selectedYear
+            + "&WorkMonth=" + filterCriteria.selectedHireMonth
+            + "&ControlGroup=" + filterCriteria.selectedControlGroup
+            + "&UnionType=" + filterCriteria.selectedTypeOfHours
+            + "&EmployeeType=" + filterCriteria.selectedNonFullTimeCatgeories + "&ReportOfWeek=" + filterCriteria.reportCount;
+
+        return this._http.get(this._enftreportUrl + fileName)
+            .map((response: Response) => response['_body'])
+            // .do(data => window.open(window.URL.createObjectURL(data))
             .catch(this.handleError);
     }
     private handleError(error: Response) {

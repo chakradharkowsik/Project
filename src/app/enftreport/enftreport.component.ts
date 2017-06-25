@@ -175,14 +175,15 @@ export class ENFTReportComponent implements OnInit {
 
     downloadExcel(): void {
 
-        let tbl = document.getElementById('datatable');
-        let btn = document.getElementById('btnDownloadExcel');
-        if (tbl) {
-            console.log(tbl.children[0]);
-        }
-        if (tbl && tbl.children.length > 0) {
-            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
-        }
+
+        // let tbl = document.getElementById('datatable');
+        // let btn = document.getElementById('btnDownloadExcel');
+        // if (tbl) {
+        //     console.log(tbl.children[0]);
+        // }
+        // if (tbl && tbl.children.length > 0) {
+        //     this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
+        // }
     }
     public onCellClick(data: any): any {
         console.log(data);

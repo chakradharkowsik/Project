@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { IEmpEligibleWorkDetail } from './empeligibleworkdetail';
 import { Observable } from 'rxjs/Observable';
-// import { CONFIGURATION } from '../app.config';
+import { CONFIGURATION } from '../app.config';
 
 
 @Injectable()
 export class EmployeeEligibilityReportService {
-    private _empEligibleReportUrl = 'app/api/';
+    private _empEligibleReportUrl = CONFIGURATION.baseServiceUrl + 'eligibilityreportservice';
     constructor(private _http: Http) { }
 
 
     getEmployeeEligibleReports(): Observable<IEmpEligibleWorkDetail[]> {
-        let fileName = 'empeligibility.json';
+        let fileName = 'getEligibilityReportData';
         return this._http.get(this._empEligibleReportUrl + fileName)
             .map((response: Response) => <IEmpEligibleWorkDetail[]>response.json())
             .do(data => console.log('All: ' + JSON.stringify(data)))

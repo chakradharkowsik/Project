@@ -9,19 +9,19 @@ import { CONFIGURATION } from '../app.config';
 export class ErCoverageReportService {
 
     // private _erCoverageReportUrl = 'app/api/';
-    private _erCoverageReportUrl = CONFIGURATION.baseServiceUrl;
+    private _erCoverageReportUrl = CONFIGURATION.baseServiceUrl + 'ercoveragereportservice/';
 
     constructor(private _http: Http) { }
 
     getReportData(): Observable<any> {
-        return this._http.get(this._erCoverageReportUrl + 'erCoverageReport/getERCoverageReferenceData')
+        return this._http.get(this._erCoverageReportUrl + 'getERCoverageReportReferenceData')
             .map((response: Response) => response.json().erCoverageReferanceDataVO)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
 
     getAnnulaizedMonthlyWorkers(filterCriteria: any): Observable<any> {
-        let fileName: string = "erCoverageReport/getAnnualizedMonthlyCount?WorkYear=" + filterCriteria.selectedYear
+        let fileName: string = "getERCoverageReportCountByWeek?WorkYear=" + filterCriteria.selectedYear
             + "&ControlGroup=" + filterCriteria.selectedControlGroup;
         return this._http.get(this._erCoverageReportUrl + fileName)
             .map((response: Response) => response.json().annualizedMonthlyCountVO)
@@ -33,7 +33,7 @@ export class ErCoverageReportService {
 
     getAnnulaizedMonthlyWorkersReportData(filterCriteria: any): Observable<IErCoverageWorkDetail[]> {
 
-        let fileName = "erCoverageReport/getReportsByAnnualizedMonthlyCount?WorkYear=" + filterCriteria.selectedYear
+        let fileName = "getERCoverageReportData?WorkYear=" + filterCriteria.selectedYear
             + "&ControlGroup=" + filterCriteria.selectedControlGroup
             + "";
         return this._http.get(this._erCoverageReportUrl + fileName)

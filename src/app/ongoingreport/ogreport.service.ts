@@ -5,14 +5,14 @@ import { Observable } from 'rxjs/Observable';
 import { CONFIGURATION } from '../app.config';
 @Injectable()
 export class OnGoingReportService {
-    private _onGoingReportUrl = CONFIGURATION.baseServiceUrl;
+    private _onGoingReportUrl = CONFIGURATION.baseServiceUrl+'ongoingreportservice/';
 
     constructor(private _http: Http) {
 
     }
 
     getReportData(): Observable<any> {
-        return this._http.get(this._onGoingReportUrl + 'eligibilityReportOngoing/getOnGoingReportReferenceData')
+        return this._http.get(this._onGoingReportUrl + 'getonGoingreportreferencedata')
             .map((response: Response) => response.json().eligibilityReportOngoingVO)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
@@ -20,7 +20,7 @@ export class OnGoingReportService {
 
 
     getOnGoingReportDataCount(filterCriteria: any): Observable<any> {
-        let fileName: string = "eligibilityReportOngoing/getOnGoingCountByWeeks?MeasurementEndDate=" + filterCriteria.selectedMeasuredDate
+        let fileName: string = "getOnGoingReportCountByWeek?MeasurementEndDate=" + filterCriteria.selectedMeasuredDate
             + "&AvgWeeklyHours=" + filterCriteria.avgWeeklyThreshold
             + "&ControlGroup=" + filterCriteria.selectedControlGroup
             + "&UnionType=" + filterCriteria.selectedTypeOfHours;
@@ -33,7 +33,7 @@ export class OnGoingReportService {
 
     getOnGoingReportData(filterCriteria: any): Observable<IWorkDetails[]> {
 
-        let fileName: string = "eligibilityReportOngoing/getOnGoingReportsByWeeksCount?MeasurementEndDate=" 
+        let fileName: string = "getOnGoingReportReportData?MeasurementEndDate=" 
         + filterCriteria.selectedMeasuredDate
             + "&AvgWeeklyHours=" + filterCriteria.avgWeeklyThreshold
             + "&ControlGroup=" + filterCriteria.selectedControlGroup

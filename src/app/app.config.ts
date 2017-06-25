@@ -1,5 +1,5 @@
 export const CONFIGURATION = {
-    'baseServiceUrl': 'http://localhost:8080/NHNFTReportWebAPI/rest/',
+    'baseServiceUrl': 'http://localhost:9988/ReportingPortalWebAPI/rest/',
     'reportingroute': 'reporting',
     'dashboard': 'dashboard',
     'nftreport': 'nhftreport',
