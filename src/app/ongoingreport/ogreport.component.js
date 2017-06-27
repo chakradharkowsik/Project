@@ -11,11 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var ogreport_service_1 = require("./ogreport.service");
-var export_service_1 = require("../shared/export.service");
 var OnGoingReportComponent = (function () {
-    function OnGoingReportComponent(_ogreportsrv, _export) {
+    function OnGoingReportComponent(_ogreportsrv) {
         this._ogreportsrv = _ogreportsrv;
-        this._export = _export;
         this.workDetails = [];
         this.rows = [];
         this.columns = [
@@ -51,6 +49,7 @@ var OnGoingReportComponent = (function () {
         this.typeOfHoursControl = new forms_1.FormControl('', forms_1.Validators.required);
         this.measurementEndDateControl = new forms_1.FormControl('', forms_1.Validators.required);
         this.avgWeeklyThresholdControl = new forms_1.FormControl('30', forms_1.Validators.required);
+        this.selectedweekCount = 13;
         this.ogReportForm = new forms_1.FormGroup({
             controlGroup: this.controlGroupControl,
             typeOfHour: this.typeOfHoursControl,
@@ -93,7 +92,7 @@ var OnGoingReportComponent = (function () {
             selectedControlGroup: cg,
             selectedTypeOfHours: emptype,
             avgWeeklyThreshold: cat,
-            reportCount: 13
+            reportCount: this.selectedweekCount
         };
         return filterCriteria;
     };
@@ -129,8 +128,9 @@ var OnGoingReportComponent = (function () {
     };
     OnGoingReportComponent.prototype.getWeekData = function (weekCount) {
         var _this = this;
+        this.selectedweekCount = weekCount;
         var filterCriteria = this.getFilterValues();
-        filterCriteria.reportCount = weekCount;
+        filterCriteria.reportCount = this.selectedweekCount;
         this._ogreportsrv.getOnGoingReportData(filterCriteria).subscribe(function (workdetails) {
             _this.workDetails = workdetails;
             _this.onChangeTable(_this.config);
@@ -140,14 +140,9 @@ var OnGoingReportComponent = (function () {
     OnGoingReportComponent.prototype.downloadPdf = function () {
     };
     OnGoingReportComponent.prototype.downloadExcel = function () {
-        var tbl = document.getElementById('datatable');
-        var btn = document.getElementById('btnDownloadExcel');
-        if (tbl) {
-            console.log(tbl.children[0]);
-        }
-        if (tbl && tbl.children.length > 0) {
-            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
-        }
+        var filterCriteria = this.getFilterValues();
+        filterCriteria.reportCount = this.selectedweekCount;
+        this._ogreportsrv.downloadExcelReport(filterCriteria);
     };
     // Validations
     OnGoingReportComponent.prototype.validateControlGroups = function () {
@@ -251,7 +246,7 @@ OnGoingReportComponent = __decorate([
         moduleId: module.id,
         templateUrl: './ogreport.html'
     }),
-    __metadata("design:paramtypes", [ogreport_service_1.OnGoingReportService, export_service_1.ExportToExcelService])
+    __metadata("design:paramtypes", [ogreport_service_1.OnGoingReportService])
 ], OnGoingReportComponent);
 exports.OnGoingReportComponent = OnGoingReportComponent;
 //# sourceMappingURL=ogreport.component.js.map

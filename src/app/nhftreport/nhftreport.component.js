@@ -10,11 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var nhftreport_service_1 = require("./nhftreport.service");
-var export_service_1 = require("../shared/export.service");
 var NewHireFullTimeComponent = (function () {
-    function NewHireFullTimeComponent(_newHireFullTimeService, _export) {
+    function NewHireFullTimeComponent(_newHireFullTimeService) {
         this._newHireFullTimeService = _newHireFullTimeService;
-        this._export = _export;
         this.eligibleFullTimeWorkers = '0';
         this.workerDetails = [];
         this.rows = [];
@@ -105,14 +103,8 @@ var NewHireFullTimeComponent = (function () {
     NewHireFullTimeComponent.prototype.downloadPdf = function () {
     };
     NewHireFullTimeComponent.prototype.downloadExcel = function () {
-        var tbl = document.getElementById('datatable');
-        var btn = document.getElementById('btnDownloadExcel');
-        if (tbl) {
-            console.log(tbl.children[0]);
-        }
-        if (tbl && tbl.children.length > 0) {
-            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
-        }
+        var filterCriteria = this.getFilterValues();
+        this._newHireFullTimeService.downloadExcelReport(filterCriteria);
     };
     NewHireFullTimeComponent.prototype.onCellClick = function (data) {
         console.log(data);
@@ -204,7 +196,7 @@ NewHireFullTimeComponent = __decorate([
         selector: 'nhftreport',
         templateUrl: 'nhftreport.html'
     }),
-    __metadata("design:paramtypes", [nhftreport_service_1.NewHireFullTimeService, export_service_1.ExportToExcelService])
+    __metadata("design:paramtypes", [nhftreport_service_1.NewHireFullTimeService])
 ], NewHireFullTimeComponent);
 exports.NewHireFullTimeComponent = NewHireFullTimeComponent;
 //# sourceMappingURL=nhftreport.component.js.map

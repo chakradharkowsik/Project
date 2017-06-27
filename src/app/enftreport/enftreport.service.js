@@ -15,10 +15,10 @@ var app_config_1 = require("../app.config");
 var ENFTReportService = (function () {
     function ENFTReportService(_http) {
         this._http = _http;
-        this._enftreportUrl = app_config_1.CONFIGURATION.baseServiceUrl;
+        this._enftreportUrl = app_config_1.CONFIGURATION.baseServiceUrl + 'newhiresnonfulltimereportservice/';
     }
     ENFTReportService.prototype.getReportData = function () {
-        return this._http.get(this._enftreportUrl + 'newHiresNonFullTime/getNewHireNonFullTImeReferenceData')
+        return this._http.get(this._enftreportUrl + 'getNewHiresNonFullTimeReportReferenceData')
             .map(function (response) { return response.json().EligibilityNewHiresNonFullTimeReferenceData; })
             .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
             .catch(this.handleError);
@@ -29,11 +29,11 @@ var ENFTReportService = (function () {
     ENFTReportService.prototype.getTypeOfHours = function () { return this.data.UnionType; };
     ENFTReportService.prototype.getNonFullTimeCategories = function () { return this.data.EmployeeType; };
     ENFTReportService.prototype.getWeeklyCounts = function (filterCriteria) {
-        var fileName = "newHiresNonFullTime/getReportCountByWeek?WorkYear=" + filterCriteria.selectedYear
-            + "&WorkMonth=" + filterCriteria.selectedHireMonth
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup
-            + "&UnionType=" + filterCriteria.selectedTypeOfHours
-            + "&EmployeeType=" + filterCriteria.selectedNonFullTimeCatgeories + "";
+        var fileName = 'getNewHiresNonFullTimeCountByWeek?WorkYear=' + filterCriteria.selectedYear
+            + '&WorkMonth=' + filterCriteria.selectedHireMonth
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '&UnionType=' + filterCriteria.selectedTypeOfHours
+            + '&EmployeeType=' + filterCriteria.selectedNonFullTimeCatgeories + '';
         return this._http.get(this._enftreportUrl + fileName)
             .map(function (response) { return response.json(); })
             .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
@@ -41,15 +41,23 @@ var ENFTReportService = (function () {
         // return { count13Weeks: "3", count26Weeks: "4", count47Weeks: "5", count52Weeks: "6" };
     };
     ENFTReportService.prototype.getWeekReportData = function (filterCriteria) {
-        var fileName = "newHiresNonFullTime/getReportsByWeeksCount?WorkYear=" + filterCriteria.selectedYear
-            + "&WorkMonth=" + filterCriteria.selectedHireMonth
-            + "&ControlGroup=" + filterCriteria.selectedControlGroup
-            + "&UnionType=" + filterCriteria.selectedTypeOfHours
-            + "&EmployeeType=" + filterCriteria.selectedNonFullTimeCatgeories + "&ReportOfWeek=" + filterCriteria.reportCount;
+        var fileName = 'getNewHiresNonFullTimeReportData?WorkYear=' + filterCriteria.selectedYear
+            + '&WorkMonth=' + filterCriteria.selectedHireMonth
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '&UnionType=' + filterCriteria.selectedTypeOfHours
+            + '&EmployeeType=' + filterCriteria.selectedNonFullTimeCatgeories + '&ReportOfWeek=' + filterCriteria.reportCount;
         return this._http.get(this._enftreportUrl + fileName)
             .map(function (response) { return response.json().reportByWeekCount; })
             .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
             .catch(this.handleError);
+    };
+    ENFTReportService.prototype.downloadExcelReport = function (filterCriteria) {
+        var fileName = 'processnewhiresnonfulltimeexcelzipdownload?WorkYear=' + filterCriteria.selectedYear
+            + '&WorkMonth=' + filterCriteria.selectedHireMonth
+            + '&ControlGroup=' + filterCriteria.selectedControlGroup
+            + '&UnionType=' + filterCriteria.selectedTypeOfHours
+            + '&EmployeeType=' + filterCriteria.selectedNonFullTimeCatgeories + '&ReportOfWeek=' + filterCriteria.reportCount;
+        window.open(this._enftreportUrl + fileName, '_bank');
     };
     ENFTReportService.prototype.handleError = function (error) {
         // in a real world app, we may send the server to some remote logging infrastructure

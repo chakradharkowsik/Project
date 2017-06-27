@@ -12,11 +12,11 @@ var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
 var router_1 = require("@angular/router");
 var app_component_1 = require("./app.component");
-var index_1 = require("./index");
 var ng2_table_1 = require("ng2-table/ng2-table");
 var ng2_bootstrap_1 = require("ng2-bootstrap");
 var app_routes_1 = require("./app.routes");
-var index_2 = require("./shared/index");
+var index_1 = require("./shared/index");
+var index_2 = require("./index");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -24,54 +24,55 @@ var AppModule = (function () {
 }());
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule,
+        imports: [
+            platform_browser_1.BrowserModule,
             forms_1.FormsModule,
             forms_1.ReactiveFormsModule,
             http_1.HttpModule,
-            router_1.RouterModule.forRoot(app_routes_1.APPROUTES),
+            router_1.RouterModule.forRoot(app_routes_1.APPROUTES, { useHash: true }),
             ng2_table_1.Ng2TableModule,
             ng2_bootstrap_1.PaginationModule.forRoot(),
             ng2_bootstrap_1.TabsModule.forRoot()
         ],
         declarations: [
             app_component_1.AppComponent,
-            index_1.DashboardComponent,
-            index_1.SideNavComponent,
-            index_1.TopNavComponent,
-            index_1.ENFTReportComponent,
-            index_1.OnGoingReportComponent,
-            index_1.NewHireFullTimeComponent,
-            index_1.PayrollDataActivityReportComponent,
-            index_1.AddCustomerComponent,
-            index_1.ListCustomerComponent,
-            index_1.OnboardingCustomerInformationComponent,
-            index_1.ClientPayrollComponent,
-            index_1.OnboardingPersonalInformationComponent,
-            index_1.AleDataUploadComponent,
-            index_1.ControlGroupComponent,
-            index_1.ApplicableLargeEmployeeComponent,
-            index_1.ErCoverageReportComponent,
-            index_1.EmployeeEligibilityReportComponent,
-            index_1.EmployeeDemographicReportComponent,
-            index_1.EmployeeBreakInServiceReportComponent,
-            index_1.EmployeeSummaryReportComponent,
-            index_1.InsuranceDataUploadComponent,
-            index_1.OneZeroNineFourDataUploadComponent,
-            index_1.OneZeroNineFiveDataUploadComponent,
-            index_1.PayrollDataUploadComponent,
-            index_1.LoginComponent
+            index_2.DashboardComponent,
+            index_2.SideNavComponent,
+            index_2.TopNavComponent,
+            index_2.ENFTReportComponent,
+            index_2.OnGoingReportComponent,
+            index_2.NewHireFullTimeComponent,
+            index_2.PayrollDataActivityReportComponent,
+            index_2.AddCustomerComponent,
+            index_2.ListCustomerComponent,
+            index_2.OnboardingCustomerInformationComponent,
+            index_2.ClientPayrollComponent,
+            index_2.OnboardingPersonalInformationComponent,
+            index_2.AleDataUploadComponent,
+            index_2.ControlGroupComponent,
+            index_2.ApplicableLargeEmployeeComponent,
+            index_2.ErCoverageReportComponent,
+            index_2.EmployeeEligibilityReportComponent,
+            index_2.EmployeeDemographicReportComponent,
+            index_2.EmployeeBreakInServiceReportComponent,
+            index_2.EmployeeSummaryReportComponent,
+            index_2.InsuranceDataUploadComponent,
+            index_2.OneZeroNineFourDataUploadComponent,
+            index_2.OneZeroNineFiveDataUploadComponent,
+            index_2.PayrollDataUploadComponent,
+            index_2.LoginComponent
         ],
         providers: [
-            index_1.ENFTReportService,
-            index_1.OnGoingReportService,
-            index_2.ExportToExcelService,
-            index_1.NewHireFullTimeService,
-            index_1.ErCoverageReportService,
-            index_1.EmployeeEligibilityReportService,
-            index_1.EmployeeDemographicReportService,
-            index_1.EmployeeBreakInServiceReportService,
-            index_1.PayrollDataActivityReportService,
-            index_1.EmployeeSummaryReportService
+            index_2.ENFTReportService,
+            index_2.OnGoingReportService,
+            index_1.ExportToExcelService,
+            index_2.NewHireFullTimeService,
+            index_2.ErCoverageReportService,
+            index_2.EmployeeEligibilityReportService,
+            index_2.EmployeeDemographicReportService,
+            index_2.EmployeeBreakInServiceReportService,
+            index_2.PayrollDataActivityReportService,
+            index_2.EmployeeSummaryReportService
         ],
         bootstrap: [app_component_1.AppComponent]
     })

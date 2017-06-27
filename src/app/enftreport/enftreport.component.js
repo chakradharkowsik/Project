@@ -10,11 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var enftreport_service_1 = require("./enftreport.service");
-var export_service_1 = require("../shared/export.service");
 var ENFTReportComponent = (function () {
-    function ENFTReportComponent(_enftreport, _export) {
+    function ENFTReportComponent(_enftreport) {
         this._enftreport = _enftreport;
-        this._export = _export;
         this.workDetails = [];
         this.rows = [];
         this.columns = [
@@ -64,6 +62,7 @@ var ENFTReportComponent = (function () {
         this.count52Weeks = '0';
         this.onChangeTable(this.config);
         this.dataLoaded = false;
+        this.selectedweekCount = 13;
     };
     ENFTReportComponent.prototype.getFilterValues = function () {
         var year = this.selectedYear;
@@ -129,8 +128,9 @@ var ENFTReportComponent = (function () {
     };
     ENFTReportComponent.prototype.getWeekData = function (weekCount) {
         var _this = this;
+        this.selectedweekCount = weekCount;
         var filterCriteria = this.getFilterValues();
-        filterCriteria.reportCount = weekCount;
+        filterCriteria.reportCount = this.selectedweekCount;
         this._enftreport.getWeekReportData(filterCriteria).subscribe(function (workdetails) {
             _this.workDetails = workdetails;
             _this.onChangeTable(_this.config);
@@ -141,14 +141,9 @@ var ENFTReportComponent = (function () {
     ENFTReportComponent.prototype.downloadPdf = function () {
     };
     ENFTReportComponent.prototype.downloadExcel = function () {
-        var tbl = document.getElementById('datatable');
-        var btn = document.getElementById('btnDownloadExcel');
-        if (tbl) {
-            console.log(tbl.children[0]);
-        }
-        if (tbl && tbl.children.length > 0) {
-            this._export.excelByTableElement(btn, tbl.children[0], 'New Hire Part Time Report');
-        }
+        var filterCriteria = this.getFilterValues();
+        filterCriteria.reportCount = this.selectedweekCount;
+        this._enftreport.downloadExcelReport(filterCriteria);
     };
     ENFTReportComponent.prototype.onCellClick = function (data) {
         console.log(data);
@@ -239,7 +234,7 @@ ENFTReportComponent = __decorate([
         moduleId: module.id,
         templateUrl: 'enftreport.html'
     }),
-    __metadata("design:paramtypes", [enftreport_service_1.ENFTReportService, export_service_1.ExportToExcelService])
+    __metadata("design:paramtypes", [enftreport_service_1.ENFTReportService])
 ], ENFTReportComponent);
 exports.ENFTReportComponent = ENFTReportComponent;
 //# sourceMappingURL=enftreport.component.js.map

@@ -14,5 +14,6 @@ export interface IEmployeeDemographicDetail {
     DateOfBirth: string;
     Email: string;
     Address: string;
-
+    ControlGroup: string;
+    WorkYear: string;
 }
